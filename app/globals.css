@@ -1,26 +1,106 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Pinyon+Script&family=Satisfy&family=Source+Serif+4:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-white: #f2ebda;
+  --font-sans: var(--font-source-serif, 'Source Serif 4', Georgia, serif);
+  --font-serif: var(--font-cormorant, 'Cormorant Garamond', Garamond, Georgia, serif);
+  --font-accent: var(--font-pinyon, 'Pinyon Script', cursive);
+  --font-signature: var(--font-satisfy, 'Satisfy', cursive);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --casa-gold: #ba935a;
+    --casa-gold-hover: #a37f48;
+    --casa-gold-light: #f5eedf;
+    --casa-bg: #ededed;
+    --casa-cream: #faf7f2;
+    --casa-charcoal: #1a1816;
+    --casa-charcoal-muted: #524d46;
+    --casa-terracotta: #d96b43;
+    --casa-green: #2d6a4f;
+    --border-gold: rgba(186, 147, 90, 0.25);
+  }
+
+  body {
+    background-color: var(--casa-bg);
+    color: var(--casa-charcoal);
+    font-family: var(--font-source-serif), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Custom Utilities & Animations */
+.bg-casa-gold { background-color: #ba935a; }
+.bg-casa-gold-hover:hover { background-color: #a37f48; }
+.bg-casa-gold-light { background-color: #f7f2e8; }
+.bg-casa-bg { background-color: #ededed; }
+.bg-casa-cream { background-color: #faf7f2; }
+.bg-casa-charcoal { background-color: #1a1816; }
+
+.text-casa-gold { color: #ba935a; }
+.text-casa-charcoal { color: #1a1816; }
+.text-casa-muted { color: #6e675e; }
+.text-casa-terracotta { color: #d96b43; }
+
+.border-casa-gold { border-color: rgba(186, 147, 90, 0.35); }
+.border-casa-gold-full { border-color: #ba935a; }
+
+.shadow-casa {
+  box-shadow: 0 10px 30px -5px rgba(186, 147, 90, 0.12), 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.shadow-casa-gold {
+  box-shadow: 0 8px 25px rgba(186, 147, 90, 0.3);
+}
+
+.glass-header {
+  background: rgba(250, 247, 242, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.glass-card {
+  background: rgba(242, 235, 218, 0.92);
+  backdrop-filter: blur(8px);
+}
+
+/* Smooth scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #ededed;
+}
+::-webkit-scrollbar-thumb {
+  background: #ba935a;
+  border-radius: 0px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #a37f48;
+}
+
+@keyframes pulse-gold {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(186, 147, 90, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(186, 147, 90, 0);
+  }
+}
+
+.animate-pulse-gold {
+  animation: pulse-gold 2s infinite;
+}
+
+/* Hide scrollbar for elements with no-scrollbar class */
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
