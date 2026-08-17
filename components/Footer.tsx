@@ -38,7 +38,7 @@ export const Footer: React.FC = () => {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 relative z-10 w-full flex flex-col items-center">
         
         {/* Brand Logo - Centered */}
-        <div className="flex flex-col items-center space-y-6">
+        <div className="flex flex-col items-center space-y-4">
           <div className="relative h-20 w-64">
             <Image
               src="/logo/logo-01.svg"
@@ -47,12 +47,6 @@ export const Footer: React.FC = () => {
               className="object-contain"
             />
           </div>
-          
-          <div className="w-24 h-[1px] bg-[#ba935a]/50 mx-auto"></div>
-          
-          <p className="text-sm sm:text-base text-[#6e675e] leading-relaxed max-w-xl mx-auto font-serif italic">
-            {t('footer.tagline')}
-          </p>
         </div>
 
         {/* Social Links - Elegant Divider */}

@@ -100,7 +100,6 @@ const translations: Record<Language, Record<string, string>> = {
     'waiter.called': 'Cameriere chiamato per',
 
     // Footer
-    'footer.tagline': '"La vera calore della cucina toscana, pasta fresca e rinomati vini italiani sulla tua tavola."',
     'footer.location': 'Posizione',
     'footer.openMaps': 'Apri in Google Maps',
     'footer.address': 'Marina, Porto Ghalib, Governatorato del Mar Rosso, Egitto',
@@ -192,7 +191,6 @@ const translations: Record<Language, Record<string, string>> = {
     'waiter.called': 'Waiter called for',
 
     // Footer
-    'footer.tagline': '"Bringing the true warmth of Tuscan dining, hand-rolled pastas, and iconic DOCG Italian wines to your table."',
     'footer.location': 'Location',
     'footer.openMaps': 'Open in Google Maps',
     'footer.address': 'Marina, Porto Ghalib, Red Sea Governorate, Egypt',
