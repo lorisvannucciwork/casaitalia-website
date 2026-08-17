@@ -23,6 +23,10 @@
     --border-gold: rgba(186, 147, 90, 0.25);
   }
 
+  html, body {
+    touch-action: manipulation;
+  }
+
   body {
     background-color: var(--casa-bg);
     color: var(--casa-charcoal);
