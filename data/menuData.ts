@@ -171,7 +171,7 @@ export const ANTIPASTI: MenuItem[] = [
     description: "Tuna tartare with orange cream",
     price: 15,
     category: "antipasti",
-    image: "/menu/TARTARE DI TONNO ALL ARANCIA.webp"
+    image: "/menu/Appetizers/TARTARE DI TONNO ALL ARANCIA.webp"
   },
   {
     id: "polpo-alla-piastra-su-vellutata-di-patate-olive-e-pomodorini-2",
@@ -181,7 +181,7 @@ export const ANTIPASTI: MenuItem[] = [
     description: "Grilled octopus on a cream of potatoes, olives and cherry tomatoes",
     price: 17,
     category: "antipasti",
-    image: "/menu/POLPO ALLA PIASTRA.webp"
+    image: "/menu/Appetizers/POLPO ALLA PIASTRA.webp"
   },
   {
     id: "tartare-di-salmone-al-mango-3",
@@ -191,7 +191,7 @@ export const ANTIPASTI: MenuItem[] = [
     description: "Salmon tartare with mango cream",
     price: 15,
     category: "antipasti",
-    image: "/menu/TARTARE DI SALMONE AL MANGO.webp"
+    image: "/menu/Appetizers/TARTARE DI SALMONE AL MANGO.webp"
   },
   {
     id: "tris-di-crostini-con-pat-di-fegatini-pomodoro-e-basilico-pecorino-e-guanciale-4",
@@ -201,7 +201,7 @@ export const ANTIPASTI: MenuItem[] = [
     description: "Trio of crostini with liver pâté, fresh tomato and basil, pecorino cheese and guanciale",
     price: 15,
     category: "antipasti",
-    image: "/menu/TRIS DI CROSTINI.webp"
+    image: "/menu/Appetizers/TRIS DI CROSTINI.webp"
   },
   {
     id: "gran-tagliere-casa-italia-di-salumi-e-formaggi-5",
@@ -211,7 +211,7 @@ export const ANTIPASTI: MenuItem[] = [
     description: "Platter 'Casa Italia' with cold cuts and cheeses",
     price: 29,
     category: "antipasti",
-    image: "/menu/GRAN TAGLIERE CASA ITALIA.webp"
+    image: "/menu/Appetizers/GRAN TAGLIERE CASA ITALIA.webp"
   },
   {
     id: "parmigiana-di-melanzane-6",
@@ -221,7 +221,7 @@ export const ANTIPASTI: MenuItem[] = [
     description: "Eggplant parmigiana",
     price: 11,
     category: "antipasti",
-    image: "/menu/PARMIGIANA DI MELAZANE.webp"
+    image: "/menu/Appetizers/PARMIGIANA DI MELAZANE.webp"
   },
   {
     id: "carpaccio-di-manzo-servito-con-rucola-noci-scaglie-di-parmigiano-capperi-e-crema-di-parmigiano-7",
@@ -231,7 +231,7 @@ export const ANTIPASTI: MenuItem[] = [
     description: "Beef carpaccio served with rocket, nuts, parmesan scales, capers and parmesan cream",
     price: 19,
     category: "antipasti",
-    image: "/menu/CARPACCIO DI MANZO.webp"
+    image: "/menu/Appetizers/CARPACCIO DI MANZO.webp"
   },
   {
     id: "vitello-tonnato-8",
@@ -241,7 +241,7 @@ export const ANTIPASTI: MenuItem[] = [
     description: "Veal with tuna sauce",
     price: 17,
     category: "antipasti",
-    image: "/menu/VITELLO TONNATO.webp"
+    image: "/menu/Appetizers/VITELLO TONNATO.webp"
   },
   {
     id: "tartare-di-manzo-servita-con-tuorlo-d-uovo-e-crema-di-parmigiano-9",
@@ -251,7 +251,7 @@ export const ANTIPASTI: MenuItem[] = [
     description: "Beef tartare served with raw egg yolk and parmesan cream",
     price: 17,
     category: "antipasti",
-    image: "/menu/TARTARE DI MANZO.webp"
+    image: "/menu/Appetizers/TARTARE DI MANZO.webp"
   }
 ];
 
@@ -264,7 +264,7 @@ export const PRIMI: MenuItem[] = [
     description: "Penne with tomato, basil and stracciatella",
     price: 14,
     category: "primi",
-    image: ""
+    image: "/menu/pasta/PENNE POMODORO.webp"
   },
   {
     id: "rigatoni-alla-bolognese-11",
@@ -274,7 +274,7 @@ export const PRIMI: MenuItem[] = [
     description: "Rigatoni with bolognese ragù",
     price: 16,
     category: "primi",
-    image: ""
+    image: "/menu/pasta/RIGATONI ALLA BOLOGNESE.webp"
   },
   {
     id: "spaghetti-alla-carbonara-12",
@@ -284,7 +284,7 @@ export const PRIMI: MenuItem[] = [
     description: "Spaghetti with eggs sauce and guanciale",
     price: 18,
     category: "primi",
-    image: "/menu/SPAGHETTI ALLA CARBONARA.webp"
+    image: "/menu/pasta/SPAGHETTI ALLA CARBONARA.webp"
   },
   {
     id: "penne-al-salmone-13",
@@ -294,7 +294,7 @@ export const PRIMI: MenuItem[] = [
     description: "Penne with smoked salmon sauce",
     price: 20,
     category: "primi",
-    image: "/menu/PENNE AL SALMONE.webp"
+    image: "/menu/pasta/PENNE AL SALMONE.webp"
   },
   {
     id: "spaghetti-ai-frutti-di-mare-14",
@@ -304,7 +304,7 @@ export const PRIMI: MenuItem[] = [
     description: "Seafood spaghetti",
     price: 20,
     category: "primi",
-    image: "/menu/SPAGHETTI AL FRUTTI DI MARE.webp"
+    image: "/menu/pasta/SPAGHETTI AL FRUTTI DI MARE.webp"
   },
   {
     id: "risotto-ai-crostacei-e-burrata-15",
@@ -314,7 +314,7 @@ export const PRIMI: MenuItem[] = [
     description: "Risotto with shellfish and burrata",
     price: 20,
     category: "primi",
-    image: "/menu/RISOTTO AL CROSTACEI E BURRATA.webp"
+    image: "/menu/pasta/RISOTTO AL CROSTACEI E BURRATA.webp"
   },
   {
     id: "risotto-al-tartufo-16",
@@ -324,7 +324,7 @@ export const PRIMI: MenuItem[] = [
     description: "Truffle risotto",
     price: 20,
     category: "primi",
-    image: "/menu/RISOTTO AL TARUFO.webp"
+    image: "/menu/pasta/RISOTTO AL TARUFO.webp"
   }
 ];
 
@@ -337,7 +337,7 @@ export const PASTA_FRESCA: MenuItem[] = [
     description: "Tortellini with cream and cooked ham",
     price: 20,
     category: "pasta_fresca",
-    image: "/menu/110B2372.webp"
+    image: ""
   },
   {
     id: "lasagna-al-rag-18",
@@ -347,7 +347,7 @@ export const PASTA_FRESCA: MenuItem[] = [
     description: "Lasagna with meat sauce",
     price: 28,
     category: "pasta_fresca",
-    image: "/menu/LASAGNA AL RAGU.webp"
+    image: "/menu/fresh pasta/LASAGNA AL RAGU.webp"
   },
   {
     id: "gnocchi-verdi-agli-spinaci-19",
@@ -357,7 +357,7 @@ export const PASTA_FRESCA: MenuItem[] = [
     description: "Green gnocchi with spinach sauce",
     price: 15,
     category: "pasta_fresca",
-    image: "/menu/GNOCCHI VERDI AGLI SPINACI.webp"
+    image: "/menu/fresh pasta/GNOCCHI VERDI AGLI SPINACI.webp"
   },
   {
     id: "gnocchi-al-rag-20",
@@ -367,7 +367,7 @@ export const PASTA_FRESCA: MenuItem[] = [
     description: "Gnocchi with meat sauce",
     price: 16,
     category: "pasta_fresca",
-    image: "/menu/GNOCCHI AL RAGU.webp"
+    image: "/menu/fresh pasta/GNOCCHI AL RAGU.webp"
   },
   {
     id: "ravioli-ripieni-ai-4-formaggi-serviti-con-salsa-al-gorgonzola-21",
@@ -377,7 +377,7 @@ export const PASTA_FRESCA: MenuItem[] = [
     description: "Ravioli stuffed with four cheeses served with blue cheese sauce",
     price: 16,
     category: "pasta_fresca",
-    image: "/menu/RAVIOLI RIPIENI AL 4 FORMAGGI.webp"
+    image: "/menu/fresh pasta/RAVIOLI RIPIENI AL 4 FORMAGGI.webp"
   },
   {
     id: "ravioli-ripieni-al-salmone-serviti-con-salsa-al-salmone-22",
@@ -387,7 +387,7 @@ export const PASTA_FRESCA: MenuItem[] = [
     description: "Ravioli stuffed with salmon served with salmon sauce",
     price: 18,
     category: "pasta_fresca",
-    image: "/menu/RAVIOLI  RIPIENI AL SALMONE.webp"
+    image: "/menu/fresh pasta/RAVIOLI  RIPIENI AL SALMONE.webp"
   },
   {
     id: "ravioli-ripieni-al-tartufo-serviti-con-salsa-al-tartufo-23",
@@ -397,7 +397,7 @@ export const PASTA_FRESCA: MenuItem[] = [
     description: "Ravioli stuffed with truffle served with truffle sauce",
     price: 17,
     category: "pasta_fresca",
-    image: "/menu/RAVIOLI RIPIENI AL TARTUFO.webp"
+    image: "/menu/fresh pasta/RAVIOLI RIPIENI AL TARTUFO.webp"
   },
   {
     id: "ravioli-ripieni-ricotta-e-spinaci-serviti-con-salsa-agli-spinaci-24",
@@ -407,7 +407,7 @@ export const PASTA_FRESCA: MenuItem[] = [
     description: "Ravioli stuffed with ricotta and spinach served with spinach sauce",
     price: 15,
     category: "pasta_fresca",
-    image: "/menu/RAVIOLI RIPIENI AL TARTUFO (2).webp"
+    image: "/menu/fresh pasta/RAVIOLI RIPIENI RICOTTA E SPINACI.webp"
   }
 ];
 
@@ -420,7 +420,7 @@ export const SECONDI_CARNE: MenuItem[] = [
     description: "Beef fillet with pepper sauce or mushrooms sauce served with baked potatoes and sautèed vegetables",
     price: 24,
     category: "secondi_carne",
-    image: "/menu/FILETTO DI MANZO.webp"
+    image: "/menu/Main dishes/FILETTO DI MANZO.webp"
   },
   {
     id: "bistecca-di-manzo-alla-piastra-con-verdure-e-patatine-fritte-26",
@@ -450,7 +450,7 @@ export const SECONDI_CARNE: MenuItem[] = [
     description: "Lemon chicken with mashed potatoes",
     price: 18,
     category: "secondi_carne",
-    image: "/menu/POLLO AL LIMONE.webp"
+    image: "/menu/Main dishes/POLLO AL LIMONE.webp"
   },
   {
     id: "pollo-affumicato-con-salsa-di-peperoni-affumicati-servito-con-pur-29",
@@ -460,7 +460,7 @@ export const SECONDI_CARNE: MenuItem[] = [
     description: "Smoked chicken with smoked peppers sauce served with mashed potatoes",
     price: 18,
     category: "secondi_carne",
-    image: ""
+    image: "/menu/Main dishes/POLLO AFFUMICATO CON SALSA DI PEPERONI.webp"
   },
   {
     id: "cotoletta-di-pollo-servita-con-insalata-verde-30",
@@ -470,7 +470,7 @@ export const SECONDI_CARNE: MenuItem[] = [
     description: "Chicken panè served with green salad",
     price: 20,
     category: "secondi_carne",
-    image: "/menu/COTOLETTA DI POLLO.webp"
+    image: "/menu/Main dishes/COTOLETTA DI POLLO.webp"
   },
   {
     id: "cotoletta-di-vitello-servita-con-rucola-e-scaglie-di-parmigiano-31",
@@ -480,7 +480,7 @@ export const SECONDI_CARNE: MenuItem[] = [
     description: "Veal panè served with rocket and parmesan scales",
     price: 22,
     category: "secondi_carne",
-    image: "/menu/COTOLETTA DI VITELLO.webp"
+    image: "/menu/Main dishes/COTOLETTA DI VITELLO.webp"
   }
 ];
 
@@ -493,7 +493,7 @@ export const SECONDI_PESCE: MenuItem[] = [
     description: "Fried seafood with crispy vegetables",
     price: 22,
     category: "secondi_pesce",
-    image: "/menu/FRITTO DIMARECON.webp"
+    image: "/menu/Main dishes/FRITTO DIMARECON.webp"
   },
   {
     id: "filetto-di-salmone-con-salsa-ai-gamberi-servito-con-verdure-grigliate-33",
@@ -503,7 +503,7 @@ export const SECONDI_PESCE: MenuItem[] = [
     description: "Salmon fillet with shrimps sauce served with grilled vegetables",
     price: 24,
     category: "secondi_pesce",
-    image: "/menu/FILETTO DI SALMONE CON SALSA AL GAMBERI.webp"
+    image: "/menu/Main dishes/FILETTO DI SALMONE CON SALSA AL GAMBERI.webp"
   },
   {
     id: "tagliata-di-tonno-in-crosta-di-pistacchio-su-crema-di-piselli-con-verdure-34",
@@ -513,7 +513,7 @@ export const SECONDI_PESCE: MenuItem[] = [
     description: "Sliced tuna in a pistachio crust on pea cream and vegetables",
     price: 26,
     category: "secondi_pesce",
-    image: "/menu/TAGLIATA DI TONNO.webp"
+    image: "/menu/Main dishes/TAGLIATA DI TONNO.webp"
   },
   {
     id: "filetto-di-salmone-al-forno-su-crema-di-spinaci-con-patate-al-forno-35",
@@ -523,7 +523,7 @@ export const SECONDI_PESCE: MenuItem[] = [
     description: "Baked salmon fillet on creme of spinach with baked potatoes",
     price: 22,
     category: "secondi_pesce",
-    image: "/menu/FILETTO DI SALMONE AL FORNO.webp"
+    image: "/menu/Main dishes/FILETTO DI SALMONE AL FORNO.webp"
   },
   {
     id: "gamberi-grigliati-con-verdure-grigliate-36",
@@ -533,7 +533,7 @@ export const SECONDI_PESCE: MenuItem[] = [
     description: "Grilled shrimps with grilled vegetables",
     price: 26,
     category: "secondi_pesce",
-    image: "/menu/GAMBERI GRIGLIATI.webp"
+    image: "/menu/Main dishes/GAMBERI GRIGLIATI.webp"
   },
   {
     id: "spigola-all-arancia-con-patate-al-forno-37",
@@ -609,21 +609,11 @@ export const BURGERS: MenuItem[] = [
     description: "Vegan burger, salad, fresh cucumber and onion",
     price: 13,
     category: "burger",
-    image: "/menu/VEGAN BURGER.webp"
+    image: "/menu/Burger/VEGAN BURGER.webp"
   }
 ];
 
 export const INSALATE: MenuItem[] = [
-  {
-    id: "salad-port-ghalib-47",
-    italianName: "SALAD PORT GHALIB",
-    tags: [],
-    name: "Port Ghalib Salad",
-    description: "Salad, grilled chicken, toasted bread, parmesan, caesar sauce",
-    price: 15,
-    category: "insalate",
-    image: "/menu/CAESAR SALAD.webp"
-  },
   {
     id: "tuna-salad-48",
     italianName: "TUNA SALAD",
@@ -632,7 +622,7 @@ export const INSALATE: MenuItem[] = [
     description: "Tuna slices, tomatoes, salad, carrots and mozzarella",
     price: 12,
     category: "insalate",
-    image: "/menu/TUNA SALAD.webp"
+    image: "/menu/Salad/TUNA SALAD.webp"
   },
   {
     id: "caesar-49",
@@ -642,7 +632,7 @@ export const INSALATE: MenuItem[] = [
     description: "Salad and parmesan",
     price: 12,
     category: "insalate",
-    image: "/menu/CAESAR SALAD.webp"
+    image: "/menu/Salad/CAESAR SALAD.webp"
   },
   {
     id: "caprese-50",
@@ -652,7 +642,7 @@ export const INSALATE: MenuItem[] = [
     description: "Fresh tomato, mozzarella and basil sauce",
     price: 15,
     category: "insalate",
-    image: "/menu/CAPRESE.webp"
+    image: "/menu/Salad/CAPRESE.webp"
   },
   {
     id: "crudo-e-bufala-51",
@@ -662,7 +652,7 @@ export const INSALATE: MenuItem[] = [
     description: "Raw ham and buffalo mozzarella",
     price: 19,
     category: "insalate",
-    image: "/menu/CRUDO E BUFALA.webp"
+    image: "/menu/Salad/CRUDO E BUFALA.webp"
   }
 ];
 
@@ -671,52 +661,52 @@ export const PIZZE_ROSSE: MenuItem[] = [
     id: "margherita-52",
     italianName: "MARGHERITA",
     tags: [],
-    name: "Margherita Pizza", description: "Tomato sauce, mozzarella and basil", price: 9, category: "pizze_rosse", image: "/menu/MARGHERITA.webp" },
+    name: "Margherita Pizza", description: "Tomato sauce, mozzarella and basil", price: 9, category: "pizze_rosse", image: "/menu/Pizza/RED/MARGHERITA.webp" },
   {
     id: "marinara-53",
     italianName: "MARINARA",
     tags: [],
-    name: "Marinara Pizza", description: "Tomato sauce, garlic and oregano", price: 7, category: "pizze_rosse", image: "/menu/MARINARA.webp" },
+    name: "Marinara Pizza", description: "Tomato sauce, garlic and oregano", price: 7, category: "pizze_rosse", image: "/menu/Pizza/RED/MARINARA.webp" },
   {
     id: "tonno-e-cipolla-54",
     italianName: "TONNO E CIPOLLA",
     tags: [],
-    name: "Tuna & Onion Pizza", description: "Tomato sauce, mozzarella, tuna and onions", price: 10, category: "pizze_rosse", image: "" },
+    name: "Tuna & Onion Pizza", description: "Tomato sauce, mozzarella, tuna and onions", price: 10, category: "pizze_rosse", image: "/menu/Pizza/RED/TONNO E CIPOLLA.webp" },
   {
     id: "napoli-55",
     italianName: "NAPOLI",
     tags: [],
-    name: "Napoli Pizza", description: "Tomato sauce, mozzarella, anchovies, capers", price: 10, category: "pizze_rosse", image: "/menu/NAPOLI.webp" },
+    name: "Napoli Pizza", description: "Tomato sauce, mozzarella, anchovies, capers", price: 10, category: "pizze_rosse", image: "/menu/Pizza/RED/NAPOLI.webp" },
   {
     id: "crudo-rucola-e-grana-56",
     italianName: "CRUDO, RUCOLA E GRANA",
     tags: [],
-    name: "Prosciutto, Arugula & Grana Pizza", description: "Tomato sauce, mozzarella, raw ham, rocket and parmesan flakes", price: 16, category: "pizze_rosse", image: "/menu/CRUDO RUCOLA E GRANA.webp" },
+    name: "Prosciutto, Arugula & Grana Pizza", description: "Tomato sauce, mozzarella, raw ham, rocket and parmesan flakes", price: 16, category: "pizze_rosse", image: "/menu/Pizza/RED/CRUDO RUCOLA E GRANA.webp" },
   {
     id: "bufalina-57",
     italianName: "BUFALINA",
     tags: [],
-    name: "Buffalo Mozzarella Pizza", description: "Tomato sauce, buffalo mozzarella and basil", price: 14, category: "pizze_rosse", image: "/menu/BUFALINA.webp" },
+    name: "Buffalo Mozzarella Pizza", description: "Tomato sauce, buffalo mozzarella and basil", price: 14, category: "pizze_rosse", image: "/menu/Pizza/RED/BUFALINA.webp" },
   {
     id: "vegetariana-58",
     italianName: "VEGETARIANA",
     tags: [],
-    name: "Vegetarian Pizza", description: "Tomato sauce, mozzarella and grilled vegetables", price: 12, category: "pizze_rosse", image: "/menu/VEGETARIANA.webp" },
+    name: "Vegetarian Pizza", description: "Tomato sauce, mozzarella and grilled vegetables", price: 12, category: "pizze_rosse", image: "/menu/Pizza/RED/VEGETARIANA.webp" },
   {
     id: "frutti-di-mare-59",
     italianName: "FRUTTI DI MARE",
     tags: [],
-    name: "Seafood Pizza", description: "Tomato sauce, mozzarella and seafood", price: 15, category: "pizze_rosse", image: "/menu/110B2651.webp" },
+    name: "Seafood Pizza", description: "Tomato sauce, mozzarella and seafood", price: 15, category: "pizze_rosse", image: "/menu/Pizza/RED/FRUTTI DI MARE.webp" },
   {
     id: "salamino-60",
     italianName: "SALAMINO",
     tags: [],
-    name: "Salami Pizza", description: "Tomato sauce, mozzarella and salami (pork salami OR cow salami)", price: 16, category: "pizze_rosse", image: "/menu/SALAMINO.webp" },
+    name: "Salami Pizza", description: "Tomato sauce, mozzarella and salami (pork salami OR cow salami)", price: 16, category: "pizze_rosse", image: "/menu/Pizza/RED/SALAMINO.webp" },
   {
     id: "calzone-port-ghalib-61",
     italianName: "CALZONE PORT GHALIB",
     tags: [],
-    name: "Port Ghalib Calzone", description: "Tomato sauce, mozzarella, cooked ham", price: 12, category: "pizze_rosse", image: "/menu/CALZONE.webp" }
+    name: "Port Ghalib Calzone", description: "Tomato sauce, mozzarella, cooked ham", price: 12, category: "pizze_rosse", image: "/menu/Pizza/RED/CALZONE.webp" }
 ];
 
 export const PIZZE_BIANCHE: MenuItem[] = [
@@ -724,17 +714,17 @@ export const PIZZE_BIANCHE: MenuItem[] = [
     id: "gamberi-e-zucchine-62",
     italianName: "GAMBERI E ZUCCHINE",
     tags: [],
-    name: "Shrimp & Zucchini Pizza", description: "Mozzarella, shrimps and zucchinis", price: 14, category: "pizze_bianche", image: "/menu/GAMBERI E ZUCCHINE.webp" },
+    name: "Shrimp & Zucchini Pizza", description: "Mozzarella, shrimps and zucchinis", price: 14, category: "pizze_bianche", image: "/menu/Pizza/WHITE/GAMBERI E ZUCCHINE.webp" },
   {
     id: "mortadella-burrata-e-pistacchi-63",
     italianName: "MORTADELLA, BURRATA E PISTACCHI",
     tags: [],
-    name: "Mortadella, Burrata & Pistachio Pizza", description: "Mozzarella, mortadella, burrata and pistachios", price: 18, category: "pizze_bianche", image: "/menu/MORTADELLA BURRATA E PISTACCHI.webp" },
+    name: "Mortadella, Burrata & Pistachio Pizza", description: "Mozzarella, mortadella, burrata and pistachios", price: 18, category: "pizze_bianche", image: "/menu/Pizza/WHITE/MORTADELLA BURRATA E PISTACCHI.webp" },
   {
     id: "quattro-formaggi-64",
     italianName: "QUATTRO FORMAGGI",
     tags: [],
-    name: "Four Cheese Pizza", description: "Four cheeses", price: 12, category: "pizze_bianche", image: "/menu/QUATTRO FORMAGGI.webp" },
+    name: "Four Cheese Pizza", description: "Four cheeses", price: 12, category: "pizze_bianche", image: "/menu/Pizza/WHITE/QUATTRO FORMAGGI.webp" },
   {
     id: "pane-arabo-salmone-avocado-e-formaggio-65",
     italianName: "PANE ARABO SALMONE, AVOCADO E FORMAGGIO",
@@ -744,12 +734,12 @@ export const PIZZE_BIANCHE: MenuItem[] = [
     id: "speck-mascarpone-e-noci-66",
     italianName: "SPECK, MASCARPONE E NOCI",
     tags: [],
-    name: "Speck, Mascarpone & Walnut Pizza", description: "Speck, cheese and walnuts", price: 18, category: "pizze_bianche", image: "/menu/SPECK-MASCARPONE-E-NOCI.webp" },
+    name: "Speck, Mascarpone & Walnut Pizza", description: "Speck, cheese and walnuts", price: 18, category: "pizze_bianche", image: "/menu/Pizza/WHITE/SPECK MASCARPONE E NOCI.webp" },
   {
     id: "tartufo-67",
     italianName: "TARTUFO",
     tags: [],
-    name: "Truffle Pizza", description: "Mozzarella, truffle cream and truffle oil", price: 18, category: "pizze_bianche", image: "/menu/TARTUFO.webp" }
+    name: "Truffle Pizza", description: "Mozzarella, truffle cream and truffle oil", price: 18, category: "pizze_bianche", image: "/menu/Pizza/WHITE/TARTUFO.webp" }
 ];
 
 export const DOLCI: MenuItem[] = [

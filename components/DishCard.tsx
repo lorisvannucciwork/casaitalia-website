@@ -16,6 +16,8 @@ interface DishCardProps {
 
 export const DishCard: React.FC<DishCardProps> = ({ item, onSelectDish, onQuickAdd }) => {
   const [addedAnim, setAddedAnim] = useState(false);
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
+  const [hasImageError, setHasImageError] = useState(false);
   const { language, formatCurrency } = useLanguage();
 
   const translatedItem = getTranslatedMenuItem(item, language);
@@ -33,18 +35,43 @@ export const DishCard: React.FC<DishCardProps> = ({ item, onSelectDish, onQuickA
       onClick={() => onSelectDish(item)}
       className="group relative bg-white/70 backdrop-blur-2xl p-2.5 sm:p-3 overflow-hidden border border-white/60 shadow-lg hover:shadow-2xl hover:shadow-[#ba935a]/20 hover:border-[#ba935a]/40 transition-all duration-500 flex flex-col cursor-pointer transform hover:-translate-y-2 h-full"
     >
-      {/* Top Image Container or Fallback UI */}
+      {/* Top Image Container with Loading Skeleton */}
       <div className="relative w-full h-52 sm:h-60 bg-[#f5eedf] overflow-hidden shadow-inner shrink-0 flex items-center justify-center">
-        {dishImage ? (
+        {dishImage && !hasImageError ? (
           <>
+            {/* Elegant Skeleton / Loading UI */}
+            {!isImageLoaded && (
+              <div className="absolute inset-0 z-0 bg-[#f7f2e8] flex flex-col items-center justify-center overflow-hidden select-none">
+                {/* Shimmer sweep */}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent animate-shimmer" />
+                
+                {/* Centered pulsing emblem */}
+                <div className="relative z-10 flex flex-col items-center gap-2 opacity-70">
+                  <div className="w-10 h-10 rounded-full border border-[#ba935a]/30 flex items-center justify-center bg-white/90 shadow-sm animate-pulse">
+                    <span className="font-serif font-black text-xs text-[#ba935a]">CI</span>
+                  </div>
+                  <span className="font-signature text-xl text-[#ba935a]/90 tracking-wide animate-pulse">
+                    Casa Italia
+                  </span>
+                </div>
+              </div>
+            )}
+
+            {/* Dish Image - Only visible when fully loaded */}
             <Image
               src={dishImage}
               alt={translatedItem.name}
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-              className="object-cover group-hover:scale-110 group-hover:rotate-1 transition-transform duration-700 ease-out"
+              onLoad={() => setIsImageLoaded(true)}
+              onError={() => setHasImageError(true)}
+              className={`object-cover group-hover:scale-110 group-hover:rotate-1 transition-all duration-700 ease-out ${
+                isImageLoaded ? 'opacity-100 scale-100 blur-0' : 'opacity-0 scale-105 blur-xs pointer-events-none'
+              }`}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent opacity-50 group-hover:opacity-40 transition-opacity" />
+            {isImageLoaded && (
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent opacity-50 group-hover:opacity-40 transition-opacity duration-500" />
+            )}
           </>
         ) : (
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-[url('/backgrounds/bg-2.webp')] bg-cover opacity-80 group-hover:opacity-100 transition-opacity">

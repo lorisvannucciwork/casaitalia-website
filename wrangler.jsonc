@@ -10,6 +10,13 @@
     "directory": ".open-next/assets",
     "binding": "ASSETS"
   },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "casaitalia",
+      "database_id": "your_d1_database_id_here"
+    }
+  ],
   "observability": {
     "enabled": true
   }

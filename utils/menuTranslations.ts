@@ -168,9 +168,6 @@ const menuTranslationMap: Record<string, Record<string, { name?: string; descrip
   'vegan-burger-46': {
     en: { name: "Vegan Burger", description: "Vegan burger, salad, fresh cucumber and onion" },
   },
-  'salad-port-ghalib-47': {
-    en: { name: "Port Ghalib Salad", description: "Salad, grilled chicken, toasted bread, parmesan, caesar sauce" },
-  },
   'tuna-salad-48': {
     en: { name: "Tuna Salad", description: "Tuna slices, tomatoes, salad, carrots and mozzarella" },
   },

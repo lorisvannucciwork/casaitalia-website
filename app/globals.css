@@ -96,8 +96,17 @@
   }
 }
 
-.animate-pulse-gold {
-  animation: pulse-gold 2s infinite;
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 1.8s infinite ease-in-out;
 }
 
 /* Hide scrollbar for elements with no-scrollbar class */
@@ -108,3 +117,4 @@
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
