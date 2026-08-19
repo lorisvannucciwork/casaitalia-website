@@ -45,12 +45,9 @@ export const DishCard: React.FC<DishCardProps> = ({ item, onSelectDish, onQuickA
                 {/* Shimmer sweep */}
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent animate-shimmer" />
                 
-                {/* Centered pulsing emblem */}
-                <div className="relative z-10 flex flex-col items-center gap-2 opacity-70">
-                  <div className="w-10 h-10 rounded-full border border-[#ba935a]/30 flex items-center justify-center bg-white/90 shadow-sm animate-pulse">
-                    <span className="font-serif font-black text-xs text-[#ba935a]">CI</span>
-                  </div>
-                  <span className="font-signature text-xl text-[#ba935a]/90 tracking-wide animate-pulse">
+                {/* Centered brand text */}
+                <div className="relative z-10 flex flex-col items-center opacity-70">
+                  <span className="font-signature text-2xl text-[#ba935a]/90 tracking-wide animate-pulse">
                     Casa Italia
                   </span>
                 </div>
