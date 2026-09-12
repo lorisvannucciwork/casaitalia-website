@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { Utensils } from 'lucide-react';
 
@@ -8,24 +8,69 @@ import { useLanguage } from '../context/LanguageContext';
 
 export const Hero: React.FC = () => {
   const { t } = useLanguage();
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    // Explicitly set DOM properties to satisfy desktop browser autoplay policy
+    video.defaultMuted = true;
+    video.muted = true;
+
+    const playVideo = () => {
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          // Autoplay was blocked on desktop; retry on any user gesture
+          const handleGesture = () => {
+            if (videoRef.current) {
+              videoRef.current.defaultMuted = true;
+              videoRef.current.muted = true;
+              videoRef.current.play().catch(() => {});
+            }
+            window.removeEventListener('click', handleGesture);
+            window.removeEventListener('scroll', handleGesture);
+            window.removeEventListener('touchstart', handleGesture);
+            window.removeEventListener('keydown', handleGesture);
+          };
+
+          window.addEventListener('click', handleGesture, { once: true, passive: true });
+          window.addEventListener('scroll', handleGesture, { once: true, passive: true });
+          window.addEventListener('touchstart', handleGesture, { once: true, passive: true });
+          window.addEventListener('keydown', handleGesture, { once: true, passive: true });
+        });
+      }
+    };
+
+    if (video.readyState >= 2) {
+      playVideo();
+    } else {
+      video.addEventListener('loadeddata', playVideo, { once: true });
+      video.addEventListener('canplay', playVideo, { once: true });
+    }
+  }, []);
 
   return (
     <section className="relative min-h-screen h-[100dvh] flex flex-col items-center justify-center pt-20 pb-12 sm:pt-24 sm:pb-16 overflow-hidden bg-[#1a1816]">
-      {/* Background Video with Blur and Dark Luxury Overlay */}
+      {/* Background Video with Dark Luxury Overlay */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
         <video
+          ref={videoRef}
           autoPlay
           loop
           muted
           playsInline
-          poster="/backgrounds/bg-1.webp"
-          className="w-full h-full object-cover scale-105 filter blur-[3px] brightness-[0.75] opacity-50 sm:opacity-60"
+          preload="auto"
+          disablePictureInPicture
+          disableRemotePlayback
+          className="w-full h-full object-cover scale-105 brightness-[0.8] opacity-60 sm:opacity-75"
         >
           <source src="/videos/hero.mp4" type="video/mp4" />
         </video>
         {/* Soft Vignette and Luxury Cream-Gold Glow Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#1a1816] via-[#1a1816]/60 to-[#1a1816]/80" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(186,147,90,0.15)_0%,_transparent_70%)]" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#1a1816] via-[#1a1816]/50 to-[#1a1816]/70" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(186,147,90,0.12)_0%,_transparent_70%)]" />
       </div>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center flex flex-col items-center space-y-8 my-auto">

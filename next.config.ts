@@ -21,6 +21,7 @@ const securityHeaders = [
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com data:",
       "img-src 'self' data: blob: https://cdn.casaitaliarestaurants.com https://*.r2.cloudflarestorage.com https://pub-*.r2.dev",
+      "media-src 'self' data: blob: https://cdn.casaitaliarestaurants.com https://*.casaitaliarestaurants.com",
       `connect-src ${connectSources}`,
       "frame-src 'self' https://maps.google.com https://www.google.com",
       "frame-ancestors 'self'",
