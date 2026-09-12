@@ -11,7 +11,7 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://casaitaliarestaurants.com"),
-  title: "Casa Italia | Ristorante & Enoteca Autentica",
+  title: "Casa Italia | Ristorante Autentico",
   description: "Experience authentic Italian dining at Casa Italia in Porto Ghalib. Fresh pasta, wood-fired Neapolitan pizza, Tuscan charcoal steaks, and fine DOCG wine pairings.",
   keywords: ["Casa Italia", "Italian Restaurant", "Porto Ghalib", "Fresh Pasta", "Wood Fired Pizza", "Wine Pairing", "Digital Menu"],
   alternates: {

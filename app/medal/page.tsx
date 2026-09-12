@@ -66,7 +66,7 @@ export default function MedalPage() {
       try {
         await navigator.share({
           title: 'Casa Italia | Medal & Social Hub',
-          text: 'Connect with Casa Italia Ristorante & Enoteca in Porto Ghalib.',
+          text: 'Connect with Casa Italia Ristorante in Porto Ghalib.',
           url: url,
         });
       } catch {

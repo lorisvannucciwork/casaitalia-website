@@ -38,8 +38,8 @@ export default function PrivacyPolicyPage() {
           </h1>
           <p className="mt-3 text-sm text-[#6e675e]">
             {isIt
-              ? 'Ultimo aggiornamento: 12 Settembre 2026 • Casa Italia Ristorante & Enoteca, Porto Ghalib, Egitto'
-              : 'Last Updated: September 12, 2026 • Casa Italia Ristorante & Enoteca, Porto Ghalib, Egypt'}
+              ? 'Ultimo aggiornamento: 12 Settembre 2026 • Casa Italia Ristorante, Porto Ghalib, Egitto'
+              : 'Last Updated: September 12, 2026 • Casa Italia Ristorante, Porto Ghalib, Egypt'}
           </p>
         </div>
 
@@ -54,16 +54,16 @@ export default function PrivacyPolicyPage() {
             <p className="mb-4">
               {isIt ? (
                 <>
-                  La presente Informativa sulla Privacy descrive le modalità con cui <strong>Casa Italia Ristorante &amp; Enoteca</strong> (&quot;noi&quot;, &quot;nostro&quot; o &quot;il Ristorante&quot;), situato nella Marina di Porto Ghalib, Governatorato del Mar Rosso, Egitto, raccoglie, utilizza, conserva e protegge le informazioni personali degli ospiti e dei visitatori del sito web e del menu digitale.
+                  La presente Informativa sulla Privacy descrive le modalità con cui <strong>Casa Italia Ristorante</strong> (&quot;noi&quot;, &quot;nostro&quot; o &quot;il Ristorante&quot;), situato nella Marina di Porto Ghalib, Governatorato del Mar Rosso, Egitto, raccoglie, utilizza, conserva e protegge le informazioni personali degli ospiti e dei visitatori del sito web e del menu digitale.
                 </>
               ) : (
                 <>
-                  This Privacy Policy outlines how <strong>Casa Italia Ristorante &amp; Enoteca</strong> (&quot;we&quot;, &quot;us&quot;, or &quot;the Restaurant&quot;), situated at Porto Ghalib Marina, Red Sea Governorate, Egypt, collects, uses, retains, and protects personal information gathered through our website and digital dining platform.
+                  This Privacy Policy outlines how <strong>Casa Italia Ristorante</strong> (&quot;we&quot;, &quot;us&quot;, or &quot;the Restaurant&quot;), situated at Porto Ghalib Marina, Red Sea Governorate, Egypt, collects, uses, retains, and protects personal information gathered through our website and digital dining platform.
                 </>
               )}
             </p>
             <div className="bg-[#faf7f2] p-4 border-l-2 border-[#ba935a] text-xs text-[#6e675e] space-y-1">
-              <p><strong>Casa Italia Ristorante &amp; Enoteca</strong></p>
+              <p><strong>Casa Italia Ristorante</strong></p>
               <p>Marina Waterfront, Porto Ghalib, Marsa Alam, Red Sea, Egypt</p>
               <p>Email: <a href="mailto:info@casaitaliarestaurants.com" className="text-[#ba935a] underline">info@casaitaliarestaurants.com</a></p>
             </div>

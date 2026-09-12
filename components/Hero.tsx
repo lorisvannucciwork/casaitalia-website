@@ -17,8 +17,12 @@ export const Hero: React.FC = () => {
     // Explicitly set DOM properties to satisfy desktop browser autoplay policy
     video.defaultMuted = true;
     video.muted = true;
+    video.volume = 0;
 
     const playVideo = () => {
+      if (!video) return;
+      video.muted = true;
+      video.volume = 0;
       const playPromise = video.play();
       if (playPromise !== undefined) {
         playPromise.catch(() => {
@@ -27,6 +31,7 @@ export const Hero: React.FC = () => {
             if (videoRef.current) {
               videoRef.current.defaultMuted = true;
               videoRef.current.muted = true;
+              videoRef.current.volume = 0;
               videoRef.current.play().catch(() => {});
             }
             window.removeEventListener('click', handleGesture);
@@ -43,12 +48,13 @@ export const Hero: React.FC = () => {
       }
     };
 
-    if (video.readyState >= 2) {
-      playVideo();
-    } else {
-      video.addEventListener('loadeddata', playVideo, { once: true });
-      video.addEventListener('canplay', playVideo, { once: true });
-    }
+    // Immediate attempt
+    playVideo();
+
+    // Event hooks when metadata or frames become available
+    video.addEventListener('loadedmetadata', playVideo, { once: true });
+    video.addEventListener('loadeddata', playVideo, { once: true });
+    video.addEventListener('canplay', playVideo, { once: true });
   }, []);
 
   return (
@@ -57,6 +63,8 @@ export const Hero: React.FC = () => {
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
         <video
           ref={videoRef}
+          src="/videos/hero.mp4"
+          poster="/backgrounds/bg-1.webp"
           autoPlay
           loop
           muted
@@ -64,12 +72,12 @@ export const Hero: React.FC = () => {
           preload="auto"
           disablePictureInPicture
           disableRemotePlayback
-          className="w-full h-full object-cover scale-105 brightness-[0.8] opacity-60 sm:opacity-75"
+          className="w-full h-full object-cover scale-105 brightness-[0.85] opacity-75 sm:opacity-85"
         >
           <source src="/videos/hero.mp4" type="video/mp4" />
         </video>
         {/* Soft Vignette and Luxury Cream-Gold Glow Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#1a1816] via-[#1a1816]/50 to-[#1a1816]/70" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#1a1816] via-[#1a1816]/40 to-[#1a1816]/60" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(186,147,90,0.12)_0%,_transparent_70%)]" />
       </div>
 

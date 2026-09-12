@@ -234,7 +234,7 @@ export default function MedalCardPage() {
           setCardData({
             guestName: 'Casa Italia Guest',
             headline: 'Medal Card Member',
-            bio: 'Distinguished guest of Casa Italia Ristorante & Enoteca Autentica in Porto Ghalib.',
+            bio: 'Distinguished guest of Casa Italia Ristorante Autentico in Porto Ghalib.',
             instagram: 'casaitalia.portghalib',
             tiktok: 'casaitalia.eg',
             facebook: 'casaitaliarestaurant'
@@ -245,7 +245,7 @@ export default function MedalCardPage() {
         setCardData({
           guestName: 'Casa Italia Guest',
           headline: 'Medal Card Member',
-          bio: 'Distinguished guest of Casa Italia Ristorante & Enoteca Autentica in Porto Ghalib.'
+          bio: 'Distinguished guest of Casa Italia Ristorante Autentico in Porto Ghalib.'
         });
       } finally {
         setLoading(false);
@@ -638,7 +638,7 @@ END:VCARD`;
             Compliments Of
           </span>
           <h3 className="font-serif font-bold text-lg text-[#faf7f2] tracking-wider mb-2">
-            Casa Italia Ristorante & Enoteca
+            Casa Italia Ristorante
           </h3>
           <p className="text-[11px] text-[#a89f91] max-w-xs leading-relaxed mb-5">
             Authentic Italian Dining & Fine Wine Pairings in the heart of Porto Ghalib Marina.

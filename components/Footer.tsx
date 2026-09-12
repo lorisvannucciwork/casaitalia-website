@@ -161,7 +161,7 @@ export const Footer: React.FC = () => {
           </div>
 
           <p className="text-[11px] text-center sm:text-right">
-            © {new Date().getFullYear()} Casa Italia Ristorante & Enoteca • Porto Ghalib. {t('footer.rights')}
+            © {new Date().getFullYear()} Casa Italia Ristorante • Porto Ghalib. {t('footer.rights')}
           </p>
         </div>
 

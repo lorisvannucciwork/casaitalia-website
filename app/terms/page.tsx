@@ -30,7 +30,7 @@ export default function TermsAndConditionsPage() {
         <div className="border-b border-[#ba935a]/30 pb-8 mb-10">
           <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#ba935a]/10 border border-[#ba935a]/30 text-[11px] font-bold uppercase tracking-widest text-[#ba935a] mb-4">
             <FileText className="w-3.5 h-3.5" />
-            <span>Casa Italia Ristorante &amp; Enoteca</span>
+            <span>Casa Italia Ristorante</span>
           </div>
 
           <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1a1816] tracking-tight">
@@ -54,11 +54,11 @@ export default function TermsAndConditionsPage() {
             <p>
               {isIt ? (
                 <>
-                  L&apos;accesso e l&apos;utilizzo dei servizi offerti da <strong>Casa Italia Ristorante &amp; Enoteca</strong>, sia in loco presso la nostra sede nella Marina di Porto Ghalib sia tramite la piattaforma digitale (sito web, menu digitale per tavoli e tag NFC), sono regolati dai presenti Termini &amp; Condizioni. Effettuando una prenotazione, consultando il menu digitale o accedendo ai nostri locali, l&apos;ospite accetta integralmente le presenti disposizioni.
+                  L&apos;accesso e l&apos;utilizzo dei servizi offerti da <strong>Casa Italia Ristorante</strong>, sia in loco presso la nostra sede nella Marina di Porto Ghalib sia tramite la piattaforma digitale (sito web, menu digitale per tavoli e tag NFC), sono regolati dai presenti Termini &amp; Condizioni. Effettuando una prenotazione, consultando il menu digitale o accedendo ai nostri locali, l&apos;ospite accetta integralmente le presenti disposizioni.
                 </>
               ) : (
                 <>
-                  Access to and use of dining, reservation, and digital ordering platforms provided by <strong>Casa Italia Ristorante &amp; Enoteca</strong> at Porto Ghalib Marina are governed by these Terms &amp; Conditions. By making a table reservation, viewing our digital menu, or dining with us, you agree to comply with and be bound by these policies.
+                  Access to and use of dining, reservation, and digital ordering platforms provided by <strong>Casa Italia Ristorante</strong> at Porto Ghalib Marina are governed by these Terms &amp; Conditions. By making a table reservation, viewing our digital menu, or dining with us, you agree to comply with and be bound by these policies.
                 </>
               )}
             </p>
