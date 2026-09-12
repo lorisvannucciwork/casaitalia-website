@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { MENU_CATEGORIES } from '../data/menuData';
+import { MENU_CATEGORIES, Category } from '../data/menuData';
 import { ChevronDown, ChevronLeft, ChevronRight, UtensilsCrossed } from 'lucide-react';
 
 import { useLanguage } from '../context/LanguageContext';
@@ -9,6 +9,7 @@ import { useLanguage } from '../context/LanguageContext';
 interface CategoryNavProps {
   activeCategory: string;
   onSelectCategory: (id: string) => void;
+  categories?: Category[];
   activeDietaryFilter?: string | null;
   onSelectDietaryFilter?: (filter: string | null) => void;
   isAttached?: boolean;
@@ -19,16 +20,24 @@ const ITEMS_PER_PAGE = 6;
 export const CategoryNav: React.FC<CategoryNavProps> = ({
   activeCategory,
   onSelectCategory,
+  categories = MENU_CATEGORIES,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [page, setPage] = useState(0);
-  const { t, formatNumber } = useLanguage();
+  const { t, formatNumber, language } = useLanguage();
 
-  const totalPages = Math.ceil(MENU_CATEGORIES.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(categories.length / ITEMS_PER_PAGE);
+
+  const getCategoryTitle = (cat: Category) => {
+    const key = `categories.${cat.id}`;
+    const trans = t(key);
+    if (trans && trans !== key) return trans;
+    return language === 'it' ? (cat.italianTitle || cat.name) : cat.name;
+  };
 
   const handleToggle = () => {
     if (!isOpen) {
-      const activeIndex = MENU_CATEGORIES.findIndex((c) => c.id === activeCategory);
+      const activeIndex = categories.findIndex((c) => c.id === activeCategory);
       if (activeIndex >= 0) {
         setPage(Math.floor(activeIndex / ITEMS_PER_PAGE));
       }
@@ -36,13 +45,13 @@ export const CategoryNav: React.FC<CategoryNavProps> = ({
     setIsOpen((prev) => !prev);
   };
 
-  const activeCategoryObj = MENU_CATEGORIES.find((c) => c.id === activeCategory);
-  const activeCategoryName = activeCategoryObj
-    ? t(`categories.${activeCategoryObj.id}`)
-    : t('categories.select');
+  const activeCategoryObj = categories.find((c) => c.id === activeCategory);
+  const activeCategoryName = activeCategory === 'all'
+    ? t('categories.all')
+    : (activeCategoryObj ? getCategoryTitle(activeCategoryObj) : t('categories.select'));
 
   const startIndex = page * ITEMS_PER_PAGE;
-  const currentCategories = MENU_CATEGORIES.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  const currentCategories = categories.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
   return (
     <div className="relative z-40 w-full sm:w-auto">
@@ -114,7 +123,7 @@ export const CategoryNav: React.FC<CategoryNavProps> = ({
           <div className="divide-y divide-gray-100">
             {currentCategories.map((cat) => {
               const isSelected = activeCategory === cat.id;
-              const categoryTitle = t(`categories.${cat.id}`);
+              const categoryTitle = getCategoryTitle(cat);
               return (
                 <button
                   key={cat.id}
@@ -150,7 +159,7 @@ export const CategoryNav: React.FC<CategoryNavProps> = ({
               <span>{t('nav.prev')}</span>
             </button>
             <span className="font-semibold text-[#ba935a]">
-              {formatNumber(startIndex + 1)} - {formatNumber(Math.min(startIndex + ITEMS_PER_PAGE, MENU_CATEGORIES.length))} {t('nav.of')} {formatNumber(MENU_CATEGORIES.length)}
+              {formatNumber(startIndex + 1)} - {formatNumber(Math.min(startIndex + ITEMS_PER_PAGE, categories.length))} {t('nav.of')} {formatNumber(categories.length)}
             </span>
             <button
               type="button"

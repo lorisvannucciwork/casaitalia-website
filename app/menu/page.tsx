@@ -5,94 +5,61 @@ import { MENU_ITEMS, MENU_CATEGORIES, MenuItem } from '../../data/menuData';
 import { Navbar } from '../../components/Navbar';
 import { CategoryNav } from '../../components/CategoryNav';
 import { DishCard } from '../../components/DishCard';
-
-import { OrderDraftDrawer, OrderItem } from '../../components/OrderDraftDrawer';
-import { FloatingOrderBar } from '../../components/FloatingOrderBar';
-
 import { Footer } from '../../components/Footer';
 import { Utensils } from 'lucide-react';
-
-import { useCart } from '../../hooks/useCart';
-
 import { useLanguage } from '../../context/LanguageContext';
 
 export default function MenuPage() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   // Navigation & Search States
+  const [categories, setCategories] = useState<typeof MENU_CATEGORIES>(MENU_CATEGORIES);
   const [activeCategory, setActiveCategory] = useState<string>(MENU_CATEGORIES[0].id);
-  const [activeDietaryFilter, setActiveDietaryFilter] = useState<string | null>(null);
+  const [menuItems, setMenuItems] = useState<MenuItem[]>(MENU_ITEMS);
 
-
-  // Modals & Drawers States
-  const [isOrderDrawerOpen, setIsOrderDrawerOpen] = useState(false);
-
-  // Table QR Detection
+  // Fetch live database menu items and categories
   React.useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search);
-      const tableParam = params.get('table');
-      if (tableParam) {
-        localStorage.setItem('casaItaliaTableNumber', `Table ${tableParam.padStart(2, '0')}`);
-        localStorage.setItem('casaItaliaScannedViaQR', 'true');
-      }
-    }
-  }, []);
+    fetch('/api/menu')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.items) && data.items.length > 0) {
+          setMenuItems(data.items);
+        }
+      })
+      .catch((err) => console.warn('Live menu fetch fallback to static:', err));
 
-  const {
-    orderItems,
-    handleUpdateQuantity,
-    handleRemoveItem,
-    handleAddItem,
-    handleUpdateNote,
-  } = useCart();
+    fetch('/api/menu/categories')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.categories) && data.categories.length > 0) {
+          setCategories(data.categories);
+        }
+      })
+      .catch((err) => console.warn('Live categories fetch fallback to static:', err));
+  }, []);
 
   // Filter menu items
   const filteredDishes = useMemo(() => {
-    return MENU_ITEMS.filter((item) => {
-      // Category filter
-      if (activeCategory !== 'all' && item.category !== activeCategory) {
+    return menuItems.filter((item) => {
+      if (activeCategory !== 'all' && item.category.toLowerCase() !== activeCategory.toLowerCase()) {
         return false;
-      }
-      // Dietary filter
-      if (activeDietaryFilter) {
-        if (!item.tags.includes(activeDietaryFilter)) {
-          return false;
-        }
       }
       return true;
     });
-  }, [activeCategory, activeDietaryFilter]);
+  }, [menuItems, activeCategory]);
 
-  // Quick Add Item handler
-  const handleQuickAdd = (item: MenuItem, e: React.MouseEvent) => {
-    e.stopPropagation();
-    const cartId = `${item.id}-${Date.now()}`;
-    const newItem: OrderItem = {
-      cartId,
-      item,
-      quantity: 1,
-      options: [],
-      unitPrice: item.price,
-    };
-    handleAddItem(newItem);
-  };
-
-  const totalItemCount = orderItems.reduce((acc, curr) => acc + curr.quantity, 0);
-
-  const currentCategoryObj = MENU_CATEGORIES.find((c) => c.id === activeCategory);
-  const currentCategoryTitle = activeCategory === 'all'
-    ? t('categories.all')
-    : (currentCategoryObj ? t(`categories.${currentCategoryObj.id}`) : activeCategory);
+  const currentCategoryObj = categories.find((c) => c.id.toLowerCase() === activeCategory.toLowerCase());
+  const currentCategoryTitle = useMemo(() => {
+    if (activeCategory === 'all') return t('categories.all');
+    if (!currentCategoryObj) return activeCategory;
+    const trans = t(`categories.${currentCategoryObj.id}`);
+    if (trans && trans !== `categories.${currentCategoryObj.id}`) return trans;
+    return language === 'it' ? (currentCategoryObj.italianTitle || currentCategoryObj.name) : currentCategoryObj.name;
+  }, [activeCategory, currentCategoryObj, t, language]);
 
   return (
     <div className="min-h-screen flex flex-col bg-[#ededed] text-[#1a1816] font-sans antialiased selection:bg-[#ba935a] selection:text-white">
-      {/* Top Navbar with Attached Category Navigation */}
-      <Navbar
-
-        orderCount={totalItemCount}
-        onOpenOrderDrawer={() => setIsOrderDrawerOpen(true)}
-
-      />
+      {/* Top Navbar */}
+      <Navbar />
 
       {/* Main Content Body */}
       <main className="flex-1 relative">
@@ -113,8 +80,8 @@ export default function MenuPage() {
                 <CategoryNav 
                   activeCategory={activeCategory}
                   onSelectCategory={setActiveCategory}
+                  categories={categories}
                 />
-
               </div>
             </div>
 
@@ -129,15 +96,14 @@ export default function MenuPage() {
                     <Utensils className="w-6 h-6 text-[#ba935a]" />
                   </div>
                   <h3 className="text-2xl sm:text-3xl font-serif font-black text-[#1a1816] tracking-tight">
-                    {t('cart.empty')}
+                    {t('categories.all')}
                   </h3>
                   <p className="text-sm text-[#6e675e] max-w-sm mx-auto font-medium">
-                    {t('cart.emptyDesc')}
+                    No dishes found in this category.
                   </p>
                   <button
                     onClick={() => {
                       setActiveCategory('all');
-                      setActiveDietaryFilter(null);
                     }}
                     className="mt-4 px-8 py-3.5 bg-[#ba935a] text-white text-sm font-bold hover:bg-[#a37f48] shadow-casa-gold transition-all transform hover:-translate-y-0.5 tracking-wide uppercase"
                   >
@@ -152,8 +118,6 @@ export default function MenuPage() {
                   <DishCard
                     key={dish.id || `dish-${index}`}
                     item={dish}
-                    onSelectDish={() => {}}
-                    onQuickAdd={handleQuickAdd}
                   />
                 ))}
               </div>
@@ -165,23 +129,6 @@ export default function MenuPage() {
 
       {/* Footer */}
       <Footer />
-
-
-
-
-      <FloatingOrderBar
-        items={orderItems}
-        onOpenOrderDrawer={() => setIsOrderDrawerOpen(true)}
-      />
-
-      <OrderDraftDrawer
-        isOpen={isOrderDrawerOpen}
-        onClose={() => setIsOrderDrawerOpen(false)}
-        items={orderItems}
-        onUpdateQuantity={handleUpdateQuantity}
-        onRemoveItem={handleRemoveItem}
-        onUpdateNote={handleUpdateNote}
-      />
     </div>
   );
 }

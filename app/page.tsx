@@ -6,11 +6,7 @@ import { ArrowRight, User } from "lucide-react";
 import { Navbar } from "../components/Navbar";
 import { Hero } from "../components/Hero";
 import { Footer } from "../components/Footer";
-import { OrderDraftDrawer } from "../components/OrderDraftDrawer";
-import { FloatingOrderBar } from "../components/FloatingOrderBar";
 import { useState } from "react";
-import { useCart } from '../hooks/useCart';
-
 import { useLanguage } from "../context/LanguageContext";
 
 function OwnerAvatarCard({
@@ -61,8 +57,6 @@ function OwnerAvatarCard({
               <User className="w-12 h-12 sm:w-14 sm:h-14 text-[#ba935a]/85 stroke-[1.6]" />
             </div>
           </div>
-
-
         </div>
       )}
       <div className="absolute inset-0 bg-gradient-to-t from-[#1a1816]/30 via-transparent to-transparent opacity-60 pointer-events-none" />
@@ -71,24 +65,12 @@ function OwnerAvatarCard({
 }
 
 export default function Home() {
-  const [isOrderDrawerOpen, setIsOrderDrawerOpen] = useState(false);
   const { t } = useLanguage();
-  const {
-    orderItems,
-    handleUpdateQuantity,
-    handleRemoveItem,
-    handleUpdateNote,
-  } = useCart();
-
-  const totalItemCount = orderItems.reduce((acc, curr) => acc + curr.quantity, 0);
 
   return (
     <div className="min-h-screen flex flex-col bg-[#ededed] text-[#1a1816] font-sans antialiased selection:bg-[#ba935a] selection:text-white">
       {/* Top Navbar */}
-      <Navbar
-        orderCount={totalItemCount}
-        onOpenOrderDrawer={() => setIsOrderDrawerOpen(true)}
-      />
+      <Navbar />
 
       {/* Main Content Body */}
       <main className="flex-1 relative">
@@ -162,20 +144,6 @@ export default function Home() {
 
       {/* Footer */}
       <Footer />
-
-      <FloatingOrderBar
-        items={orderItems}
-        onOpenOrderDrawer={() => setIsOrderDrawerOpen(true)}
-      />
-
-      <OrderDraftDrawer
-        isOpen={isOrderDrawerOpen}
-        onClose={() => setIsOrderDrawerOpen(false)}
-        items={orderItems}
-        onUpdateQuantity={handleUpdateQuantity}
-        onRemoveItem={handleRemoveItem}
-        onUpdateNote={handleUpdateNote}
-      />
     </div>
   );
 }

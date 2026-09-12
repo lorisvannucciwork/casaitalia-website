@@ -6,16 +6,13 @@ import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
 import { Utensils, Home } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
-import { useCart } from '../hooks/useCart';
 
 export default function NotFound() {
   const { t } = useLanguage();
-  const { orderItems } = useCart();
-  const totalItemCount = orderItems.reduce((acc, i) => acc + i.quantity, 0);
 
   return (
     <div className="min-h-screen flex flex-col bg-[#ededed] text-[#1a1816] font-sans antialiased pt-[72px]">
-      <Navbar orderCount={totalItemCount} onOpenOrderDrawer={() => {}} />
+      <Navbar />
 
       <main className="flex-1 relative w-full flex items-center justify-center py-16 sm:py-24 bg-[url('/backgrounds/bg-1.webp')] bg-cover bg-center bg-fixed">
         {/* Soft warmth overlay */}

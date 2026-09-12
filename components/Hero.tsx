@@ -18,6 +18,7 @@ export const Hero: React.FC = () => {
           loop
           muted
           playsInline
+          poster="/backgrounds/bg-1.webp"
           className="w-full h-full object-cover scale-105 filter blur-[3px] brightness-[0.75] opacity-50 sm:opacity-60"
         >
           <source src="/videos/hero.mp4" type="video/mp4" />

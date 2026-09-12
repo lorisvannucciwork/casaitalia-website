@@ -10,30 +10,22 @@ import { getTranslatedMenuItem } from '../utils/menuTranslations';
 
 interface DishCardProps {
   item: MenuItem;
-  onSelectDish: (item: MenuItem) => void;
-  onQuickAdd: (item: MenuItem, e: React.MouseEvent) => void;
+  onSelectDish?: (item: MenuItem) => void;
 }
 
-export const DishCard: React.FC<DishCardProps> = ({ item, onSelectDish, onQuickAdd }) => {
-  const [addedAnim, setAddedAnim] = useState(false);
+export const DishCard: React.FC<DishCardProps> = ({ item, onSelectDish }) => {
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const [hasImageError, setHasImageError] = useState(false);
   const { language, formatCurrency } = useLanguage();
 
   const translatedItem = getTranslatedMenuItem(item, language);
 
-  const handleQuickAddClick = (e: React.MouseEvent) => {
-    onQuickAdd(item, e);
-    setAddedAnim(true);
-    setTimeout(() => setAddedAnim(false), 800);
-  };
-
   const dishImage = item.image && item.image.trim() !== '' ? item.image : null;
 
   return (
     <div
-      onClick={() => onSelectDish(item)}
-      className="group relative bg-white/70 backdrop-blur-2xl p-2.5 sm:p-3 overflow-hidden border border-white/60 shadow-lg hover:shadow-2xl hover:shadow-[#ba935a]/20 hover:border-[#ba935a]/40 transition-all duration-500 flex flex-col cursor-pointer transform hover:-translate-y-2 h-full"
+      onClick={() => onSelectDish && onSelectDish(item)}
+      className="group relative bg-white/70 backdrop-blur-2xl p-2.5 sm:p-3 overflow-hidden border border-white/60 shadow-lg hover:shadow-2xl hover:shadow-[#ba935a]/20 hover:border-[#ba935a]/40 transition-all duration-500 flex flex-col transform hover:-translate-y-1.5 h-full"
     >
       {/* Top Image Container with Loading Skeleton */}
       <div className="relative w-full h-52 sm:h-60 bg-[#f5eedf] overflow-hidden shadow-inner shrink-0 flex items-center justify-center">
@@ -101,32 +93,11 @@ export const DishCard: React.FC<DishCardProps> = ({ item, onSelectDish, onQuickA
           </p>
         </div>
 
-        {/* Dietary Badges & Quick Action Row */}
-        <div className="pt-4 mt-4 border-t border-[#ba935a]/15 flex items-end justify-between gap-2">
-          
-          {/* Price & Tags */}
-          <div className="flex flex-col gap-1.5">
-            <span className="font-serif font-bold text-xl sm:text-2xl text-[#1a1816] leading-none">
-              {formatCurrency(item.price)}
-            </span>
-
-          </div>
-
-          {/* Action Buttons */}
-          <button
-            onClick={handleQuickAddClick}
-            className={`group/btn relative overflow-hidden flex items-center justify-center w-11 h-11 sm:w-12 sm:h-12  font-bold transition-all duration-300 shadow-md shrink-0 ${
-              addedAnim
-                ? 'bg-emerald-500 text-white scale-110 shadow-emerald-500/30'
-                : 'bg-[#ba935a] hover:bg-[#a37f48] text-white hover:shadow-xl hover:shadow-[#ba935a]/40 hover:-translate-y-1'
-            }`}
-          >
-            {addedAnim ? (
-              <Check className="w-5 h-5 animate-in zoom-in duration-300" />
-            ) : (
-              <Plus className="w-5 h-5 group-hover/btn:rotate-90 transition-transform duration-300" />
-            )}
-          </button>
+        {/* Price Row */}
+        <div className="pt-4 mt-4 border-t border-[#ba935a]/15 flex items-center justify-between gap-2">
+          <span className="font-serif font-bold text-xl sm:text-2xl text-[#1a1816] leading-none">
+            {formatCurrency(item.price)}
+          </span>
         </div>
       </div>
     </div>
