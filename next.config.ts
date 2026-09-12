@@ -6,6 +6,8 @@ const connectSources = [
   "'self'",
   "https://*.cloudflare.com",
   "https://api.cloudflare.com",
+  "https://cloudflareinsights.com",
+  "https://*.cloudflareinsights.com",
   "https://cdn.casaitaliarestaurants.com",
   "https://*.casaitaliarestaurants.com",
   ...(isDev ? ["http://localhost:*", "ws://localhost:*", "http://127.0.0.1:*", "ws://127.0.0.1:*"] : []),
@@ -17,10 +19,10 @@ const securityHeaders = [
     key: 'Content-Security-Policy',
     value: [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' https://cdn.casaitaliarestaurants.com",
+      "script-src 'self' 'unsafe-inline' https://cdn.casaitaliarestaurants.com https://static.cloudflareinsights.com https://*.cloudflareinsights.com",
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com data:",
-      "img-src 'self' data: blob: https://cdn.casaitaliarestaurants.com https://*.r2.cloudflarestorage.com https://pub-*.r2.dev",
+      "img-src 'self' data: blob: https://cdn.casaitaliarestaurants.com https://*.r2.cloudflarestorage.com https://*.r2.dev",
       "media-src 'self' data: blob: https://cdn.casaitaliarestaurants.com https://*.casaitaliarestaurants.com",
       `connect-src ${connectSources}`,
       "frame-src 'self' https://maps.google.com https://www.google.com",
@@ -85,7 +87,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'pub-*.r2.dev',
+        hostname: '**.r2.dev',
       },
       {
         protocol: 'https',
