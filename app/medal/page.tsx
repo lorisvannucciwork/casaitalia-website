@@ -7,7 +7,6 @@ import {
   MapPin, 
   Share2, 
   Check, 
-  ExternalLink, 
   Utensils, 
   MessageCircle, 
   ChevronDown, 
@@ -131,16 +130,11 @@ export default function MedalPage() {
                 <div className="w-10 h-10 bg-[#00aa6c] text-white flex items-center justify-center shadow-sm shrink-0 group-hover:scale-105 transition-transform">
                   <TripAdvisorIcon className="w-5 h-5" />
                 </div>
-                <div className="text-left">
-                  <span className="text-sm font-bold text-[#1a1816] group-hover:text-[#00aa6c] transition-colors block">
-                    TripAdvisor Reviews
-                  </span>
-                  <span className="text-xs text-[#6e675e] block mt-0.5">
-                    Travelers&apos; Choice • Leave a Review
-                  </span>
-                </div>
+                <span className="text-sm font-bold text-[#1a1816] group-hover:text-[#00aa6c] transition-colors block">
+                  TripAdvisor Reviews
+                </span>
               </div>
-              <ExternalLink className="w-4 h-4 text-[#00aa6c] shrink-0 opacity-80 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" />
+              <ChevronRight className="w-4 h-4 text-[#00aa6c] group-hover:translate-x-0.5 transition-all shrink-0" />
             </a>
 
             {/* GOOGLE MAPS LOCATION & EXPANDABLE TOGGLE */}
@@ -155,15 +149,9 @@ export default function MedalPage() {
                   <div className="w-10 h-10 bg-[#ba935a] text-white flex items-center justify-center shadow-sm shrink-0 group-hover:scale-105 transition-transform">
                     <MapPin className="w-5 h-5" />
                   </div>
-                  <div>
-                    <span className="text-sm font-bold text-[#1a1816] group-hover:text-[#ba935a] transition-colors flex items-center gap-1">
-                      Google Maps Location
-                      <ExternalLink className="w-3.5 h-3.5 text-[#ba935a]" />
-                    </span>
-                    <span className="text-xs text-[#6e675e] block mt-0.5">
-                      Marina, Porto Ghalib (Open in Maps)
-                    </span>
-                  </div>
+                  <span className="text-sm font-bold text-[#1a1816] group-hover:text-[#ba935a] transition-colors block">
+                    Google Maps Location
+                  </span>
                 </a>
 
                 {/* Map Toggle Preview Button */}
@@ -203,14 +191,9 @@ export default function MedalPage() {
                 <div className="w-10 h-10 bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] text-white flex items-center justify-center shadow-sm shrink-0 group-hover:scale-105 transition-transform">
                   <InstagramIcon className="w-5 h-5 text-white" />
                 </div>
-                <div className="text-left">
-                  <span className="text-sm font-bold text-[#1a1816] group-hover:text-[#ba935a] transition-colors block">
-                    Instagram
-                  </span>
-                  <span className="text-xs text-[#6e675e] block font-mono mt-0.5">
-                    @casaitalia.portghalib
-                  </span>
-                </div>
+                <span className="text-sm font-bold text-[#1a1816] group-hover:text-[#ba935a] transition-colors block">
+                  Instagram
+                </span>
               </div>
               <ChevronRight className="w-4 h-4 text-[#ba935a] group-hover:translate-x-0.5 transition-all shrink-0" />
             </a>
@@ -226,14 +209,9 @@ export default function MedalPage() {
                 <div className="w-10 h-10 bg-[#1a1816] text-white flex items-center justify-center shadow-sm shrink-0 group-hover:scale-105 transition-transform">
                   <TikTokIcon className="w-5 h-5 text-white" />
                 </div>
-                <div className="text-left">
-                  <span className="text-sm font-bold text-[#1a1816] group-hover:text-[#ba935a] transition-colors block">
-                    TikTok
-                  </span>
-                  <span className="text-xs text-[#6e675e] block font-mono mt-0.5">
-                    @casaitalia.eg
-                  </span>
-                </div>
+                <span className="text-sm font-bold text-[#1a1816] group-hover:text-[#ba935a] transition-colors block">
+                  TikTok
+                </span>
               </div>
               <ChevronRight className="w-4 h-4 text-[#ba935a] group-hover:translate-x-0.5 transition-all shrink-0" />
             </a>
@@ -249,14 +227,9 @@ export default function MedalPage() {
                 <div className="w-10 h-10 bg-[#1877f2] text-white flex items-center justify-center shadow-sm shrink-0 group-hover:scale-105 transition-transform">
                   <FacebookIcon className="w-5 h-5 text-white" />
                 </div>
-                <div className="text-left">
-                  <span className="text-sm font-bold text-[#1a1816] group-hover:text-[#1877f2] transition-colors block">
-                    Facebook Community
-                  </span>
-                  <span className="text-xs text-[#6e675e] block mt-0.5">
-                    casaitaliarestaurant
-                  </span>
-                </div>
+                <span className="text-sm font-bold text-[#1a1816] group-hover:text-[#1877f2] transition-colors block">
+                  Facebook
+                </span>
               </div>
               <ChevronRight className="w-4 h-4 text-[#ba935a] group-hover:translate-x-0.5 transition-all shrink-0" />
             </a>
@@ -272,14 +245,9 @@ export default function MedalPage() {
                 <div className="w-10 h-10 bg-[#25d366] text-white flex items-center justify-center shadow-sm shrink-0 group-hover:scale-105 transition-transform">
                   <MessageCircle className="w-5 h-5 text-white" />
                 </div>
-                <div className="text-left">
-                  <span className="text-sm font-bold text-[#1a1816] group-hover:text-[#25d366] transition-colors block">
-                    WhatsApp Concierge
-                  </span>
-                  <span className="text-xs text-[#6e675e] block mt-0.5">
-                    Table Reservations &amp; Inquiries
-                  </span>
-                </div>
+                <span className="text-sm font-bold text-[#1a1816] group-hover:text-[#25d366] transition-colors block">
+                  WhatsApp Reservations
+                </span>
               </div>
               <ChevronRight className="w-4 h-4 text-[#25d366] group-hover:translate-x-0.5 transition-all shrink-0" />
             </a>
@@ -293,14 +261,9 @@ export default function MedalPage() {
                 <div className="w-10 h-10 bg-white/20 text-white flex items-center justify-center shadow-sm shrink-0 group-hover:scale-105 transition-transform">
                   <Utensils className="w-5 h-5" />
                 </div>
-                <div className="text-left">
-                  <span className="text-sm font-bold text-white block">
-                    Explore Digital Menu
-                  </span>
-                  <span className="text-xs text-white/85 block mt-0.5">
-                    Fresh Pasta, Seafood &amp; DOCG Wine
-                  </span>
-                </div>
+                <span className="text-sm font-bold text-white block">
+                  Explore Digital Menu
+                </span>
               </div>
               <ChevronRight className="w-4 h-4 text-white group-hover:translate-x-0.5 transition-all shrink-0" />
             </Link>
