@@ -64,7 +64,6 @@ export const Hero: React.FC = () => {
         <video
           ref={videoRef}
           src="/videos/hero.mp4"
-          poster="/backgrounds/bg-1.webp"
           autoPlay
           loop
           muted
@@ -72,7 +71,7 @@ export const Hero: React.FC = () => {
           preload="auto"
           disablePictureInPicture
           disableRemotePlayback
-          className="w-full h-full object-cover scale-105 brightness-[0.85] opacity-75 sm:opacity-85"
+          className="w-full h-full object-cover scale-105 sm:scale-[2.15] brightness-[0.92] opacity-80 sm:opacity-90 transition-transform duration-700"
         >
           <source src="/videos/hero.mp4" type="video/mp4" />
         </video>
