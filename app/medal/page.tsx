@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { 
-  Sparkles, 
   MapPin, 
   Share2, 
   Download, 
@@ -104,7 +103,7 @@ END:VCARD`;
     <div className="min-h-screen relative flex flex-col items-center justify-start text-[#1a1816] selection:bg-[#ba935a] selection:text-white">
       
       {/* ======================================================== */}
-      {/* 1. BRIGHT BACKGROUND WITH /backgrounds/bg-2.webp */}
+      {/* 1. RESTAURANT BACKGROUND IMAGE (/backgrounds/bg-2.webp) */}
       {/* ======================================================== */}
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
         <Image
@@ -112,12 +111,11 @@ END:VCARD`;
           alt="Casa Italia Background"
           fill
           priority
-          className="object-cover object-center scale-105 filter brightness-[1.02] contrast-[1.02]"
+          className="object-cover object-center scale-105"
         />
-        {/* Luminous Warm Ivory Overlay */}
-        <div className="absolute inset-0 bg-[#faf7f2]/82 backdrop-blur-[3px]" />
-        <div className="absolute inset-0 bg-gradient-to-b from-white/70 via-[#faf7f2]/60 to-[#faf7f2]/90" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(186,147,90,0.16)_0%,_transparent_75%)]" />
+        {/* Soft elegant vignette to preserve full photo visibility */}
+        <div className="absolute inset-0 bg-black/40 backdrop-blur-[0.5px]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-black/60" />
       </div>
 
       {/* ======================================================== */}
@@ -126,7 +124,7 @@ END:VCARD`;
       <main className="w-full max-w-lg mx-auto px-4 py-8 sm:py-12 relative z-10 flex flex-col items-center">
         
         {/* Luminous Glassmorphic Central Card */}
-        <div className="w-full bg-white/95 backdrop-blur-xl border border-[#ba935a]/35 rounded-3xl p-6 sm:p-8 shadow-[0_20px_50px_rgba(186,147,90,0.18)] flex flex-col items-center text-center relative overflow-hidden">
+        <div className="w-full bg-white/95 backdrop-blur-xl border border-[#ba935a]/35 rounded-3xl p-6 sm:p-8 shadow-[0_20px_50px_rgba(0,0,0,0.4)] flex flex-col items-center text-center relative overflow-hidden">
           
           {/* Subtle Golden Corner Embellishments */}
           <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-[#ba935a]"></div>
@@ -135,7 +133,7 @@ END:VCARD`;
           <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-[#ba935a]"></div>
 
           {/* Logo */}
-          <div className="relative h-16 w-52 sm:h-20 sm:w-60 mb-3 drop-shadow-sm">
+          <div className="relative h-16 w-52 sm:h-20 sm:w-60 mb-6 drop-shadow-sm">
             <Image
               src="/logo/logo-01.svg"
               alt="Casa Italia Logo"
@@ -143,14 +141,6 @@ END:VCARD`;
               className="object-contain"
               priority
             />
-          </div>
-
-          {/* Official Medal Badge */}
-          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#ba935a]/15 border border-[#ba935a]/35 mb-6 shadow-sm">
-            <Sparkles className="w-3.5 h-3.5 text-[#ba935a]" />
-            <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#ba935a]">
-              {t('medal.badge')}
-            </span>
           </div>
 
           {/* ======================================================== */}
