@@ -4,8 +4,6 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { 
-  MapPin, 
-  Share2, 
   Check, 
   Utensils, 
   ChevronDown, 
@@ -15,6 +13,16 @@ import {
 import { useLanguage } from '@/context/LanguageContext';
 
 // Official Vector Brand Icons
+const GoogleMapsIcon = ({ className = 'w-5 h-5' }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 92.3 132.3" fill="none">
+    <path fill="#1a73e8" d="M60.2 2.2C55.8.8 51 0 46.1 0 32 0 19.3 6.4 10.8 16.5l21.8 18.3L60.2 2.2z" />
+    <path fill="#ea4335" d="M10.8 16.5C4.1 24.5 0 34.9 0 46.1c0 8.7 1.7 15.7 4.6 22l28-33.3-21.8-18.3z" />
+    <path fill="#4285f4" d="M46.2 28.5c9.8 0 17.7 7.9 17.7 17.7 0 4.3-1.6 8.3-4.2 11.4 0 0 13.9-16.6 27.5-32.7-5.6-10.8-15.3-19-27-22.7L32.6 34.8c3.3-3.8 8.1-6.3 13.6-6.3" />
+    <path fill="#fbbc04" d="M46.2 63.8c-9.8 0-17.7-7.9-17.7-17.7 0-4.3 1.5-8.3 4.1-11.3l-28 33.3c4.8 10.6 12.8 19.2 21 29.9l34.1-40.5c-3.3 3.9-8.1 6.3-13.5 6.3" />
+    <path fill="#34a853" d="M59.1 109.2c15.4-24.1 33.3-35 33.3-63 0-7.7-1.9-14.9-5.2-21.3L25.6 98c2.6 3.4 5.3 7.3 7.9 11.3 9.4 14.5 6.8 23.1 12.8 23.1s3.4-8.7 12.8-23.2" />
+  </svg>
+);
+
 const TripAdvisorIcon = ({ className = 'w-5 h-5' }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="currentColor">
     <path d="M12.006 4.295c-2.67 0-5.338.784-7.645 2.353H0l1.963 2.135a5.997 5.997 0 0 0 4.04 10.43 5.976 5.976 0 0 0 4.075-1.6L12 19.705l1.922-2.09a5.972 5.972 0 0 0 4.072 1.598 6 6 0 0 0 6-5.998 5.982 5.982 0 0 0-1.957-4.432L24 6.648h-4.35a13.573 13.573 0 0 0-7.644-2.353zM12 6.255c1.531 0 3.063.303 4.504.903C13.943 8.138 12 10.43 12 13.1c0-2.671-1.942-4.962-4.504-5.942A11.72 11.72 0 0 1 12 6.256zM6.002 9.157a4.059 4.059 0 1 1 0 8.118 4.059 4.059 0 0 1 0-8.118zm11.992.002a4.057 4.057 0 1 1 .003 8.115 4.057 4.057 0 0 1-.003-8.115zm-11.992 1.93a2.128 2.128 0 0 0 0 4.256 2.128 2.128 0 0 0 0-4.256zm11.992 0a2.128 2.128 0 0 0 0 4.256 2.128 2.128 0 0 0 0-4.256z" />
@@ -143,7 +151,7 @@ export default function MedalPage() {
             </a>
 
             {/* GOOGLE MAPS LOCATION & EXPANDABLE TOGGLE */}
-            <div className="w-full bg-white border border-[#ba935a]/35 overflow-hidden shadow-sm hover:shadow-md transition-all">
+            <div className="w-full bg-white border border-[#4285F4]/35 hover:border-[#4285F4] overflow-hidden shadow-sm hover:shadow-md transition-all">
               <div className="flex items-center justify-between p-3.5">
                 <a
                   href="https://maps.app.goo.gl/HNufX8h9iE7dDJbR9"
@@ -151,10 +159,10 @@ export default function MedalPage() {
                   rel="noopener noreferrer"
                   className="flex items-center gap-3 text-left flex-1 group"
                 >
-                  <div className="w-10 h-10 bg-[#ba935a] text-white flex items-center justify-center shadow-sm shrink-0 group-hover:scale-105 transition-transform">
-                    <MapPin className="w-5 h-5" />
+                  <div className="w-10 h-10 bg-white border border-[#4285F4]/20 flex items-center justify-center shadow-sm shrink-0 group-hover:scale-105 transition-transform p-1.5">
+                    <GoogleMapsIcon className="w-5 h-6" />
                   </div>
-                  <span className="text-sm font-bold text-[#1a1816] group-hover:text-[#ba935a] transition-colors block">
+                  <span className="text-sm font-bold text-[#1a1816] group-hover:text-[#1a73e8] transition-colors block">
                     Google Maps Location
                   </span>
                 </a>
@@ -162,7 +170,7 @@ export default function MedalPage() {
                 {/* Map Toggle Preview Button */}
                 <button
                   onClick={() => setShowMapEmbed(!showMapEmbed)}
-                  className="px-2.5 py-1.5 text-[11px] font-bold uppercase tracking-wider text-[#ba935a] bg-[#ba935a]/10 hover:bg-[#ba935a]/20 border border-[#ba935a]/30 transition-all flex items-center gap-1 cursor-pointer shrink-0 ml-2"
+                  className="px-2.5 py-1.5 text-[11px] font-bold uppercase tracking-wider text-[#1a73e8] bg-[#1a73e8]/10 hover:bg-[#1a73e8]/20 border border-[#1a73e8]/30 transition-all flex items-center gap-1 cursor-pointer shrink-0 ml-2"
                 >
                   <span>{showMapEmbed ? 'Hide' : 'Map'}</span>
                   {showMapEmbed ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
@@ -171,7 +179,7 @@ export default function MedalPage() {
 
               {/* Collapsible Interactive Map Embed */}
               {showMapEmbed && (
-                <div className="w-full h-56 bg-[#f5f1eb] border-t border-[#ba935a]/30 relative animate-fadeIn">
+                <div className="w-full h-56 bg-[#f5f1eb] border-t border-[#4285F4]/30 relative animate-fadeIn">
                   <iframe
                     title="Casa Italia Porto Ghalib Map"
                     src="https://maps.google.com/maps?q=25.5340348,34.6360475&hl=en&z=17&output=embed"
@@ -289,10 +297,7 @@ export default function MedalPage() {
                   <span className="text-emerald-600">{t('medal.copied')}</span>
                 </>
               ) : (
-                <>
-                  <Share2 className="w-4 h-4 text-[#ba935a]" />
-                  <span>{t('medal.shareHub')}</span>
-                </>
+                <span>{t('medal.shareHub')}</span>
               )}
             </button>
           </div>
