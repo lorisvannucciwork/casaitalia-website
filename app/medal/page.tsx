@@ -14,8 +14,7 @@ import {
   MessageCircle, 
   ChevronDown, 
   ChevronUp, 
-  ChevronRight,
-  Star
+  ChevronRight
 } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 
@@ -171,14 +170,9 @@ END:VCARD`;
                   <TripAdvisorIcon className="w-5 h-5" />
                 </div>
                 <div className="text-left">
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-sm font-bold text-[#1a1816] group-hover:text-[#00aa6c] transition-colors">
-                      TripAdvisor Reviews
-                    </span>
-                    <span className="text-[10px] font-black text-[#00aa6c] bg-[#00aa6c]/10 px-1.5 py-0.5 rounded flex items-center gap-0.5 border border-[#00aa6c]/20">
-                      <Star className="w-2.5 h-2.5 fill-[#00aa6c]" /> 5.0
-                    </span>
-                  </div>
+                  <span className="text-sm font-bold text-[#1a1816] group-hover:text-[#00aa6c] transition-colors block">
+                    TripAdvisor Reviews
+                  </span>
                   <span className="text-xs text-[#6e675e] block mt-0.5">
                     Travelers&apos; Choice • Leave a Review
                   </span>
@@ -379,13 +373,6 @@ END:VCARD`;
                 </>
               )}
             </button>
-          </div>
-
-          {/* Footer Copyright */}
-          <div className="mt-6 text-[11px] text-[#7a7267] uppercase tracking-widest flex items-center justify-center gap-1.5">
-            <span>&copy; {new Date().getFullYear()} Casa Italia</span>
-            <span>•</span>
-            <span>Porto Ghalib</span>
           </div>
 
         </div>
