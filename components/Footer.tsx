@@ -88,7 +88,7 @@ export const Footer: React.FC = () => {
               <FacebookIcon className="w-4 h-4" />
             </a>
             <a
-              href="https://www.tripadvisor.com/Search?q=Casa+Italia+Porto+Ghalib"
+              href="https://www.tripadvisor.com/Restaurant_Review-g311425-d33991658-Reviews-Casa_Italia_Port_Ghalib-Marsa_Alam_Red_Sea_and_Sinai.html"
               target="_blank"
               rel="noopener noreferrer"
               title="TripAdvisor"

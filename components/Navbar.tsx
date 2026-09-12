@@ -149,7 +149,7 @@ export const Navbar: React.FC<NavbarProps> = () => {
               <Link href="https://www.facebook.com/casaitaliarestaurant/" target="_blank" className="w-9 h-9 bg-white border border-[#ba935a]/30 flex items-center justify-center text-[#ba935a] hover:bg-[#ba935a] hover:text-white transition-colors shadow-sm">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
               </Link>
-              <Link href="https://www.tripadvisor.com/Search?q=Casa+Italia+Porto+Ghalib" target="_blank" title="TripAdvisor" className="w-9 h-9 bg-white border border-[#ba935a]/30 flex items-center justify-center text-[#00aa6c] hover:bg-[#00aa6c] hover:text-white transition-colors shadow-sm">
+              <Link href="https://www.tripadvisor.com/Restaurant_Review-g311425-d33991658-Reviews-Casa_Italia_Port_Ghalib-Marsa_Alam_Red_Sea_and_Sinai.html" target="_blank" title="TripAdvisor" className="w-9 h-9 bg-white border border-[#ba935a]/30 flex items-center justify-center text-[#00aa6c] hover:bg-[#00aa6c] hover:text-white transition-colors shadow-sm">
                 <TripAdvisorNavIcon className="w-4 h-4" />
               </Link>
             </div>

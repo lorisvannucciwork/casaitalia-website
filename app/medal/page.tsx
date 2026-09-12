@@ -134,7 +134,7 @@ export default function MedalPage() {
             
             {/* TRIPADVISOR CARD BUTTON */}
             <a
-              href="https://www.tripadvisor.com/Search?q=Casa+Italia+Porto+Ghalib"
+              href="https://www.tripadvisor.com/Restaurant_Review-g311425-d33991658-Reviews-Casa_Italia_Port_Ghalib-Marsa_Alam_Red_Sea_and_Sinai.html"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-between p-3.5 bg-white hover:bg-[#f2faf5] border border-[#00aa6c]/40 hover:border-[#00aa6c] transition-all duration-300 group shadow-sm hover:shadow-md"
