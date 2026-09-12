@@ -84,7 +84,7 @@ export default function MedalPage() {
   };
 
   return (
-    <div className="min-h-screen relative flex flex-col items-center justify-start text-[#1a1816] selection:bg-[#ba935a] selection:text-white">
+    <div className="h-[100dvh] max-h-[100dvh] overflow-hidden relative flex flex-col items-center justify-center p-2 sm:p-4 text-[#1a1816] selection:bg-[#ba935a] selection:text-white">
       
       {/* ======================================================== */}
       {/* 1. RESTAURANT BACKGROUND IMAGE (/backgrounds/bg-2.webp) */}
@@ -103,12 +103,12 @@ export default function MedalPage() {
       </div>
 
       {/* ======================================================== */}
-      {/* 2. MAIN BRIGHT LUXURY CARD CONTAINER (SHARP EDGES) */}
+      {/* 2. MAIN BRIGHT LUXURY CARD CONTAINER (SMART SCREEN FIT) */}
       {/* ======================================================== */}
-      <main className="w-full max-w-lg mx-auto px-4 py-8 sm:py-12 relative z-10 flex flex-col items-center">
+      <main className="w-full max-w-md mx-auto h-full max-h-[100dvh] flex flex-col items-center justify-center relative z-10 py-1 sm:py-2">
         
         {/* Luminous Glassmorphic Central Card with Sharp Corners */}
-        <div className="w-full bg-white/95 backdrop-blur-xl border border-[#ba935a]/40 p-6 sm:p-8 shadow-[0_20px_50px_rgba(0,0,0,0.4)] flex flex-col items-center text-center relative overflow-hidden">
+        <div className="w-full max-h-full bg-white/95 backdrop-blur-xl border border-[#ba935a]/40 px-3.5 py-3 sm:px-6 sm:py-4 shadow-[0_15px_40px_rgba(0,0,0,0.35)] flex flex-col items-center text-center relative overflow-y-auto scrollbar-none">
           
           {/* Subtle Golden Corner Embellishments */}
           <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-[#ba935a]"></div>
@@ -117,7 +117,7 @@ export default function MedalPage() {
           <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-[#ba935a]"></div>
 
           {/* Logo */}
-          <div className="relative h-16 w-52 sm:h-20 sm:w-60 mb-6 drop-shadow-sm">
+          <div className="relative h-10 w-36 sm:h-12 sm:w-44 mb-2 sm:mb-2.5 drop-shadow-sm shrink-0">
             <Image
               src="/logo/logo-01.svg"
               alt="Casa Italia Logo"
@@ -130,39 +130,39 @@ export default function MedalPage() {
           {/* ======================================================== */}
           {/* 3. SIMPLIFIED SHARP-EDGED ACTION BUTTONS & LINKS */}
           {/* ======================================================== */}
-          <div className="w-full space-y-3">
+          <div className="w-full flex-1 flex flex-col justify-center gap-1.5 sm:gap-2 min-h-0">
             
             {/* TRIPADVISOR CARD BUTTON */}
             <a
               href="https://www.tripadvisor.com/Restaurant_Review-g311425-d33991658-Reviews-Casa_Italia_Port_Ghalib-Marsa_Alam_Red_Sea_and_Sinai.html"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-between p-3.5 bg-white hover:bg-[#f2faf5] border border-[#00aa6c]/40 hover:border-[#00aa6c] transition-all duration-300 group shadow-sm hover:shadow-md"
+              className="flex items-center justify-between p-2 sm:p-2.5 bg-white hover:bg-[#f2faf5] border border-[#00aa6c]/40 hover:border-[#00aa6c] transition-all duration-300 group shadow-sm hover:shadow-md shrink-0"
             >
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-[#00aa6c] text-white flex items-center justify-center shadow-sm shrink-0 group-hover:scale-105 transition-transform">
-                  <TripAdvisorIcon className="w-5 h-5" />
+              <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                <div className="w-7 h-7 sm:w-8 sm:h-8 bg-[#00aa6c] text-white flex items-center justify-center shadow-sm shrink-0 group-hover:scale-105 transition-transform p-1">
+                  <TripAdvisorIcon className="w-4 h-4" />
                 </div>
-                <span className="text-sm font-bold text-[#1a1816] group-hover:text-[#00aa6c] transition-colors block">
+                <span className="text-xs sm:text-sm font-bold text-[#1a1816] group-hover:text-[#00aa6c] transition-colors truncate">
                   TripAdvisor Reviews
                 </span>
               </div>
-              <ChevronRight className="w-4 h-4 text-[#00aa6c] group-hover:translate-x-0.5 transition-all shrink-0" />
+              <ChevronRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#00aa6c] group-hover:translate-x-0.5 transition-all shrink-0 ml-1" />
             </a>
 
             {/* GOOGLE MAPS LOCATION & EXPANDABLE TOGGLE */}
-            <div className="w-full bg-white border border-[#4285F4]/35 hover:border-[#4285F4] overflow-hidden shadow-sm hover:shadow-md transition-all">
-              <div className="flex items-center justify-between p-3.5">
+            <div className="w-full bg-white border border-[#4285F4]/35 hover:border-[#4285F4] overflow-hidden shadow-sm hover:shadow-md transition-all shrink-0">
+              <div className="flex items-center justify-between p-2 sm:p-2.5">
                 <a
                   href="https://maps.app.goo.gl/HNufX8h9iE7dDJbR9"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-3 text-left flex-1 group"
+                  className="flex items-center gap-2.5 sm:gap-3 text-left flex-1 group min-w-0"
                 >
-                  <div className="w-10 h-10 bg-white border border-[#4285F4]/20 flex items-center justify-center shadow-sm shrink-0 group-hover:scale-105 transition-transform p-1.5">
-                    <GoogleMapsIcon className="w-5 h-6" />
+                  <div className="w-7 h-7 sm:w-8 sm:h-8 bg-white border border-[#4285F4]/20 flex items-center justify-center shadow-sm shrink-0 group-hover:scale-105 transition-transform p-1">
+                    <GoogleMapsIcon className="w-4 h-5" />
                   </div>
-                  <span className="text-sm font-bold text-[#1a1816] group-hover:text-[#1a73e8] transition-colors block">
+                  <span className="text-xs sm:text-sm font-bold text-[#1a1816] group-hover:text-[#1a73e8] transition-colors block truncate">
                     Google Maps Location
                   </span>
                 </a>
@@ -170,16 +170,16 @@ export default function MedalPage() {
                 {/* Map Toggle Preview Button */}
                 <button
                   onClick={() => setShowMapEmbed(!showMapEmbed)}
-                  className="px-2.5 py-1.5 text-[11px] font-bold uppercase tracking-wider text-[#1a73e8] bg-[#1a73e8]/10 hover:bg-[#1a73e8]/20 border border-[#1a73e8]/30 transition-all flex items-center gap-1 cursor-pointer shrink-0 ml-2"
+                  className="px-2 py-1 text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-[#1a73e8] bg-[#1a73e8]/10 hover:bg-[#1a73e8]/20 border border-[#1a73e8]/30 transition-all flex items-center gap-1 cursor-pointer shrink-0 ml-1.5"
                 >
                   <span>{showMapEmbed ? 'Hide' : 'Map'}</span>
-                  {showMapEmbed ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+                  {showMapEmbed ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
                 </button>
               </div>
 
               {/* Collapsible Interactive Map Embed */}
               {showMapEmbed && (
-                <div className="w-full h-56 bg-[#f5f1eb] border-t border-[#4285F4]/30 relative animate-fadeIn">
+                <div className="w-full h-40 sm:h-48 bg-[#f5f1eb] border-t border-[#4285F4]/30 relative animate-fadeIn">
                   <iframe
                     title="Casa Italia Porto Ghalib Map"
                     src="https://maps.google.com/maps?q=25.5340348,34.6360475&hl=en&z=17&output=embed"
@@ -198,17 +198,17 @@ export default function MedalPage() {
               href="https://www.instagram.com/casaitalia.portghalib/"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-between p-3.5 bg-white hover:bg-[#fdfaf5] border border-[#ba935a]/25 hover:border-[#f09433] transition-all duration-300 group shadow-sm hover:shadow-md"
+              className="flex items-center justify-between p-2 sm:p-2.5 bg-white hover:bg-[#fdfaf5] border border-[#ba935a]/25 hover:border-[#f09433] transition-all duration-300 group shadow-sm hover:shadow-md shrink-0"
             >
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] text-white flex items-center justify-center shadow-sm shrink-0 group-hover:scale-105 transition-transform">
-                  <InstagramIcon className="w-5 h-5 text-white" />
+              <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] text-white flex items-center justify-center shadow-sm shrink-0 group-hover:scale-105 transition-transform p-1">
+                  <InstagramIcon className="w-4 h-4 text-white" />
                 </div>
-                <span className="text-sm font-bold text-[#1a1816] group-hover:text-[#ba935a] transition-colors block">
+                <span className="text-xs sm:text-sm font-bold text-[#1a1816] group-hover:text-[#ba935a] transition-colors truncate">
                   Instagram
                 </span>
               </div>
-              <ChevronRight className="w-4 h-4 text-[#ba935a] group-hover:translate-x-0.5 transition-all shrink-0" />
+              <ChevronRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#ba935a] group-hover:translate-x-0.5 transition-all shrink-0 ml-1" />
             </a>
 
             {/* TIKTOK BUTTON */}
@@ -216,17 +216,17 @@ export default function MedalPage() {
               href="https://www.tiktok.com/@casaitalia.eg"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-between p-3.5 bg-white hover:bg-[#fdfaf5] border border-[#ba935a]/25 hover:border-[#1a1816] transition-all duration-300 group shadow-sm hover:shadow-md"
+              className="flex items-center justify-between p-2 sm:p-2.5 bg-white hover:bg-[#fdfaf5] border border-[#ba935a]/25 hover:border-[#1a1816] transition-all duration-300 group shadow-sm hover:shadow-md shrink-0"
             >
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-[#1a1816] text-white flex items-center justify-center shadow-sm shrink-0 group-hover:scale-105 transition-transform">
-                  <TikTokIcon className="w-5 h-5 text-white" />
+              <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                <div className="w-7 h-7 sm:w-8 sm:h-8 bg-[#1a1816] text-white flex items-center justify-center shadow-sm shrink-0 group-hover:scale-105 transition-transform p-1">
+                  <TikTokIcon className="w-4 h-4 text-white" />
                 </div>
-                <span className="text-sm font-bold text-[#1a1816] group-hover:text-[#ba935a] transition-colors block">
+                <span className="text-xs sm:text-sm font-bold text-[#1a1816] group-hover:text-[#ba935a] transition-colors truncate">
                   TikTok
                 </span>
               </div>
-              <ChevronRight className="w-4 h-4 text-[#ba935a] group-hover:translate-x-0.5 transition-all shrink-0" />
+              <ChevronRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#ba935a] group-hover:translate-x-0.5 transition-all shrink-0 ml-1" />
             </a>
 
             {/* FACEBOOK BUTTON */}
@@ -234,17 +234,17 @@ export default function MedalPage() {
               href="https://www.facebook.com/casaitaliarestaurant/"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-between p-3.5 bg-white hover:bg-[#fdfaf5] border border-[#ba935a]/25 hover:border-[#1877f2] transition-all duration-300 group shadow-sm hover:shadow-md"
+              className="flex items-center justify-between p-2 sm:p-2.5 bg-white hover:bg-[#fdfaf5] border border-[#ba935a]/25 hover:border-[#1877f2] transition-all duration-300 group shadow-sm hover:shadow-md shrink-0"
             >
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-[#1877f2] text-white flex items-center justify-center shadow-sm shrink-0 group-hover:scale-105 transition-transform">
-                  <FacebookIcon className="w-5 h-5 text-white" />
+              <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                <div className="w-7 h-7 sm:w-8 sm:h-8 bg-[#1877f2] text-white flex items-center justify-center shadow-sm shrink-0 group-hover:scale-105 transition-transform p-1">
+                  <FacebookIcon className="w-4 h-4 text-white" />
                 </div>
-                <span className="text-sm font-bold text-[#1a1816] group-hover:text-[#1877f2] transition-colors block">
+                <span className="text-xs sm:text-sm font-bold text-[#1a1816] group-hover:text-[#1877f2] transition-colors block truncate">
                   Facebook
                 </span>
               </div>
-              <ChevronRight className="w-4 h-4 text-[#ba935a] group-hover:translate-x-0.5 transition-all shrink-0" />
+              <ChevronRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#ba935a] group-hover:translate-x-0.5 transition-all shrink-0 ml-1" />
             </a>
 
             {/* WHATSAPP RESERVATIONS */}
@@ -252,33 +252,33 @@ export default function MedalPage() {
               href="https://wa.me/201000000000?text=Hello%20Casa%20Italia!%20I%20would%20like%20to%20reserve%20a%20table."
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-between p-3.5 bg-white hover:bg-[#f3fbf6] border border-[#25d366]/40 hover:border-[#25d366] transition-all duration-300 group shadow-sm hover:shadow-md"
+              className="flex items-center justify-between p-2 sm:p-2.5 bg-white hover:bg-[#f3fbf6] border border-[#25d366]/40 hover:border-[#25d366] transition-all duration-300 group shadow-sm hover:shadow-md shrink-0"
             >
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-[#25d366] text-white flex items-center justify-center shadow-sm shrink-0 group-hover:scale-105 transition-transform">
-                  <WhatsAppIcon className="w-5 h-5 text-white" />
+              <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                <div className="w-7 h-7 sm:w-8 sm:h-8 bg-[#25d366] text-white flex items-center justify-center shadow-sm shrink-0 group-hover:scale-105 transition-transform p-1">
+                  <WhatsAppIcon className="w-4 h-4 text-white" />
                 </div>
-                <span className="text-sm font-bold text-[#1a1816] group-hover:text-[#25d366] transition-colors block">
+                <span className="text-xs sm:text-sm font-bold text-[#1a1816] group-hover:text-[#25d366] transition-colors truncate">
                   WhatsApp Reservations
                 </span>
               </div>
-              <ChevronRight className="w-4 h-4 text-[#25d366] group-hover:translate-x-0.5 transition-all shrink-0" />
+              <ChevronRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#25d366] group-hover:translate-x-0.5 transition-all shrink-0 ml-1" />
             </a>
 
             {/* DIGITAL MENU CTA */}
             <Link
               href="/menu"
-              className="flex items-center justify-between p-3.5 bg-gradient-to-r from-[#ba935a] to-[#a37f48] hover:from-[#c8a165] hover:to-[#ba935a] text-white transition-all duration-300 group shadow-md hover:shadow-lg"
+              className="flex items-center justify-between p-2 sm:p-2.5 bg-gradient-to-r from-[#ba935a] to-[#a37f48] hover:from-[#c8a165] hover:to-[#ba935a] text-white transition-all duration-300 group shadow-md hover:shadow-lg shrink-0"
             >
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-white/20 text-white flex items-center justify-center shadow-sm shrink-0 group-hover:scale-105 transition-transform">
-                  <Utensils className="w-5 h-5" />
+              <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                <div className="w-7 h-7 sm:w-8 sm:h-8 bg-white/20 text-white flex items-center justify-center shadow-sm shrink-0 group-hover:scale-105 transition-transform p-1">
+                  <Utensils className="w-4 h-4" />
                 </div>
-                <span className="text-sm font-bold text-white block">
+                <span className="text-xs sm:text-sm font-bold text-white truncate">
                   Explore Digital Menu
                 </span>
               </div>
-              <ChevronRight className="w-4 h-4 text-white group-hover:translate-x-0.5 transition-all shrink-0" />
+              <ChevronRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white group-hover:translate-x-0.5 transition-all shrink-0 ml-1" />
             </Link>
 
           </div>
@@ -286,14 +286,14 @@ export default function MedalPage() {
           {/* ======================================================== */}
           {/* 4. UTILITY ACTION (SHARE HUB) */}
           {/* ======================================================== */}
-          <div className="w-full mt-6 pt-5 border-t border-[#ba935a]/25">
+          <div className="w-full mt-2 sm:mt-2.5 pt-2 sm:pt-2.5 border-t border-[#ba935a]/25 shrink-0">
             <button
               onClick={handleShare}
-              className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-white hover:bg-[#faf7f2] text-[#1a1816] border border-[#ba935a]/40 text-xs font-bold uppercase tracking-widest transition-all active:scale-[0.99] cursor-pointer shadow-sm"
+              className="w-full flex items-center justify-center gap-2 py-2 sm:py-2.5 px-3 bg-white hover:bg-[#faf7f2] text-[#1a1816] border border-[#ba935a]/40 text-[11px] sm:text-xs font-bold uppercase tracking-widest transition-all active:scale-[0.99] cursor-pointer shadow-sm"
             >
               {copied ? (
                 <>
-                  <Check className="w-4 h-4 text-emerald-600" />
+                  <Check className="w-3.5 h-3.5 text-emerald-600" />
                   <span className="text-emerald-600">{t('medal.copied')}</span>
                 </>
               ) : (
