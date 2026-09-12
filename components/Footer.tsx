@@ -3,7 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { MapPin, Award } from 'lucide-react';
+import { MapPin } from 'lucide-react';
 
 const FacebookIcon = ({ className }: { className?: string }) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
@@ -44,22 +44,28 @@ export const Footer: React.FC = () => {
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 relative z-10 w-full flex flex-col items-center">
         
-        {/* Brand Logo - Centered */}
-        <div className="flex flex-col items-center space-y-4">
-          <div className="relative h-20 w-64">
-            <Image
-              src="/logo/logo-01.svg"
-              alt="Casa Italia Logo"
-              fill
-              className="object-contain"
-            />
-          </div>
+        {/* Top Section: Brand Identity */}
+        <div className="flex flex-col items-center text-center space-y-4">
+          <Link href="/" className="inline-block transition-transform hover:scale-105">
+            <div className="relative h-16 w-48 sm:h-20 sm:w-60">
+              <Image
+                src="/logo/logo-01.svg"
+                alt="Casa Italia"
+                fill
+                className="object-contain"
+                priority
+              />
+            </div>
+          </Link>
+          <p className="text-sm text-[#8c8479] max-w-sm tracking-wide">
+            {t('footer.tagline')}
+          </p>
         </div>
 
-        {/* Social Links & Review Portal */}
-        <div className="flex items-center justify-center gap-4 w-full">
+        {/* Elegant Gold Divider with Social Icons */}
+        <div className="w-full flex items-center justify-center gap-4">
           <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent via-[#ba935a]/30 to-[#ba935a]/30"></div>
-          <div className="flex items-center gap-3 px-4">
+          <div className="flex items-center gap-3">
             <a
               href="https://www.instagram.com/casaitalia.portghalib/"
               target="_blank"
@@ -92,23 +98,12 @@ export const Footer: React.FC = () => {
               target="_blank"
               rel="noopener noreferrer"
               title="TripAdvisor"
-              className="w-10 h-10 bg-transparent border border-[#ba935a]/40 flex items-center justify-center text-[#00aa6c] hover:bg-[#00aa6c] hover:text-white transition-colors shadow-sm"
+              className="w-10 h-10 bg-transparent border border-[#ba935a]/40 flex items-center justify-center text-[#ba935a] hover:bg-[#ba935a] hover:text-white transition-colors shadow-sm"
             >
               <TripAdvisorIcon className="w-4 h-4" />
             </a>
           </div>
           <div className="h-[1px] flex-1 bg-gradient-to-l from-transparent via-[#ba935a]/30 to-[#ba935a]/30"></div>
-        </div>
-
-        {/* Medal & Social Hub Quick Link */}
-        <div>
-          <Link
-            href="/medal"
-            className="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-[#ba935a]/50 text-xs font-bold uppercase tracking-widest text-[#ba935a] hover:bg-[#ba935a] hover:text-white transition-all shadow-sm"
-          >
-            <Award className="w-3.5 h-3.5" />
-            <span>{t('nav.medal')}</span>
-          </Link>
         </div>
 
         {/* Location Area - Centered */}
