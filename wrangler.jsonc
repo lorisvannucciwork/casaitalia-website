@@ -1,6 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "casaitalia-website",
+  "account_id": "8b8755b04c1790daf296a01787640060",
   "main": ".open-next/worker.js",
   "compatibility_date": "2026-08-17",
   "compatibility_flags": [
