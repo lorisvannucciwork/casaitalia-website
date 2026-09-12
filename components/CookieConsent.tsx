@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Cookie, X } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 
 declare global {
@@ -65,24 +64,11 @@ export const CookieConsent: React.FC = () => {
         <div className="absolute bottom-0 left-0 w-2.5 h-2.5 border-b-2 border-l-2 border-[#ba935a]"></div>
         <div className="absolute bottom-0 right-0 w-2.5 h-2.5 border-b-2 border-r-2 border-[#ba935a]"></div>
 
-        {/* Top bar with Icon and Close */}
-        <div className="flex items-center justify-between gap-3 mb-2">
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 bg-[#ba935a]/15 border border-[#ba935a]/30 flex items-center justify-center text-[#ba935a] shrink-0">
-              <Cookie className="w-4 h-4" />
-            </div>
-            <h3 className="text-xs sm:text-sm font-serif font-bold text-[#1a1816] uppercase tracking-wider">
-              {t('cookie.title')}
-            </h3>
-          </div>
-
-          <button
-            onClick={() => handleConsent('necessary')}
-            aria-label="Chiudi informativa cookie"
-            className="p-1 text-[#8c8479] hover:text-[#1a1816] transition-colors"
-          >
-            <X className="w-4 h-4" />
-          </button>
+        {/* Top bar with Title */}
+        <div className="mb-2">
+          <h3 className="text-xs sm:text-sm font-serif font-bold text-[#1a1816] uppercase tracking-wider">
+            {t('cookie.title')}
+          </h3>
         </div>
 
         {/* Description Text */}

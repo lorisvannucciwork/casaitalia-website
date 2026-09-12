@@ -57,9 +57,6 @@ export const Footer: React.FC = () => {
               />
             </div>
           </Link>
-          <p className="text-sm text-[#8c8479] max-w-sm tracking-wide">
-            {t('footer.tagline')}
-          </p>
         </div>
 
         {/* Elegant Gold Divider with Social Icons */}
