@@ -11,7 +11,6 @@ import {
   Check, 
   ExternalLink, 
   Utensils, 
-  Award, 
   MessageCircle, 
   ChevronDown, 
   ChevronUp, 
@@ -44,20 +43,6 @@ const TikTokIcon = ({ className = 'w-5 h-5' }: { className?: string }) => (
 const FacebookIcon = ({ className = 'w-5 h-5' }: { className?: string }) => (
   <svg className={className} fill="currentColor" viewBox="0 0 24 24">
     <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-  </svg>
-);
-
-const LaurelLeft = () => (
-  <svg className="w-5 h-8 text-[#ba935a] opacity-80" viewBox="0 0 24 36" fill="currentColor">
-    <path d="M18 4C14 8 10 14 10 20C10 26 13 31 18 34C15 32 8 26 8 20C8 13 14 6 18 4Z" />
-    <path d="M14 6C10 9 6 13 6 17C6 19 8 21 11 20C8 19 8 16 9 13C10 10 13 8 14 6Z" opacity="0.8" />
-  </svg>
-);
-
-const LaurelRight = () => (
-  <svg className="w-5 h-8 text-[#ba935a] opacity-80 scale-x-[-1]" viewBox="0 0 24 36" fill="currentColor">
-    <path d="M18 4C14 8 10 14 10 20C10 26 13 31 18 34C15 32 8 26 8 20C8 13 14 6 18 4Z" />
-    <path d="M14 6C10 9 6 13 6 17C6 19 8 21 11 20C8 19 8 16 9 13C10 10 13 8 14 6Z" opacity="0.8" />
   </svg>
 );
 
@@ -117,10 +102,10 @@ END:VCARD`;
   };
 
   return (
-    <div className="min-h-screen relative flex flex-col items-center justify-start text-[#faf7f2] selection:bg-[#ba935a] selection:text-[#141210]">
+    <div className="min-h-screen relative flex flex-col items-center justify-start text-[#1a1816] selection:bg-[#ba935a] selection:text-white">
       
       {/* ======================================================== */}
-      {/* 1. LUXURY BACKGROUND IMAGE (/backgrounds/bg-2.webp) */}
+      {/* 1. BRIGHT BACKGROUND WITH /backgrounds/bg-2.webp */}
       {/* ======================================================== */}
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
         <Image
@@ -128,20 +113,21 @@ END:VCARD`;
           alt="Casa Italia Background"
           fill
           priority
-          className="object-cover object-center scale-105 filter brightness-[0.38] contrast-[1.05]"
+          className="object-cover object-center scale-105 filter brightness-[1.02] contrast-[1.02]"
         />
-        {/* Soft dark vignette & warm golden ambient glow */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#141210]/85 via-[#141210]/65 to-[#141210]/95" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(186,147,90,0.18)_0%,_transparent_70%)]" />
+        {/* Luminous Warm Ivory Overlay */}
+        <div className="absolute inset-0 bg-[#faf7f2]/82 backdrop-blur-[3px]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-white/70 via-[#faf7f2]/60 to-[#faf7f2]/90" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(186,147,90,0.16)_0%,_transparent_75%)]" />
       </div>
 
       {/* ======================================================== */}
-      {/* 2. MAIN STREAMLINED LUXURY CARD CONTAINER */}
+      {/* 2. MAIN BRIGHT LUXURY CARD CONTAINER */}
       {/* ======================================================== */}
       <main className="w-full max-w-lg mx-auto px-4 py-8 sm:py-12 relative z-10 flex flex-col items-center">
         
-        {/* Glassmorphic Central Card */}
-        <div className="w-full bg-[#181614]/85 backdrop-blur-xl border border-[#ba935a]/35 rounded-2xl p-6 sm:p-8 shadow-[0_15px_45px_rgba(0,0,0,0.7)] flex flex-col items-center text-center relative overflow-hidden">
+        {/* Luminous Glassmorphic Central Card */}
+        <div className="w-full bg-white/95 backdrop-blur-xl border border-[#ba935a]/35 rounded-3xl p-6 sm:p-8 shadow-[0_20px_50px_rgba(186,147,90,0.18)] flex flex-col items-center text-center relative overflow-hidden">
           
           {/* Subtle Golden Corner Embellishments */}
           <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-[#ba935a]"></div>
@@ -150,7 +136,7 @@ END:VCARD`;
           <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-[#ba935a]"></div>
 
           {/* Logo */}
-          <div className="relative h-14 w-48 mb-4 drop-shadow-md">
+          <div className="relative h-16 w-52 sm:h-20 sm:w-60 mb-3 drop-shadow-sm">
             <Image
               src="/logo/logo-01.svg"
               alt="Casa Italia Logo"
@@ -160,42 +146,16 @@ END:VCARD`;
             />
           </div>
 
-          {/* Golden Medal Emblem */}
-          <div className="relative my-2 flex items-center justify-center">
-            <div className="w-20 h-20 rounded-full p-[2px] bg-gradient-to-tr from-[#7a5823] via-[#e8d5a7] to-[#ba935a] shadow-lg flex items-center justify-center">
-              <div className="w-full h-full rounded-full bg-gradient-to-b from-[#241f19] to-[#12100e] border border-[#ba935a]/40 flex flex-col items-center justify-center relative p-1">
-                <div className="absolute inset-0 flex items-center justify-between px-1 pointer-events-none">
-                  <LaurelLeft />
-                  <LaurelRight />
-                </div>
-                <span className="font-serif font-black text-xl text-transparent bg-clip-text bg-gradient-to-b from-[#fff2cc] to-[#ba935a] tracking-wider drop-shadow">
-                  CI
-                </span>
-                <span className="text-[7px] font-bold text-[#ba935a] uppercase tracking-widest mt-0.5">
-                  Porto Ghalib
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Official Badge */}
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#ba935a]/15 border border-[#ba935a]/30 mt-2 mb-2">
-            <Sparkles className="w-3 h-3 text-[#e5cf9f]" />
-            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#e5cf9f]">
+          {/* Official Medal Badge */}
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#ba935a]/15 border border-[#ba935a]/35 mb-6 shadow-sm">
+            <Sparkles className="w-3.5 h-3.5 text-[#ba935a]" />
+            <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#ba935a]">
               {t('medal.badge')}
             </span>
           </div>
 
-          {/* Heading */}
-          <h1 className="font-serif text-xl sm:text-2xl font-bold text-[#faf7f2] tracking-wide mt-1 mb-1">
-            Casa Italia Ristorante
-          </h1>
-          <p className="text-xs text-[#a89f91] mb-6 font-light">
-            Marina, Porto Ghalib • Authentic Italian Dining &amp; Enoteca
-          </p>
-
           {/* ======================================================== */}
-          {/* 3. SIMPLIFIED ACTION BUTTONS & LINKS */}
+          {/* 3. SIMPLIFIED BRIGHT ACTION BUTTONS & LINKS */}
           {/* ======================================================== */}
           <div className="w-full space-y-3">
             
@@ -204,22 +164,22 @@ END:VCARD`;
               href="https://www.tripadvisor.com/Search?q=Casa+Italia+Porto+Ghalib"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-between p-3.5 bg-[#1f1d19]/90 hover:bg-[#25221d] border border-[#00aa6c]/50 hover:border-[#00aa6c] rounded-xl transition-all duration-300 group shadow-md"
+              className="flex items-center justify-between p-3.5 bg-white hover:bg-[#f2faf5] border border-[#00aa6c]/40 hover:border-[#00aa6c] rounded-2xl transition-all duration-300 group shadow-sm hover:shadow-md"
             >
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-[#00aa6c] text-white flex items-center justify-center shadow-md shrink-0">
+                <div className="w-10 h-10 rounded-xl bg-[#00aa6c] text-white flex items-center justify-center shadow-md shrink-0 group-hover:scale-105 transition-transform">
                   <TripAdvisorIcon className="w-5 h-5" />
                 </div>
                 <div className="text-left">
                   <div className="flex items-center gap-1.5">
-                    <span className="text-xs font-bold text-[#faf7f2] group-hover:text-[#00aa6c] transition-colors">
+                    <span className="text-sm font-bold text-[#1a1816] group-hover:text-[#00aa6c] transition-colors">
                       TripAdvisor Reviews
                     </span>
-                    <span className="text-[10px] font-black text-[#00aa6c] bg-[#00aa6c]/15 px-1.5 py-0.5 rounded flex items-center gap-0.5">
+                    <span className="text-[10px] font-black text-[#00aa6c] bg-[#00aa6c]/10 px-1.5 py-0.5 rounded flex items-center gap-0.5 border border-[#00aa6c]/20">
                       <Star className="w-2.5 h-2.5 fill-[#00aa6c]" /> 5.0
                     </span>
                   </div>
-                  <span className="text-[11px] text-[#a89f91] block">
+                  <span className="text-xs text-[#6e675e] block mt-0.5">
                     Travelers&apos; Choice • Leave a Review
                   </span>
                 </div>
@@ -228,7 +188,7 @@ END:VCARD`;
             </a>
 
             {/* GOOGLE MAPS LOCATION & EXPANDABLE TOGGLE */}
-            <div className="w-full bg-[#1f1d19]/90 border border-[#ba935a]/40 rounded-xl overflow-hidden shadow-md transition-all">
+            <div className="w-full bg-white border border-[#ba935a]/35 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all">
               <div className="flex items-center justify-between p-3.5">
                 <a
                   href="https://maps.app.goo.gl/HNufX8h9iE7dDJbR9"
@@ -236,15 +196,15 @@ END:VCARD`;
                   rel="noopener noreferrer"
                   className="flex items-center gap-3 text-left flex-1 group"
                 >
-                  <div className="w-10 h-10 rounded-lg bg-[#ba935a] text-[#141210] flex items-center justify-center shadow-md shrink-0">
+                  <div className="w-10 h-10 rounded-xl bg-[#ba935a] text-white flex items-center justify-center shadow-md shrink-0 group-hover:scale-105 transition-transform">
                     <MapPin className="w-5 h-5" />
                   </div>
                   <div>
-                    <span className="text-xs font-bold text-[#faf7f2] group-hover:text-[#ba935a] transition-colors flex items-center gap-1">
+                    <span className="text-sm font-bold text-[#1a1816] group-hover:text-[#ba935a] transition-colors flex items-center gap-1">
                       Google Maps Location
-                      <ExternalLink className="w-3 h-3 text-[#ba935a]" />
+                      <ExternalLink className="w-3.5 h-3.5 text-[#ba935a]" />
                     </span>
-                    <span className="text-[11px] text-[#a89f91] block">
+                    <span className="text-xs text-[#6e675e] block mt-0.5">
                       Marina, Porto Ghalib (Open in Maps)
                     </span>
                   </div>
@@ -253,16 +213,16 @@ END:VCARD`;
                 {/* Map Toggle Preview Button */}
                 <button
                   onClick={() => setShowMapEmbed(!showMapEmbed)}
-                  className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#e5cf9f] bg-[#ba935a]/15 hover:bg-[#ba935a]/25 border border-[#ba935a]/30 rounded-md transition-all flex items-center gap-1 cursor-pointer shrink-0 ml-2"
+                  className="px-2.5 py-1.5 text-[11px] font-bold uppercase tracking-wider text-[#ba935a] bg-[#ba935a]/10 hover:bg-[#ba935a]/20 border border-[#ba935a]/30 rounded-lg transition-all flex items-center gap-1 cursor-pointer shrink-0 ml-2"
                 >
                   <span>{showMapEmbed ? 'Hide' : 'Map'}</span>
-                  {showMapEmbed ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+                  {showMapEmbed ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
                 </button>
               </div>
 
               {/* Collapsible Interactive Map Embed */}
               {showMapEmbed && (
-                <div className="w-full h-56 bg-[#12100e] border-t border-[#ba935a]/30 relative animate-fadeIn">
+                <div className="w-full h-56 bg-[#f5f1eb] border-t border-[#ba935a]/30 relative animate-fadeIn">
                   <iframe
                     title="Casa Italia Porto Ghalib Map"
                     src="https://maps.google.com/maps?q=25.5340348,34.6360475&hl=en&z=17&output=embed"
@@ -281,22 +241,22 @@ END:VCARD`;
               href="https://www.instagram.com/casaitalia.portghalib/"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-between p-3.5 bg-[#1f1d19]/90 hover:bg-[#25221d] border border-[#ba935a]/30 hover:border-[#f09433] rounded-xl transition-all duration-300 group shadow-md"
+              className="flex items-center justify-between p-3.5 bg-white hover:bg-[#fdfaf5] border border-[#ba935a]/25 hover:border-[#f09433] rounded-2xl transition-all duration-300 group shadow-sm hover:shadow-md"
             >
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] text-white flex items-center justify-center shadow-md shrink-0">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] text-white flex items-center justify-center shadow-md shrink-0 group-hover:scale-105 transition-transform">
                   <InstagramIcon className="w-5 h-5 text-white" />
                 </div>
                 <div className="text-left">
-                  <span className="text-xs font-bold text-[#faf7f2] group-hover:text-[#e5cf9f] transition-colors block">
+                  <span className="text-sm font-bold text-[#1a1816] group-hover:text-[#ba935a] transition-colors block">
                     Instagram
                   </span>
-                  <span className="text-[11px] text-[#a89f91] block font-mono">
+                  <span className="text-xs text-[#6e675e] block font-mono mt-0.5">
                     @casaitalia.portghalib
                   </span>
                 </div>
               </div>
-              <ChevronRight className="w-4 h-4 text-[#8c8479] group-hover:text-[#ba935a] group-hover:translate-x-0.5 transition-all shrink-0" />
+              <ChevronRight className="w-4 h-4 text-[#ba935a] group-hover:translate-x-0.5 transition-all shrink-0" />
             </a>
 
             {/* TIKTOK BUTTON */}
@@ -304,22 +264,22 @@ END:VCARD`;
               href="https://www.tiktok.com/@casaitalia.eg"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-between p-3.5 bg-[#1f1d19]/90 hover:bg-[#25221d] border border-[#ba935a]/30 hover:border-cyan-400/50 rounded-xl transition-all duration-300 group shadow-md"
+              className="flex items-center justify-between p-3.5 bg-white hover:bg-[#fdfaf5] border border-[#ba935a]/25 hover:border-[#1a1816] rounded-2xl transition-all duration-300 group shadow-sm hover:shadow-md"
             >
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-black border border-white/20 text-white flex items-center justify-center shadow-md shrink-0">
+                <div className="w-10 h-10 rounded-xl bg-[#1a1816] text-white flex items-center justify-center shadow-md shrink-0 group-hover:scale-105 transition-transform">
                   <TikTokIcon className="w-5 h-5 text-white" />
                 </div>
                 <div className="text-left">
-                  <span className="text-xs font-bold text-[#faf7f2] group-hover:text-[#e5cf9f] transition-colors block">
+                  <span className="text-sm font-bold text-[#1a1816] group-hover:text-[#ba935a] transition-colors block">
                     TikTok
                   </span>
-                  <span className="text-[11px] text-[#a89f91] block font-mono">
+                  <span className="text-xs text-[#6e675e] block font-mono mt-0.5">
                     @casaitalia.eg
                   </span>
                 </div>
               </div>
-              <ChevronRight className="w-4 h-4 text-[#8c8479] group-hover:text-[#ba935a] group-hover:translate-x-0.5 transition-all shrink-0" />
+              <ChevronRight className="w-4 h-4 text-[#ba935a] group-hover:translate-x-0.5 transition-all shrink-0" />
             </a>
 
             {/* FACEBOOK BUTTON */}
@@ -327,22 +287,22 @@ END:VCARD`;
               href="https://www.facebook.com/casaitaliarestaurant/"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-between p-3.5 bg-[#1f1d19]/90 hover:bg-[#25221d] border border-[#ba935a]/30 hover:border-[#1877f2]/50 rounded-xl transition-all duration-300 group shadow-md"
+              className="flex items-center justify-between p-3.5 bg-white hover:bg-[#fdfaf5] border border-[#ba935a]/25 hover:border-[#1877f2] rounded-2xl transition-all duration-300 group shadow-sm hover:shadow-md"
             >
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-[#1877f2] text-white flex items-center justify-center shadow-md shrink-0">
+                <div className="w-10 h-10 rounded-xl bg-[#1877f2] text-white flex items-center justify-center shadow-md shrink-0 group-hover:scale-105 transition-transform">
                   <FacebookIcon className="w-5 h-5 text-white" />
                 </div>
                 <div className="text-left">
-                  <span className="text-xs font-bold text-[#faf7f2] group-hover:text-[#e5cf9f] transition-colors block">
+                  <span className="text-sm font-bold text-[#1a1816] group-hover:text-[#1877f2] transition-colors block">
                     Facebook Community
                   </span>
-                  <span className="text-[11px] text-[#a89f91] block">
+                  <span className="text-xs text-[#6e675e] block mt-0.5">
                     casaitaliarestaurant
                   </span>
                 </div>
               </div>
-              <ChevronRight className="w-4 h-4 text-[#8c8479] group-hover:text-[#ba935a] group-hover:translate-x-0.5 transition-all shrink-0" />
+              <ChevronRight className="w-4 h-4 text-[#ba935a] group-hover:translate-x-0.5 transition-all shrink-0" />
             </a>
 
             {/* WHATSAPP RESERVATIONS */}
@@ -350,43 +310,43 @@ END:VCARD`;
               href="https://wa.me/201000000000?text=Hello%20Casa%20Italia!%20I%20would%20like%20to%20reserve%20a%20table."
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-between p-3.5 bg-[#1f1d19]/90 hover:bg-[#25221d] border border-[#25d366]/40 hover:border-[#25d366] rounded-xl transition-all duration-300 group shadow-md"
+              className="flex items-center justify-between p-3.5 bg-white hover:bg-[#f3fbf6] border border-[#25d366]/40 hover:border-[#25d366] rounded-2xl transition-all duration-300 group shadow-sm hover:shadow-md"
             >
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-[#25d366] text-white flex items-center justify-center shadow-md shrink-0">
+                <div className="w-10 h-10 rounded-xl bg-[#25d366] text-white flex items-center justify-center shadow-md shrink-0 group-hover:scale-105 transition-transform">
                   <MessageCircle className="w-5 h-5 text-white" />
                 </div>
                 <div className="text-left">
-                  <span className="text-xs font-bold text-[#faf7f2] group-hover:text-[#25d366] transition-colors block">
+                  <span className="text-sm font-bold text-[#1a1816] group-hover:text-[#25d366] transition-colors block">
                     WhatsApp Concierge
                   </span>
-                  <span className="text-[11px] text-[#a89f91] block">
+                  <span className="text-xs text-[#6e675e] block mt-0.5">
                     Table Reservations &amp; Inquiries
                   </span>
                 </div>
               </div>
-              <ChevronRight className="w-4 h-4 text-[#8c8479] group-hover:text-[#25d366] group-hover:translate-x-0.5 transition-all shrink-0" />
+              <ChevronRight className="w-4 h-4 text-[#25d366] group-hover:translate-x-0.5 transition-all shrink-0" />
             </a>
 
             {/* DIGITAL MENU CTA */}
             <Link
               href="/menu"
-              className="flex items-center justify-between p-3.5 bg-gradient-to-r from-[#ba935a]/20 to-[#ba935a]/10 hover:from-[#ba935a]/30 hover:to-[#ba935a]/20 border border-[#ba935a] rounded-xl transition-all duration-300 group shadow-md"
+              className="flex items-center justify-between p-3.5 bg-gradient-to-r from-[#ba935a] to-[#a37f48] hover:from-[#c8a165] hover:to-[#ba935a] text-white rounded-2xl transition-all duration-300 group shadow-md hover:shadow-lg"
             >
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-[#ba935a] text-[#141210] flex items-center justify-center shadow-md shrink-0">
+                <div className="w-10 h-10 rounded-xl bg-white/20 text-white flex items-center justify-center shadow-sm shrink-0 group-hover:scale-105 transition-transform">
                   <Utensils className="w-5 h-5" />
                 </div>
                 <div className="text-left">
-                  <span className="text-xs font-bold text-[#faf7f2] group-hover:text-[#e5cf9f] transition-colors block">
+                  <span className="text-sm font-bold text-white block">
                     Explore Digital Menu
                   </span>
-                  <span className="text-[11px] text-[#a89f91] block">
+                  <span className="text-xs text-white/85 block mt-0.5">
                     Fresh Pasta, Seafood &amp; DOCG Wine
                   </span>
                 </div>
               </div>
-              <ChevronRight className="w-4 h-4 text-[#ba935a] group-hover:translate-x-0.5 transition-all shrink-0" />
+              <ChevronRight className="w-4 h-4 text-white group-hover:translate-x-0.5 transition-all shrink-0" />
             </Link>
 
           </div>
@@ -394,10 +354,10 @@ END:VCARD`;
           {/* ======================================================== */}
           {/* 4. UTILITY ACTIONS (SAVE VCARD & SHARE) */}
           {/* ======================================================== */}
-          <div className="grid grid-cols-2 gap-3 w-full mt-6 pt-5 border-t border-[#ba935a]/20">
+          <div className="grid grid-cols-2 gap-3 w-full mt-6 pt-5 border-t border-[#ba935a]/25">
             <button
               onClick={handleDownloadVCard}
-              className="flex items-center justify-center gap-1.5 py-2.5 px-3 bg-[#ba935a] hover:bg-[#a37f48] text-[#141210] text-xs font-bold uppercase tracking-wider rounded-lg transition-all shadow-md active:scale-95 cursor-pointer"
+              className="flex items-center justify-center gap-1.5 py-2.5 px-3 bg-[#ba935a] hover:bg-[#a37f48] text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-sm hover:shadow active:scale-95 cursor-pointer"
             >
               <Download className="w-3.5 h-3.5" />
               <span>{t('medal.saveContact')}</span>
@@ -405,12 +365,12 @@ END:VCARD`;
 
             <button
               onClick={handleShare}
-              className="flex items-center justify-center gap-1.5 py-2.5 px-3 bg-[#24201c] hover:bg-[#2d2823] text-[#faf7f2] border border-[#ba935a]/40 text-xs font-bold uppercase tracking-wider rounded-lg transition-all active:scale-95 cursor-pointer"
+              className="flex items-center justify-center gap-1.5 py-2.5 px-3 bg-[#faf7f2] hover:bg-[#f0e7d8] text-[#1a1816] border border-[#ba935a]/35 text-xs font-bold uppercase tracking-wider rounded-xl transition-all active:scale-95 cursor-pointer shadow-sm"
             >
               {copied ? (
                 <>
-                  <Check className="w-3.5 h-3.5 text-emerald-400" />
-                  <span className="text-emerald-400">{t('medal.copied')}</span>
+                  <Check className="w-3.5 h-3.5 text-emerald-600" />
+                  <span className="text-emerald-600">{t('medal.copied')}</span>
                 </>
               ) : (
                 <>
@@ -422,7 +382,7 @@ END:VCARD`;
           </div>
 
           {/* Footer Copyright */}
-          <div className="mt-6 text-[10px] text-[#8c8479] uppercase tracking-widest flex items-center justify-center gap-1.5">
+          <div className="mt-6 text-[11px] text-[#7a7267] uppercase tracking-widest flex items-center justify-center gap-1.5">
             <span>&copy; {new Date().getFullYear()} Casa Italia</span>
             <span>•</span>
             <span>Porto Ghalib</span>
