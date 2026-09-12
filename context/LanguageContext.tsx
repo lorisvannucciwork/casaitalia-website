@@ -93,10 +93,23 @@ const translations: Record<Language, Record<string, string>> = {
     'medal.phoneCta': 'Chiama il Ristorante',
     'medal.viewMenuCta': 'Esplora il Menu Digitale',
 
-    // Footer
+    // Footer & Legal
     'footer.location': 'Posizione',
     'footer.openMaps': 'Apri in Google Maps',
     'footer.address': 'Marina, Porto Ghalib, Governatorato del Mar Rosso, Egitto',
+    'footer.privacy': 'Informativa sulla Privacy',
+    'footer.terms': 'Termini & Condizioni',
+    'footer.cookies': 'Politica sui Cookie',
+    'footer.cookiePreferences': 'Gestione Cookie',
+    'footer.rights': 'Tutti i diritti riservati.',
+
+    // Cookie Banner
+    'cookie.title': 'Informativa sui Cookie & Privacy',
+    'cookie.description': 'Utilizziamo cookie essenziali per garantire il corretto funzionamento del nostro menu digitale e della selezione del tavolo, nonché statistiche anonime per migliorare la tua esperienza gastronomica a Casa Italia.',
+    'cookie.acceptAll': 'Accetta Tutti',
+    'cookie.essentialOnly': 'Solo Necessari',
+    'cookie.manage': 'Preferenze',
+    'cookie.policy': 'Leggi la Cookie Policy',
   },
   en: {
     // Navigation
@@ -179,10 +192,23 @@ const translations: Record<Language, Record<string, string>> = {
     'medal.phoneCta': 'Call Restaurant',
     'medal.viewMenuCta': 'Explore Digital Menu',
 
-    // Footer
+    // Footer & Legal
     'footer.location': 'Location',
     'footer.openMaps': 'Open in Google Maps',
     'footer.address': 'Marina, Porto Ghalib, Red Sea Governorate, Egypt',
+    'footer.privacy': 'Privacy Policy',
+    'footer.terms': 'Terms & Conditions',
+    'footer.cookies': 'Cookie Policy',
+    'footer.cookiePreferences': 'Cookie Settings',
+    'footer.rights': 'All rights reserved.',
+
+    // Cookie Banner
+    'cookie.title': 'Cookie & Privacy Choices',
+    'cookie.description': 'We use essential cookies to power our digital table service, menu navigation, and anonymous analytics to continually refine your dining experience at Casa Italia.',
+    'cookie.acceptAll': 'Accept All',
+    'cookie.essentialOnly': 'Essential Only',
+    'cookie.manage': 'Preferences',
+    'cookie.policy': 'Read Cookie Policy',
   },
 };
 

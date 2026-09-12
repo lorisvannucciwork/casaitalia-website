@@ -136,6 +136,35 @@ export const Footer: React.FC = () => {
           </div>
         </div>
 
+        {/* Legal Links & Copyright Bar */}
+        <div className="w-full pt-8 mt-2 border-t border-[#ba935a]/20 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#8c8479]">
+          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+            <Link href="/privacy" className="hover:text-[#ba935a] transition-colors underline-offset-4 hover:underline">
+              {t('footer.privacy')}
+            </Link>
+            <Link href="/terms" className="hover:text-[#ba935a] transition-colors underline-offset-4 hover:underline">
+              {t('footer.terms')}
+            </Link>
+            <Link href="/cookies" className="hover:text-[#ba935a] transition-colors underline-offset-4 hover:underline">
+              {t('footer.cookies')}
+            </Link>
+            <button
+              onClick={() => {
+                if (typeof window !== 'undefined' && window.openCookiePreferences) {
+                  window.openCookiePreferences();
+                }
+              }}
+              className="hover:text-[#ba935a] transition-colors underline-offset-4 hover:underline cursor-pointer bg-transparent border-none p-0 text-xs text-[#8c8479]"
+            >
+              {t('footer.cookiePreferences')}
+            </button>
+          </div>
+
+          <p className="text-[11px] text-center sm:text-right">
+            © {new Date().getFullYear()} Casa Italia Ristorante & Enoteca • Porto Ghalib. {t('footer.rights')}
+          </p>
+        </div>
+
       </div>
     </footer>
   );

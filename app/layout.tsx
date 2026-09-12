@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { LanguageProvider } from "../context/LanguageContext";
+import { CookieConsent } from "../components/CookieConsent";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -52,6 +53,7 @@ export default function RootLayout({
       <body className="notranslate min-h-full flex flex-col font-sans bg-[#ededed] text-[#1a1816]">
         <LanguageProvider>
           {children}
+          <CookieConsent />
         </LanguageProvider>
       </body>
     </html>
