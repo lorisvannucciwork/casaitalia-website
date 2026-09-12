@@ -4,7 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
-import { ShieldCheck, Lock, Eye, FileText, ArrowLeft } from 'lucide-react';
+import { ShieldCheck, ArrowLeft } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 
 export default function PrivacyPolicyPage() {
@@ -173,7 +173,7 @@ export default function PrivacyPolicyPage() {
               <li><strong>Cloudflare Workers &amp; Edge</strong>: Hosting ad alte prestazioni, crittografia SSL/TLS e protezione DDoS.</li>
               <li><strong>Google Maps</strong>: Fornitura di mappe interattive e calcolo del percorso per raggiungere il ristorante a Porto Ghalib.</li>
               <li><strong>TripAdvisor</strong>: Collegamento al portale ufficiale delle recensioni verificate.</li>
-              <li><strong>WhatsApp (Meta)</strong>: Canale diretto di messaggistica istantanea per l\'assistenza clienti e prenotazioni veloci.</li>
+              <li><strong>WhatsApp (Meta)</strong>: Canale diretto di messaggistica istantanea per l&apos;assistenza clienti e prenotazioni veloci.</li>
             </ul>
           </section>
 

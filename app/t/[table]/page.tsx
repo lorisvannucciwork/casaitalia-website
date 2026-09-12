@@ -21,37 +21,32 @@ export default function TableLandingPortal() {
   const params = useParams();
   const { language, setLanguage } = useLanguage();
 
-  const [isGeneralTable, setIsGeneralTable] = useState<boolean>(false);
-  const [tableNum, setTableNum] = useState<number | null>(null);
-  const [tableFormatted, setTableFormatted] = useState<string>('Table');
+  const rawParam = params?.table ? (Array.isArray(params.table) ? params.table[0] : params.table).trim().toLowerCase() : '';
+  const isGeneral = rawParam === 'general' || rawParam === 'all' || rawParam === 'menu';
+  const tableNum = isGeneral || !rawParam ? null : (parseInt(rawParam.replace(/\D/g, ''), 10) || 1);
+  const tableFormatted = isGeneral
+    ? 'General Guest Table'
+    : tableNum
+      ? (tableNum < 10 ? `Table 0${tableNum}` : `Table ${tableNum}`)
+      : 'Table';
 
   // Wi-Fi Copy state
   const [wifiCopied, setWifiCopied] = useState(false);
 
   useEffect(() => {
     if (params?.table) {
-      const raw = (Array.isArray(params.table) ? params.table[0] : params.table).trim().toLowerCase();
-      if (raw === 'general' || raw === 'all' || raw === 'menu') {
-        setIsGeneralTable(true);
-        setTableNum(null);
-        setTableFormatted('General Guest Table');
+      if (isGeneral) {
         localStorage.removeItem('casaItaliaTableNumber');
         localStorage.removeItem('casaItaliaTableNumOnly');
         localStorage.setItem('casaItaliaScannedViaQR', 'true');
-      } else {
-        const num = parseInt(raw.replace(/\D/g, ''), 10) || 1;
-        const formatted = num < 10 ? `Table 0${num}` : `Table ${num}`;
-        setIsGeneralTable(false);
-        setTableNum(num);
-        setTableFormatted(formatted);
-
-        // Save scanned table number to localStorage
+      } else if (tableNum !== null) {
+        const formatted = tableNum < 10 ? `Table 0${tableNum}` : `Table ${tableNum}`;
         localStorage.setItem('casaItaliaTableNumber', formatted);
-        localStorage.setItem('casaItaliaTableNumOnly', String(num));
+        localStorage.setItem('casaItaliaTableNumOnly', String(tableNum));
         localStorage.setItem('casaItaliaScannedViaQR', 'true');
       }
     }
-  }, [params]);
+  }, [params?.table, isGeneral, tableNum]);
 
   const isIt = language === 'it';
 

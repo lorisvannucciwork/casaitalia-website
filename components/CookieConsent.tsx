@@ -17,13 +17,14 @@ export const CookieConsent: React.FC = () => {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
-    const saved = localStorage.getItem('casa_italia_cookie_consent');
-    if (!saved) {
-      // Short delay for smooth slide-in without blocking initial page paint
-      const timer = setTimeout(() => setIsVisible(true), 800);
-      return () => clearTimeout(timer);
-    }
+    const timer = setTimeout(() => {
+      setMounted(true);
+      const saved = localStorage.getItem('casa_italia_cookie_consent');
+      if (!saved) {
+        setIsVisible(true);
+      }
+    }, 300);
+    return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {

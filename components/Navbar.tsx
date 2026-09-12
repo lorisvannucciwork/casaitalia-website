@@ -28,9 +28,7 @@ const LuxuryVillaIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-interface NavbarProps {}
-
-export const Navbar: React.FC<NavbarProps> = () => {
+export const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();

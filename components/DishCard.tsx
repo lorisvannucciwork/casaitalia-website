@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { MenuItem } from '../data/menuData';
 import { useLanguage } from '../context/LanguageContext';
-import { Plus, Check } from 'lucide-react';
 
 import { getTranslatedMenuItem } from '../utils/menuTranslations';
 

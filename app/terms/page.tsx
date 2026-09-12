@@ -4,7 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
-import { FileText, AlertCircle, Utensils, Clock, ArrowLeft } from 'lucide-react';
+import { FileText, AlertCircle, ArrowLeft } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 
 export default function TermsAndConditionsPage() {

@@ -4,7 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
-import { Cookie, Settings, ShieldCheck, CheckCircle2, ArrowLeft } from 'lucide-react';
+import { Cookie, Settings, CheckCircle2, ArrowLeft } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 
 export default function CookiePolicyPage() {
