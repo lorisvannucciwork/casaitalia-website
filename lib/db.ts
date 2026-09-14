@@ -2,7 +2,7 @@ import * as schema from './schema';
 
 export * from './schema';
 
-interface D1QueryResult<T = any> {
+interface D1QueryResult<T = unknown> {
   results?: T[];
   success?: boolean;
   meta?: {
@@ -12,6 +12,12 @@ interface D1QueryResult<T = any> {
     rows_read?: number;
     rows_written?: number;
   };
+}
+
+interface D1ApiResponse<T = unknown> {
+  result?: D1QueryResult<T>[];
+  success: boolean;
+  errors?: { message: string }[];
 }
 
 function getCloudflareCredentials() {
@@ -33,9 +39,9 @@ function getCloudflareCredentials() {
 }
 
 /**
- * Direct query execution against Cloudflare D1 REST API
+ * Direct raw query execution against Cloudflare D1 REST API
  */
-async function queryD1Rest<T>(sql: string, params: any[] = []): Promise<T[]> {
+async function queryD1RestRaw<T = unknown>(sql: string, params: unknown[] = []): Promise<D1QueryResult<T>> {
   const { accountId, databaseId, apiToken } = getCloudflareCredentials();
   const url = `https://api.cloudflare.com/client/v4/accounts/${accountId}/d1/database/${databaseId}/query`;
 
@@ -52,13 +58,53 @@ async function queryD1Rest<T>(sql: string, params: any[] = []): Promise<T[]> {
     cache: 'no-store',
   });
 
-  const data = await response.json();
+  const data = (await response.json()) as D1ApiResponse<T>;
   if (!response.ok || !data.success) {
     const errorMsg = data.errors?.[0]?.message || response.statusText || 'Cloudflare D1 Query Failed';
     throw new Error(`Cloudflare D1 Error: ${errorMsg}`);
   }
 
-  return (data.result?.[0]?.results || []) as T[];
+  return data.result?.[0] || {};
+}
+
+/**
+ * Direct query execution against Cloudflare D1 REST API returning rows
+ */
+async function queryD1Rest<T>(sql: string, params: unknown[] = []): Promise<T[]> {
+  const res = await queryD1RestRaw<T>(sql, params);
+  return (res.results || []) as T[];
+}
+
+interface NativeD1Database {
+  prepare: (sql: string) => {
+    bind: (...params: unknown[]) => {
+      all: () => Promise<{ results?: unknown[] }>;
+      run: () => Promise<{ success: boolean; meta?: { changes?: number; last_row_id?: number } }>;
+    };
+  };
+  batch: (statements: unknown[]) => Promise<unknown[]>;
+}
+
+/**
+ * Resolves native D1 database binding from Cloudflare runtime or global injection
+ */
+async function getNativeDb(): Promise<NativeD1Database | null> {
+  const direct = (globalThis as Record<string, unknown>).__D1_DB__ || (process.env as Record<string, unknown>).DB;
+  if (direct && typeof (direct as NativeD1Database).prepare === 'function') {
+    return direct as NativeD1Database;
+  }
+
+  try {
+    const { getCloudflareContext } = await import('@opennextjs/cloudflare');
+    const ctx = await getCloudflareContext({ async: true });
+    if (ctx?.env?.DB && typeof (ctx.env.DB as NativeD1Database).prepare === 'function') {
+      return ctx.env.DB as NativeD1Database;
+    }
+  } catch {
+    // Non-Cloudflare or build-time environment
+  }
+
+  return null;
 }
 
 /**
@@ -70,8 +116,8 @@ export const db = {
   /**
    * Execute SELECT query
    */
-  async query<T = any>(sql: string, params: any[] = []): Promise<T[]> {
-    const nativeDb = (globalThis as any).__D1_DB__ || (process.env as any).DB;
+  async query<T = unknown>(sql: string, params: unknown[] = []): Promise<T[]> {
+    const nativeDb = await getNativeDb();
     if (nativeDb && typeof nativeDb.prepare === 'function') {
       const stmt = nativeDb.prepare(sql).bind(...params);
       const res = await stmt.all();
@@ -84,7 +130,7 @@ export const db = {
   /**
    * Execute query and return single row or null
    */
-  async queryFirst<T = any>(sql: string, params: any[] = []): Promise<T | null> {
+  async queryFirst<T = unknown>(sql: string, params: unknown[] = []): Promise<T | null> {
     const rows = await this.query<T>(sql, params);
     return rows.length > 0 ? rows[0] : null;
   },
@@ -92,23 +138,23 @@ export const db = {
   /**
    * Execute INSERT / UPDATE / DELETE statement
    */
-  async execute(sql: string, params: any[] = []): Promise<{ success: boolean; changes?: number; lastRowId?: number }> {
-    const nativeDb = (globalThis as any).__D1_DB__ || (process.env as any).DB;
+  async execute(sql: string, params: unknown[] = []): Promise<{ success: boolean; changes?: number; lastRowId?: number }> {
+    const nativeDb = await getNativeDb();
     if (nativeDb && typeof nativeDb.prepare === 'function') {
       const stmt = nativeDb.prepare(sql).bind(...params);
       const res = await stmt.run();
       return { success: res.success, changes: res.meta?.changes, lastRowId: res.meta?.last_row_id };
     }
 
-    await queryD1Rest(sql, params);
-    return { success: true };
+    const res = await queryD1RestRaw(sql, params);
+    return { success: true, changes: res.meta?.changes, lastRowId: res.meta?.last_row_id };
   },
 
   /**
    * Execute multiple statements in an atomic batch
    */
-  async batch(statements: { sql: string; params?: any[] }[]): Promise<any[]> {
-    const nativeDb = (globalThis as any).__D1_DB__ || (process.env as any).DB;
+  async batch(statements: { sql: string; params?: unknown[] }[]): Promise<unknown[]> {
+    const nativeDb = await getNativeDb();
     if (nativeDb && typeof nativeDb.batch === 'function') {
       const prepared = statements.map((s) => nativeDb.prepare(s.sql).bind(...(s.params || [])));
       return await nativeDb.batch(prepared);
@@ -133,7 +179,7 @@ export const db = {
       cache: 'no-store',
     });
 
-    const data = await response.json();
+    const data = (await response.json()) as { success: boolean; errors?: { message: string }[]; result?: D1QueryResult[] };
     if (!response.ok || !data.success) {
       const errorMsg = data.errors?.[0]?.message || response.statusText || 'Cloudflare D1 Batch Failed';
       throw new Error(`Cloudflare D1 Error: ${errorMsg}`);

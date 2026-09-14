@@ -4,7 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
-import { Cookie, Settings, CheckCircle2, ArrowLeft } from 'lucide-react';
+import { Settings, ArrowLeft } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 
 export default function CookiePolicyPage() {
@@ -35,11 +35,6 @@ export default function CookiePolicyPage() {
         {/* Header Title Section */}
         <div className="border-b border-[#ba935a]/30 pb-8 mb-10 flex flex-col sm:flex-row sm:items-end justify-between gap-6">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#ba935a]/10 border border-[#ba935a]/30 text-[11px] font-bold uppercase tracking-widest text-[#ba935a] mb-4">
-              <Cookie className="w-3.5 h-3.5" />
-              <span>ePrivacy &amp; GDPR Compliant</span>
-            </div>
-
             <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1a1816] tracking-tight">
               {isIt ? 'Informativa sui Cookie' : 'Cookie Policy'}
             </h1>
@@ -91,10 +86,9 @@ export default function CookiePolicyPage() {
             <div className="space-y-6">
               {/* Essential */}
               <div className="border-l-2 border-[#ba935a] pl-4">
-                <div className="flex items-center gap-2 font-bold text-[#1a1816] text-sm mb-1">
-                  <CheckCircle2 className="w-4 h-4 text-[#ba935a]" />
-                  <h4>{isIt ? 'Cookie Strettamente Necessari (Essenziali)' : 'Strictly Necessary (Essential Cookies)'}</h4>
-                </div>
+                <h4 className="font-bold text-[#1a1816] text-sm mb-1">
+                  {isIt ? 'Cookie Strettamente Necessari (Essenziali)' : 'Strictly Necessary (Essential Cookies)'}
+                </h4>
                 <p className="text-xs text-[#6e675e] mb-3">
                   {isIt
                     ? 'Indispensabili per il corretto funzionamento del sito, della lingua e della consultazione del menu al tavolo. Non possono essere disattivati.'
@@ -133,10 +127,9 @@ export default function CookiePolicyPage() {
 
               {/* Functional & External */}
               <div className="border-l-2 border-[#4285F4] pl-4">
-                <div className="flex items-center gap-2 font-bold text-[#1a1816] text-sm mb-1">
-                  <CheckCircle2 className="w-4 h-4 text-[#4285F4]" />
-                  <h4>{isIt ? 'Funzionali & Integrazioni Terze (Mappe & Recensioni)' : 'Functional & Third-Party Embeds'}</h4>
-                </div>
+                <h4 className="font-bold text-[#1a1816] text-sm mb-1">
+                  {isIt ? 'Funzionali & Integrazioni Terze (Mappe & Recensioni)' : 'Functional & Third-Party Embeds'}
+                </h4>
                 <p className="text-xs text-[#6e675e] mb-2">
                   {isIt
                     ? 'Attivati solo su richiesta dell\'utente quando si visualizza l\'anteprima della mappa interattiva di Google Maps o si naviga verso i portali ufficiali di TripAdvisor e WhatsApp.'

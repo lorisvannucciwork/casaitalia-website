@@ -47,30 +47,51 @@ export function sanitizeUrl(url?: string | null): string {
 }
 
 /**
- * Strict validator for NFC tag redirect target URLs
+ * Strict validator for safe redirect URLs
  */
 export function validateRedirectUrl(url?: string | null): string | null {
   if (!url) return null;
-  const sanitized = sanitizeUrl(url);
+  const raw = String(url).trim();
+  if (!raw) return null;
+
+  // 1. Safe relative paths (starts with single '/' and not '//' to prevent protocol-relative redirects)
+  if (raw.startsWith('/') && !raw.startsWith('//') && !raw.startsWith('/\\')) {
+    // Strip control characters
+    const cleanRelative = raw.replace(/[\x00-\x1F\x7F]/g, '');
+    return cleanRelative.startsWith('/') ? cleanRelative : `/${cleanRelative}`;
+  }
+
+  const sanitized = sanitizeUrl(raw);
   if (!sanitized) return null;
 
   try {
     const parsed = new URL(sanitized);
-    if (parsed.protocol === 'https:' || parsed.protocol === 'http:') {
-      // Prevent redirecting to dangerous localhost / internal addresses in production
-      if (process.env.NODE_ENV === 'production') {
-        const hostname = parsed.hostname.toLowerCase();
-        if (
-          hostname === 'localhost' ||
-          hostname === '127.0.0.1' ||
-          hostname === '0.0.0.0' ||
-          hostname.endsWith('.internal') ||
-          hostname.endsWith('.local')
-        ) {
-          return null;
+    if (parsed.protocol === 'https:' || (process.env.NODE_ENV !== 'production' && parsed.protocol === 'http:')) {
+      const hostname = parsed.hostname.toLowerCase();
+
+      // Whitelist of trusted production domains
+      const ALLOWED_HOSTS = new Set([
+        'casaitaliarestaurants.com',
+        'www.casaitaliarestaurants.com',
+        'cdn.casaitaliarestaurants.com',
+      ]);
+
+      const customCloud = process.env.NEXT_PUBLIC_CLOUD_SYSTEM_URL;
+      if (customCloud) {
+        try {
+          ALLOWED_HOSTS.add(new URL(customCloud).hostname.toLowerCase());
+        } catch {
+          // ignore invalid env url
         }
       }
-      return parsed.toString();
+
+      if (ALLOWED_HOSTS.has(hostname) || hostname.endsWith('.casaitaliarestaurants.com')) {
+        return parsed.toString();
+      }
+
+      if (process.env.NODE_ENV !== 'production' && (hostname === 'localhost' || hostname === '127.0.0.1')) {
+        return parsed.toString();
+      }
     }
   } catch {
     return null;
@@ -78,3 +99,4 @@ export function validateRedirectUrl(url?: string | null): string | null {
 
   return null;
 }
+

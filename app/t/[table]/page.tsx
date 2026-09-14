@@ -20,18 +20,32 @@ import { useLanguage } from '@/context/LanguageContext';
 export default function TableLandingPortal() {
   const params = useParams();
   const { language, setLanguage } = useLanguage();
+  const isIt = language === 'it';
 
   const rawParam = params?.table ? (Array.isArray(params.table) ? params.table[0] : params.table).trim().toLowerCase() : '';
   const isGeneral = rawParam === 'general' || rawParam === 'all' || rawParam === 'menu';
-  const tableNum = isGeneral || !rawParam ? null : (parseInt(rawParam.replace(/\D/g, ''), 10) || 1);
+  const digits = rawParam.replace(/\D/g, '');
+  const tableNum = isGeneral || !digits ? null : parseInt(digits, 10);
   const tableFormatted = isGeneral
-    ? 'General Guest Table'
+    ? (isIt ? 'Ospite Generale' : 'General Guest Table')
     : tableNum
       ? (tableNum < 10 ? `Table 0${tableNum}` : `Table ${tableNum}`)
-      : 'Table';
+      : (rawParam ? `Table ${rawParam}` : 'Table');
 
-  // Wi-Fi Copy state
+  // Wi-Fi credentials & copy state
   const [wifiCopied, setWifiCopied] = useState(false);
+  const [wifiSsid, setWifiSsid] = useState('CasaItalia_Guest');
+  const [wifiPass, setWifiPass] = useState('casaitaliaportghalib');
+
+  useEffect(() => {
+    fetch('/api/settings/public')
+      .then((res) => res.json() as Promise<{ settings?: { guestWifiSsid?: string; guestWifiPassword?: string } }>)
+      .then((data) => {
+        if (data?.settings?.guestWifiSsid) setWifiSsid(data.settings.guestWifiSsid);
+        if (data?.settings?.guestWifiPassword) setWifiPass(data.settings.guestWifiPassword);
+      })
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     if (params?.table) {
@@ -48,14 +62,36 @@ export default function TableLandingPortal() {
     }
   }, [params?.table, isGeneral, tableNum]);
 
-  const isIt = language === 'it';
+  // Handle Copy Wi-Fi with safe fallback
+  const handleCopyWifi = async () => {
+    try {
+      if (navigator?.clipboard?.writeText) {
+        await navigator.clipboard.writeText(wifiPass);
+        setWifiCopied(true);
+        setTimeout(() => setWifiCopied(false), 3000);
+        return;
+      }
+    } catch {
+      // ignore and try fallback
+    }
 
-  // Handle Copy Wi-Fi
-  const handleCopyWifi = () => {
-    navigator.clipboard.writeText('casaitaliaportghalib');
-    setWifiCopied(true);
-    setTimeout(() => setWifiCopied(false), 3000);
+    try {
+      const el = document.createElement('textarea');
+      el.value = wifiPass;
+      el.style.position = 'fixed';
+      el.style.opacity = '0';
+      document.body.appendChild(el);
+      el.focus();
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+      setWifiCopied(true);
+      setTimeout(() => setWifiCopied(false), 3000);
+    } catch {
+      // fallback failed
+    }
   };
+
 
   return (
     <div className="min-h-screen bg-[#141210] text-[#faf7f2] flex flex-col justify-between selection:bg-[#ba935a] selection:text-white relative overflow-x-hidden font-sans">
@@ -126,7 +162,7 @@ export default function TableLandingPortal() {
 
         {/* 1. PRIMARY FEATURE: Restaurant Menu */}
         <Link
-          href={`/menu?table=${tableNum}`}
+          href={tableNum ? `/menu?table=${tableNum}` : '/menu'}
           className="group block relative bg-gradient-to-br from-[#2a241e] via-[#211d19] to-[#1a1714] border-2 border-[#ba935a] p-5 sm:p-6 shadow-[0_15px_35px_rgba(0,0,0,0.6)] hover:border-[#dfba82] transition-all duration-300 transform hover:-translate-y-1 overflow-hidden"
         >
           {/* Subtle Background Shimmer / Accent */}
@@ -184,7 +220,7 @@ export default function TableLandingPortal() {
                 {isIt ? 'Wi-Fi Ospiti' : 'Guest Wi-Fi'}
               </div>
               <p className="text-[10px] text-[#a8a095] pt-0.5 font-mono">
-                CasaItalia_Guest
+                {wifiSsid}
               </p>
             </div>
           </div>

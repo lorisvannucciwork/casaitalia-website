@@ -26,14 +26,23 @@ function getRedisClient(): Redis | null {
 
 const redis = getRedisClient();
 
-const upstashRateLimiter = redis
-  ? new Ratelimit({
+const limiterCache = new Map<string, Ratelimit>();
+
+function getUpstashLimiter(maxRequests: number, windowSeconds: number): Ratelimit | null {
+  if (!redis) return null;
+  const key = `${maxRequests}_${windowSeconds}`;
+  let limiter = limiterCache.get(key);
+  if (!limiter) {
+    limiter = new Ratelimit({
       redis,
-      limiter: Ratelimit.slidingWindow(5, '30 s'),
+      limiter: Ratelimit.slidingWindow(maxRequests, `${windowSeconds} s`),
       analytics: true,
-      prefix: 'casa_italia_website',
-    })
-  : null;
+      prefix: `casa_italia_${key}`,
+    });
+    limiterCache.set(key, limiter);
+  }
+  return limiter;
+}
 
 /**
  * Rate limit check helper (Upstash Redis with fallback to in-memory sliding window)
@@ -44,9 +53,10 @@ export async function checkRateLimit(
   windowSeconds: number = 30
 ): Promise<{ success: boolean; limit: number; remaining: number; reset: number }> {
   // 1. Try Upstash Redis if configured
-  if (upstashRateLimiter) {
+  const limiter = getUpstashLimiter(maxRequests, windowSeconds);
+  if (limiter) {
     try {
-      const res = await upstashRateLimiter.limit(identifier);
+      const res = await limiter.limit(identifier);
       return {
         success: res.success,
         limit: res.limit,
@@ -100,7 +110,7 @@ export async function checkRateLimit(
 }
 
 const IPV4_REGEX = /^(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)){3}$/;
-const IPV6_REGEX = /^([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$/;
+const IPV6_REGEX = /^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$/;
 
 function isValidIp(ip: string): boolean {
   return IPV4_REGEX.test(ip) || IPV6_REGEX.test(ip) || ip === '::1' || ip === '127.0.0.1';
@@ -111,12 +121,12 @@ function isValidIp(ip: string): boolean {
  */
 export function getClientIp(req: Request): string {
   // Cloudflare's trusted connecting IP (highest priority in Cloudflare edge network)
-  const cfIp = req.headers.get('cf-connecting-ip');
-  if (cfIp && isValidIp(cfIp.trim())) return cfIp.trim();
+  const cfIp = req.headers.get('cf-connecting-ip')?.trim();
+  if (cfIp && isValidIp(cfIp)) return cfIp;
 
   // NGINX / Proxy real IP
-  const realIp = req.headers.get('x-real-ip');
-  if (realIp && isValidIp(realIp.trim())) return realIp.trim();
+  const realIp = req.headers.get('x-real-ip')?.trim();
+  if (realIp && isValidIp(realIp)) return realIp;
 
   // Standard Forwarded For
   const forwarded = req.headers.get('x-forwarded-for');
@@ -125,5 +135,17 @@ export function getClientIp(req: Request): string {
     if (isValidIp(firstIp)) return firstIp;
   }
 
+  // Generate fallback pseudo-identifier based on User-Agent to avoid global lockout
+  const ua = req.headers.get('user-agent') || '';
+  if (ua) {
+    let hash = 0;
+    for (let i = 0; i < ua.length; i++) {
+      hash = ((hash << 5) - hash) + ua.charCodeAt(i);
+      hash |= 0;
+    }
+    return `anon_${Math.abs(hash)}`;
+  }
+
   return '127.0.0.1';
 }
+

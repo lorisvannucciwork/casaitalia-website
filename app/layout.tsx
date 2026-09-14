@@ -17,9 +17,6 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
-  other: {
-    google: "notranslate",
-  },
   openGraph: {
     title: "Casa Italia | Autentica Cucina Italiana",
     description: "Bright, elegant digital menu & table service experience for Casa Italia in Porto Ghalib.",
@@ -46,11 +43,10 @@ export default function RootLayout({
   return (
     <html
       lang="it"
-      translate="no"
-      className="notranslate h-full antialiased light"
+      className="h-full antialiased light"
       suppressHydrationWarning
     >
-      <body className="notranslate min-h-full flex flex-col font-sans bg-[#ededed] text-[#1a1816]">
+      <body className="min-h-full flex flex-col font-sans bg-[#ededed] text-[#1a1816]">
         <LanguageProvider>
           {children}
           <CookieConsent />

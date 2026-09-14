@@ -18,7 +18,7 @@ export async function GET() {
         latencyMs: latency,
       },
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Website health check error:', error);
     return NextResponse.json(
       {

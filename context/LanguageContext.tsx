@@ -7,6 +7,8 @@ export type Language = 'it' | 'en';
 export interface LanguageContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
+  currency: string;
+  setCurrency: (curr: string) => void;
   t: (key: string) => string;
   formatNumber: (val: string | number) => string;
   formatCurrency: (amount: number) => string;
@@ -17,11 +19,15 @@ const translations: Record<Language, Record<string, string>> = {
     // Navigation
     'nav.home': 'Inizio',
     'nav.menu': 'Menu',
+    'nav.medal': 'Medaglia & Social',
     'nav.page': 'Pagina',
     'nav.of': 'di',
     'nav.prev': 'Prec',
     'nav.next': 'Succ',
     'nav.nextPage': 'Pagina Successiva',
+    'table.seatedGuest': 'Ospite al Tavolo',
+    'table.activeTable': 'Tavolo Attivo',
+    'table.clear': 'Rimuovi',
 
     // 404 Page
     'notFound.subtitle': 'Pagina Non Trovata',
@@ -121,6 +127,9 @@ const translations: Record<Language, Record<string, string>> = {
     'nav.prev': 'Prev',
     'nav.next': 'Next',
     'nav.nextPage': 'Next Page',
+    'table.seatedGuest': 'Seated Guest',
+    'table.activeTable': 'Active Table',
+    'table.clear': 'Clear',
 
     // 404 Page
     'notFound.subtitle': 'Page Not Found',
@@ -137,7 +146,7 @@ const translations: Record<Language, Record<string, string>> = {
     'story.title': 'Our',
     'story.subtitle': 'Story',
     'story.p1': 'Every story begins with an emotion; ours started with a dream far from home. We, Loris and Veronica, with the precious support of Andrea, wanted to bring a real piece of Italy to Egypt. Not just the food, but the soul of our country. What was meant to be a small idea became Casa Italia: an authentic corner overlooking the sea of Port Ghalib, born from passion and the desire to make every guest feel at home.',
-    'story.p2': 'Every single detail — from Tuscan-style tables to olive trees, from the scent of real morning espresso facing the marina to authentic Italian pizza — was chosen with care to let you breathe Italy in every moment. Casa Italia shock was never meant to be just a restaurant, but emotion, celebration, and family. And this... is only the beginning of our story.',
+    'story.p2': 'Every single detail — from Tuscan-style tables to olive trees, from the scent of real morning espresso facing the marina to authentic Italian pizza — was chosen with care to let you breathe Italy in every moment. Casa Italia was never meant to be just a restaurant, but emotion, celebration, and family. And this... is only the beginning of our story.',
     'story.quote': '"From our family to yours, buon appetito."',
     'story.discoverMenu': 'Discover Our Menu',
 
@@ -216,6 +225,7 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [language, setLanguageState] = useState<Language>('it');
+  const [currency, setCurrencyState] = useState<string>('€');
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -224,6 +234,22 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setLanguageState(savedLang);
       }
+
+      const savedCurr = localStorage.getItem('casaItaliaCurrency');
+      if (savedCurr) {
+        setCurrencyState(savedCurr);
+      }
+
+      // Fetch dynamic settings in background
+      fetch('/api/settings/public')
+        .then((res) => res.json() as Promise<{ settings?: { currency?: string } }>)
+        .then((data) => {
+          if (data?.settings?.currency) {
+            setCurrencyState(data.settings.currency);
+            localStorage.setItem('casaItaliaCurrency', data.settings.currency);
+          }
+        })
+        .catch(() => {});
     }
   }, []);
 
@@ -231,6 +257,13 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     setLanguageState(lang);
     if (typeof window !== 'undefined') {
       localStorage.setItem('casaItaliaLanguage', lang);
+    }
+  };
+
+  const setCurrency = (curr: string) => {
+    setCurrencyState(curr);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('casaItaliaCurrency', curr);
     }
   };
 
@@ -246,8 +279,12 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   };
 
   const formatCurrency = (amount: number): string => {
-    const formatted = amount.toFixed(2);
-    return `€${formatted}`;
+    const num = typeof amount === 'number' ? amount : parseFloat(String(amount) || '0');
+    const formatted = num.toFixed(2);
+    if (currency === 'EGP' || currency === 'LE') {
+      return `${formatted} EGP`;
+    }
+    return `${currency}${formatted}`;
   };
 
   const t = (key: string): string => {
@@ -255,7 +292,17 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   };
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t, formatNumber, formatCurrency }}>
+    <LanguageContext.Provider
+      value={{
+        language,
+        setLanguage,
+        currency,
+        setCurrency,
+        t,
+        formatNumber,
+        formatCurrency,
+      }}
+    >
       {children}
     </LanguageContext.Provider>
   );

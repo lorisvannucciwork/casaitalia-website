@@ -71,18 +71,6 @@ CREATE TABLE IF NOT EXISTS menu_items (
   updated_at TEXT NOT NULL
 );
 
--- 7. Dedicated NFC Tags & Smart Physical Cards
-CREATE TABLE IF NOT EXISTS nfc (
-  id TEXT PRIMARY KEY,
-  type TEXT NOT NULL DEFAULT 'redirect', -- 'redirect' | 'social_card'
-  target_url TEXT NOT NULL DEFAULT '',
-  social_card TEXT, -- JSON string of SocialCardData
-  taps_count INTEGER NOT NULL DEFAULT 0,
-  status TEXT NOT NULL DEFAULT 'active', -- 'active' | 'inactive'
-  created_at TEXT NOT NULL,
-  updated_at TEXT NOT NULL
-);
-
 -- Indexes for lightning fast queries on D1
 CREATE INDEX IF NOT EXISTS idx_audit_created ON audit_logs(created_at);
 CREATE INDEX IF NOT EXISTS idx_audit_action ON audit_logs(action);
@@ -90,5 +78,4 @@ CREATE INDEX IF NOT EXISTS idx_categories_order ON menu_categories(display_order
 CREATE INDEX IF NOT EXISTS idx_categories_active ON menu_categories(active);
 CREATE INDEX IF NOT EXISTS idx_menu_category ON menu_items(category);
 CREATE INDEX IF NOT EXISTS idx_menu_active ON menu_items(active);
-CREATE INDEX IF NOT EXISTS idx_nfc_status ON nfc(status);
-CREATE INDEX IF NOT EXISTS idx_nfc_type ON nfc(type);
+

@@ -2,7 +2,9 @@
 @import "tailwindcss";
 
 @theme {
-  --color-white: #f2ebda;
+  --color-casa-gold: #ba935a;
+  --color-casa-cream: #faf7f2;
+  --color-casa-warm: #f2ebda;
   --font-sans: var(--font-source-serif, 'Source Serif 4', Georgia, serif);
   --font-serif: var(--font-cormorant, 'Cormorant Garamond', Garamond, Georgia, serif);
   --font-accent: var(--font-pinyon, 'Pinyon Script', cursive);

@@ -8,6 +8,7 @@ export const users = sqliteTable('users', {
   color: text('color').default('#ba935a'),
   avatar_url: text('avatar_url'),
   active: integer('active').notNull().default(1),
+  token_version: integer('token_version').notNull().default(1),
   created_at: text('created_at').notNull(),
 });
 
@@ -23,6 +24,25 @@ export const systemSettings = sqliteTable('system_settings', {
   key: text('key').primaryKey(),
   value: text('value').notNull(),
 });
+
+export const auditLogs = sqliteTable(
+  'audit_logs',
+  {
+    id: text('id').primaryKey(),
+    user_id: text('user_id'),
+    user_name: text('user_name'),
+    action: text('action').notNull(),
+    entity_type: text('entity_type'),
+    entity_id: text('entity_id'),
+    details: text('details'),
+    ip_address: text('ip_address'),
+    created_at: text('created_at').notNull(),
+  },
+  (table) => [
+    index('idx_audit_created').on(table.created_at),
+    index('idx_audit_action').on(table.action),
+  ]
+);
 
 export const menuCategories = sqliteTable(
   'menu_categories',
@@ -65,23 +85,6 @@ export const menuItems = sqliteTable(
   ]
 );
 
-export const nfc = sqliteTable(
-  'nfc',
-  {
-    id: text('id').primaryKey(),
-    type: text('type').notNull().default('redirect'),
-    target_url: text('target_url').notNull().default(''),
-    social_card: text('social_card'),
-    taps_count: integer('taps_count').notNull().default(0),
-    status: text('status').notNull().default('active'),
-    created_at: text('created_at').notNull(),
-    updated_at: text('updated_at').notNull(),
-  },
-  (table) => [
-    index('idx_nfc_status').on(table.status),
-    index('idx_nfc_type').on(table.type),
-  ]
-);
 
 // Direct D1 Row Types
 export type User = typeof users.$inferSelect;
@@ -93,11 +96,13 @@ export type NewRestaurantTable = typeof tables.$inferInsert;
 export type SystemSetting = typeof systemSettings.$inferSelect;
 export type NewSystemSetting = typeof systemSettings.$inferInsert;
 
+export type AuditLog = typeof auditLogs.$inferSelect;
+export type NewAuditLog = typeof auditLogs.$inferInsert;
+
 export type MenuCategoryRecord = typeof menuCategories.$inferSelect;
 export type NewMenuCategoryRecord = typeof menuCategories.$inferInsert;
 
 export type MenuItemRecord = typeof menuItems.$inferSelect;
 export type NewMenuItemRecord = typeof menuItems.$inferInsert;
 
-export type NfcRecord = typeof nfc.$inferSelect;
-export type NewNfcRecord = typeof nfc.$inferInsert;
+

@@ -22,7 +22,7 @@ const securityHeaders = [
       "script-src 'self' 'unsafe-inline' https://cdn.casaitaliarestaurants.com https://static.cloudflareinsights.com https://*.cloudflareinsights.com",
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com data:",
-      "img-src 'self' data: blob: https://cdn.casaitaliarestaurants.com https://*.r2.cloudflarestorage.com https://*.r2.dev",
+      "img-src 'self' data: blob: https://cdn.casaitaliarestaurants.com https://*.r2.cloudflarestorage.com https://*.r2.dev https://lh3.googleusercontent.com https://images.unsplash.com",
       "media-src 'self' data: blob: https://cdn.casaitaliarestaurants.com https://*.casaitaliarestaurants.com",
       `connect-src ${connectSources}`,
       "frame-src 'self' https://maps.google.com https://www.google.com",
@@ -92,6 +92,14 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: '*.r2.cloudflarestorage.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
       },
     ],
   },

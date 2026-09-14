@@ -4,7 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
-import { ShieldCheck, ArrowLeft } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 
 export default function PrivacyPolicyPage() {
@@ -28,11 +28,6 @@ export default function PrivacyPolicyPage() {
 
         {/* Header Title Section */}
         <div className="border-b border-[#ba935a]/30 pb-8 mb-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#ba935a]/10 border border-[#ba935a]/30 text-[11px] font-bold uppercase tracking-widest text-[#ba935a] mb-4">
-            <ShieldCheck className="w-3.5 h-3.5" />
-            <span>GDPR &amp; Law 151/2020 Compliant</span>
-          </div>
-
           <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1a1816] tracking-tight">
             {isIt ? 'Informativa sulla Privacy' : 'Privacy Policy'}
           </h1>
@@ -88,10 +83,10 @@ export default function PrivacyPolicyPage() {
                   : 'Name, contact telephone number (WhatsApp), requested dining time, table preferences, and dietary or allergen requirements.'}
               </li>
               <li>
-                <strong>{isIt ? 'Navigazione & Menu al Tavolo (NFC)' : 'Digital Dining & NFC Interaction'}</strong>:{' '}
+                <strong>{isIt ? 'Navigazione & Menu Digitale al Tavolo' : 'Digital Dining & QR Menu Interaction'}</strong>:{' '}
                 {isIt
-                  ? 'Identificativo del tavolo (quando viene scansionato il tag NFC o il codice QR), lingua di navigazione preferita e scelte del menu caricate.'
-                  : 'Table identifier (when scanning table NFC tags or QR codes), preferred language token, and temporary menu session state.'}
+                  ? 'Identificativo del tavolo (quando viene scansionato il codice QR del tavolo), lingua di navigazione preferita e scelte del menu caricate.'
+                  : 'Table identifier (when scanning table QR codes), preferred language token, and temporary menu session state.'}
               </li>
               <li>
                 <strong>{isIt ? 'Dati Tecnici & Cookie' : 'Technical & Analytics Data'}</strong>:{' '}

@@ -19,15 +19,30 @@ export const DishCard: React.FC<DishCardProps> = ({ item, onSelectDish }) => {
 
   const translatedItem = getTranslatedMenuItem(item, language);
 
-  const dishImage = item.image && item.image.trim() !== '' ? item.image : null;
+  const dishImage = item.image && item.image.trim() !== '' ? encodeURI(item.image.trim()) : null;
 
   return (
     <div
+      role={onSelectDish ? "button" : undefined}
+      tabIndex={onSelectDish ? 0 : undefined}
       onClick={() => onSelectDish && onSelectDish(item)}
-      className="group relative bg-white/70 backdrop-blur-2xl p-2.5 sm:p-3 overflow-hidden border border-white/60 shadow-lg hover:shadow-2xl hover:shadow-[#ba935a]/20 hover:border-[#ba935a]/40 transition-all duration-500 flex flex-col transform hover:-translate-y-1.5 h-full"
+      onKeyDown={(e) => {
+        if (onSelectDish && (e.key === 'Enter' || e.key === ' ')) {
+          e.preventDefault();
+          onSelectDish(item);
+        }
+      }}
+      className="group relative bg-white/70 backdrop-blur-2xl p-2.5 sm:p-3 overflow-hidden border border-white/60 shadow-lg hover:shadow-2xl hover:shadow-[#ba935a]/20 hover:border-[#ba935a]/40 transition-all duration-500 flex flex-col transform hover:-translate-y-1.5 h-full focus:outline-none focus:ring-2 focus:ring-[#ba935a]"
     >
       {/* Top Image Container with Loading Skeleton */}
       <div className="relative w-full h-52 sm:h-60 bg-[#f5eedf] overflow-hidden shadow-inner shrink-0 flex items-center justify-center">
+        {/* Badge if present (e.g. Chef's Special) */}
+        {item.badge && (
+          <div className="absolute top-2 left-2 z-20 px-2.5 py-1 bg-[#ba935a] text-white text-[10px] font-bold uppercase tracking-wider shadow-md">
+            {item.badge}
+          </div>
+        )}
+
         {dishImage && !hasImageError ? (
           <>
             {/* Elegant Skeleton / Loading UI */}
@@ -90,6 +105,20 @@ export const DishCard: React.FC<DishCardProps> = ({ item, onSelectDish }) => {
           <p className="text-xs sm:text-sm text-[#6e675e] line-clamp-2 leading-relaxed pt-1 font-medium">
             {translatedItem.description}
           </p>
+
+          {/* Dietary Tags */}
+          {item.tags && item.tags.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 pt-1">
+              {item.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="px-2 py-0.5 bg-[#faf7f2] border border-[#ba935a]/25 text-[10px] font-semibold text-[#8c6c39] tracking-wider uppercase"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Price Row */}

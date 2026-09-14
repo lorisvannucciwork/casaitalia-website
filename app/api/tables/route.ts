@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import db, { RestaurantTable } from '@/lib/db';
 import { getCorsHeaders, handleCorsPreflight } from '@/lib/cors';
+import { checkRateLimit, getClientIp } from '@/lib/ratelimit';
 
 export const dynamic = 'force-dynamic';
 
@@ -11,6 +12,12 @@ export async function OPTIONS(req: NextRequest) {
 export async function GET(req: NextRequest) {
   const corsHeaders = getCorsHeaders(req, 'GET, OPTIONS');
   try {
+    const ip = getClientIp(req);
+    const rate = await checkRateLimit(`tables_get_${ip}`, 60, 60);
+    if (!rate.success) {
+      return NextResponse.json({ error: 'Too many requests' }, { status: 429, headers: corsHeaders });
+    }
+
     const tables = await db.query<RestaurantTable>(
       `SELECT id, table_number, name, active FROM tables WHERE active = 1 ORDER BY table_number ASC`
     );
@@ -23,7 +30,7 @@ export async function GET(req: NextRequest) {
     }));
 
     return NextResponse.json({ tables: safeTables }, { headers: corsHeaders });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error fetching tables on website:', error);
     return NextResponse.json({ error: 'Failed to fetch available tables' }, { status: 500, headers: corsHeaders });
   }

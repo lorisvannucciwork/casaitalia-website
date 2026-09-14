@@ -485,6 +485,50 @@ const menuTranslationMap: Record<string, Record<string, { name?: string; descrip
   }
 };
 
+// Curated authentic Italian descriptions for signature dishes
+const italianDescriptionsMap: Record<string, string> = {
+  'tartare-di-tonno-all-arancia-1': "Tartare di tonno fresco marinata con delicata crema all'arancia.",
+  'polpo-alla-piastra-su-vellutata-di-patate-olive-e-pomodorini-2': "Polpo alla piastra servito su vellutata di patate, olive taggiasche e pomodorini.",
+  'tartare-di-salmone-al-mango-3': "Tartare di salmone fresco con emulsione al mango.",
+  'tris-di-crostini-con-pat-di-fegatini-pomodoro-e-basilico-pecorino-e-guanciale-4': "Tris di crostini toscani: paté di fegatini, pomodoro e basilico, pecorino e guanciale croccante.",
+  'gran-tagliere-casa-italia-di-salumi-e-formaggi-5': "Gran tagliere degustazione con salumi e formaggi artigianali italiani della casa.",
+  'parmigiana-di-melanzane-6': "Sformato di melanzane al forno con pomodoro, basilico, mozzarella e parmigiano.",
+  'carpaccio-di-manzo-servito-con-rucola-noci-scaglie-di-parmigiano-capperi-e-crema-di-parmigiano-7': "Carpaccio di manzo con rucola, noci tostate, scaglie e crema di parmigiano e capperi.",
+  'vitello-tonnato-8': "Fettine di tenero vitello cotte a bassa temperatura con classica salsa tonnata piemontese.",
+  'tartare-di-manzo-servita-con-tuorlo-d-uovo-e-crema-di-parmigiano-9': "Battuta di manzo al coltello con tuorlo d'uovo fresco e fonduta di parmigiano.",
+  'penne-pomodoro-basilico-e-stracciatella-10': "Penne con pomodoro dolce, basilico fresco e cuore di stracciatella pugliese.",
+};
+
+function normalizeKey(str?: string | null): string {
+  if (!str) return '';
+  return str.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+}
+
+function translateEnglishDescriptionToItalian(desc: string, italianName: string): string {
+  if (!desc) return italianName;
+  const clean = desc.trim();
+
+  // If already Italian or simple text, return clean
+  const italianMarkers = /\b(pomodoro|basilico|mozzarella|parmigiano|patate|olio|fresco|fresca|della|dello|degli|alle|agli|ripieni|ripiena|secondi|primi)\b/i;
+  if (italianMarkers.test(clean)) {
+    return clean.charAt(0).toUpperCase() + clean.slice(1);
+  }
+
+  // Safe common culinary terms only
+  const translated = clean
+    .replace(/\bwith fresh\b/gi, 'con')
+    .replace(/\bwith cream of\b/gi, 'con vellutata di')
+    .replace(/\bwith homemade\b/gi, 'con')
+    .replace(/\bserving with\b/gi, 'servito con')
+    .replace(/\bcherry tomatoes\b/gi, 'pomodorini')
+    .replace(/\bfresh tomato\b/gi, 'pomodoro fresco')
+    .replace(/\bwood-fired pizza\b/gi, 'pizza cotta nel forno a legna')
+    .replace(/\bfresh pasta\b/gi, 'pasta fresca')
+    .trim();
+
+  return translated.charAt(0).toUpperCase() + translated.slice(1);
+}
+
 /**
  * Returns translated name and description for any MenuItem object based on current language.
  */
@@ -492,7 +536,16 @@ export function getTranslatedMenuItem(item: MenuItem, lang: Language): Translate
   const formattedItalian = formatTitleCase(item.italianName || item.name);
   const formattedEnglish = formatTitleCase(item.name || item.italianName);
   
-  const custom = menuTranslationMap[item.id]?.[lang];
+  const idKey = item.id;
+  const slugKey = normalizeKey(item.id);
+  const nameKey = normalizeKey(item.name);
+  const italianNameKey = normalizeKey(item.italianName);
+
+  const custom =
+    menuTranslationMap[idKey]?.[lang] ||
+    menuTranslationMap[slugKey]?.[lang] ||
+    menuTranslationMap[nameKey]?.[lang] ||
+    menuTranslationMap[italianNameKey]?.[lang];
 
   // 1. Check custom map translation first
   if (custom && custom.name && custom.description) {
@@ -505,16 +558,25 @@ export function getTranslatedMenuItem(item: MenuItem, lang: Language): Translate
 
   // 2. Language specific rules
   if (lang === 'it') {
+    const curatedItalian =
+      italianDescriptionsMap[idKey] ||
+      italianDescriptionsMap[slugKey] ||
+      italianDescriptionsMap[nameKey] ||
+      italianDescriptionsMap[italianNameKey];
+
+    const itDescription = curatedItalian || translateEnglishDescriptionToItalian(item.description, formattedItalian);
+
     return {
       name: formattedItalian,
-      description: item.description,
+      description: itDescription,
       italianName: formattedItalian,
     };
   }
 
   return {
     name: formattedEnglish,
-    description: item.description,
+    description: item.description || formattedItalian,
     italianName: formattedItalian,
   };
 }
+

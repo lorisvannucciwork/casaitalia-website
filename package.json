@@ -10,6 +10,7 @@
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
     "cf-typegen": "wrangler types --env-interface CloudflareEnv env.d.ts",
     "start": "next start",
+    "generate:legal-pdf": "node scripts/generate-legal-pdf.js",
     "lint": "eslint"
   },
   "dependencies": {
