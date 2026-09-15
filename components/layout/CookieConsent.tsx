@@ -27,7 +27,6 @@ export const CookieConsent: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    // Expose global opener so footer / policy links can trigger it
     window.openCookiePreferences = () => {
       setIsVisible(true);
     };
@@ -57,12 +56,11 @@ export const CookieConsent: React.FC = () => {
       className="fixed bottom-3 left-3 right-3 sm:left-auto sm:right-6 sm:bottom-6 z-50 max-w-lg w-auto animate-fadeIn"
     >
       <div className="bg-white/95 backdrop-blur-xl border border-[#ba935a]/50 p-4 sm:p-5 shadow-[0_20px_50px_rgba(0,0,0,0.35)] text-left relative overflow-hidden">
-        
         {/* Subtle Golden Corner Markers */}
-        <div className="absolute top-0 left-0 w-2.5 h-2.5 border-t-2 border-l-2 border-[#ba935a]"></div>
-        <div className="absolute top-0 right-0 w-2.5 h-2.5 border-t-2 border-r-2 border-[#ba935a]"></div>
-        <div className="absolute bottom-0 left-0 w-2.5 h-2.5 border-b-2 border-l-2 border-[#ba935a]"></div>
-        <div className="absolute bottom-0 right-0 w-2.5 h-2.5 border-b-2 border-r-2 border-[#ba935a]"></div>
+        <div className="absolute top-0 left-0 w-2.5 h-2.5 border-t-2 border-l-2 border-[#ba935a]" />
+        <div className="absolute top-0 right-0 w-2.5 h-2.5 border-t-2 border-r-2 border-[#ba935a]" />
+        <div className="absolute bottom-0 left-0 w-2.5 h-2.5 border-b-2 border-l-2 border-[#ba935a]" />
+        <div className="absolute bottom-0 right-0 w-2.5 h-2.5 border-b-2 border-r-2 border-[#ba935a]" />
 
         {/* Top bar with Title */}
         <div className="mb-2">
@@ -87,6 +85,7 @@ export const CookieConsent: React.FC = () => {
         {/* Action Buttons */}
         <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2 pt-1 border-t border-[#ba935a]/20">
           <button
+            type="button"
             onClick={() => handleConsent('necessary')}
             className="px-3.5 py-2 text-[11px] font-bold uppercase tracking-wider text-[#1a1816] bg-white hover:bg-[#faf7f2] border border-[#ba935a]/40 transition-all cursor-pointer text-center"
           >
@@ -94,13 +93,13 @@ export const CookieConsent: React.FC = () => {
           </button>
 
           <button
+            type="button"
             onClick={() => handleConsent('all')}
             className="px-4 py-2 text-[11px] font-bold uppercase tracking-wider text-white bg-gradient-to-r from-[#ba935a] to-[#a37f48] hover:from-[#c8a165] hover:to-[#ba935a] shadow-sm transition-all cursor-pointer text-center"
           >
             {t('cookie.acceptAll')}
           </button>
         </div>
-
       </div>
     </div>
   );

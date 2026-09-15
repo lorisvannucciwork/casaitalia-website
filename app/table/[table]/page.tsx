@@ -1,3 +1,5 @@
-import TableLandingPortal from '@/app/t/[table]/page';
+import { redirect } from 'next/navigation';
 
-export default TableLandingPortal;
+export default function LegacyTableRedirect() {
+  redirect('/table');
+}

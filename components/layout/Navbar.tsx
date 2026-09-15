@@ -5,8 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Utensils, Menu, X, Award } from 'lucide-react';
-
-import { useLanguage } from '../context/LanguageContext';
+import { useLanguage } from '@/context/LanguageContext';
 import { LanguageSelector } from './LanguageSelector';
 
 const TripAdvisorNavIcon = ({ className }: { className?: string }) => (
@@ -69,15 +68,30 @@ export const Navbar: React.FC = () => {
         {/* Absolute Centered Desktop Nav Links */}
         <div className="hidden lg:flex absolute left-1/2 -translate-x-1/2">
           <nav className="flex items-center gap-6 text-sm font-bold text-[#1a1816]">
-            <Link href="/" className={`transition-colors py-1 flex items-center gap-1.5 ${pathname === '/' ? 'text-[#ba935a]' : 'hover:text-[#ba935a]'}`}>
+            <Link
+              href="/"
+              className={`transition-colors py-1 flex items-center gap-1.5 ${
+                pathname === '/' ? 'text-[#ba935a]' : 'hover:text-[#ba935a]'
+              }`}
+            >
               <LuxuryVillaIcon className="w-4 h-4" />
               <span>{t('nav.home')}</span>
             </Link>
-            <Link href="/menu" className={`transition-colors py-1 flex items-center gap-1.5 ${pathname === '/menu' ? 'text-[#ba935a]' : 'hover:text-[#ba935a]'}`}>
+            <Link
+              href="/menu"
+              className={`transition-colors py-1 flex items-center gap-1.5 ${
+                pathname === '/menu' ? 'text-[#ba935a]' : 'hover:text-[#ba935a]'
+              }`}
+            >
               <Utensils className="w-4 h-4" />
               <span>{t('nav.menu')}</span>
             </Link>
-            <Link href="/medal" className={`transition-colors py-1 flex items-center gap-1.5 ${pathname === '/medal' ? 'text-[#ba935a]' : 'hover:text-[#ba935a]'}`}>
+            <Link
+              href="/medal"
+              className={`transition-colors py-1 flex items-center gap-1.5 ${
+                pathname === '/medal' ? 'text-[#ba935a]' : 'hover:text-[#ba935a]'
+              }`}
+            >
               <Award className="w-4 h-4" />
               <span>{t('nav.medal')}</span>
             </Link>
@@ -90,6 +104,7 @@ export const Navbar: React.FC = () => {
           <LanguageSelector />
 
           <button
+            type="button"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Toggle Navigation Menu"
             aria-expanded={isMobileMenuOpen}
@@ -106,7 +121,7 @@ export const Navbar: React.FC = () => {
       </div>
 
       {/* Mobile Navigation Dropdown Menu */}
-      <div 
+      <div
         id="mobile-nav-menu"
         className={`lg:hidden grid transition-all duration-300 ease-in-out ${
           isMobileMenuOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
@@ -117,7 +132,9 @@ export const Navbar: React.FC = () => {
             <Link
               href="/"
               onClick={() => setIsMobileMenuOpen(false)}
-              className={`flex items-center gap-2 text-sm font-bold py-2 border-b border-[#ba935a]/10 transition-colors ${pathname === '/' ? 'text-[#ba935a]' : 'text-[#1a1816] hover:text-[#ba935a]'}`}
+              className={`flex items-center gap-2 text-sm font-bold py-2 border-b border-[#ba935a]/10 transition-colors ${
+                pathname === '/' ? 'text-[#ba935a]' : 'text-[#1a1816] hover:text-[#ba935a]'
+              }`}
             >
               <LuxuryVillaIcon className="w-4 h-4" />
               <span>{t('nav.home')}</span>
@@ -125,7 +142,9 @@ export const Navbar: React.FC = () => {
             <Link
               href="/menu"
               onClick={() => setIsMobileMenuOpen(false)}
-              className={`flex items-center gap-2 text-sm font-bold py-2 border-b border-[#ba935a]/10 transition-colors ${pathname === '/menu' ? 'text-[#ba935a]' : 'text-[#1a1816] hover:text-[#ba935a]'}`}
+              className={`flex items-center gap-2 text-sm font-bold py-2 border-b border-[#ba935a]/10 transition-colors ${
+                pathname === '/menu' ? 'text-[#ba935a]' : 'text-[#1a1816] hover:text-[#ba935a]'
+              }`}
             >
               <Utensils className="w-4 h-4" />
               <span>{t('nav.menu')}</span>
@@ -133,32 +152,98 @@ export const Navbar: React.FC = () => {
             <Link
               href="/medal"
               onClick={() => setIsMobileMenuOpen(false)}
-              className={`flex items-center gap-2 text-sm font-bold py-2 transition-colors ${pathname === '/medal' ? 'text-[#ba935a]' : 'text-[#1a1816] hover:text-[#ba935a]'}`}
+              className={`flex items-center gap-2 text-sm font-bold py-2 transition-colors ${
+                pathname === '/medal' ? 'text-[#ba935a]' : 'text-[#1a1816] hover:text-[#ba935a]'
+              }`}
             >
               <Award className="w-4 h-4" />
               <span>{t('nav.medal')}</span>
             </Link>
-            
+
             {/* Social Media & Review Links */}
             <div className="flex items-center justify-center gap-4 pt-4 mt-2 border-t border-[#ba935a]/20">
-              <a href="https://www.instagram.com/casaitalia.portghalib/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="w-9 h-9 bg-white border border-[#ba935a]/30 flex items-center justify-center text-[#ba935a] hover:bg-[#ba935a] hover:text-white transition-colors shadow-sm">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+              <a
+                href="https://www.instagram.com/casaitalia.portghalib/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+                className="w-9 h-9 bg-white border border-[#ba935a]/30 flex items-center justify-center text-[#ba935a] hover:bg-[#ba935a] hover:text-white transition-colors shadow-sm"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="w-4 h-4"
+                >
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                </svg>
               </a>
-              <a href="https://www.tiktok.com/@casaitalia.eg" target="_blank" rel="noopener noreferrer" aria-label="TikTok" className="w-9 h-9 bg-white border border-[#ba935a]/30 flex items-center justify-center text-[#ba935a] hover:bg-[#ba935a] hover:text-white transition-colors shadow-sm">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4"><path d="M21 7.917v4.034a9.948 9.948 0 0 1 -5 -1.951v4.5a6.5 6.5 0 1 1 -8 -6.326v4.326a2.5 2.5 0 1 0 4 2v-11.5h4.083a6.002 6.002 0 0 0 4.917 4.917z"></path></svg>
+              <a
+                href="https://www.tiktok.com/@casaitalia.eg"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="TikTok"
+                className="w-9 h-9 bg-white border border-[#ba935a]/30 flex items-center justify-center text-[#ba935a] hover:bg-[#ba935a] hover:text-white transition-colors shadow-sm"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="w-4 h-4"
+                >
+                  <path d="M21 7.917v4.034a9.948 9.948 0 0 1 -5 -1.951v4.5a6.5 6.5 0 1 1 -8 -6.326v4.326a2.5 2.5 0 1 0 4 2v-11.5h4.083a6.002 6.002 0 0 0 4.917 4.917z"></path>
+                </svg>
               </a>
-              <a href="https://www.facebook.com/casaitaliarestaurant/" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="w-9 h-9 bg-white border border-[#ba935a]/30 flex items-center justify-center text-[#ba935a] hover:bg-[#ba935a] hover:text-white transition-colors shadow-sm">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+              <a
+                href="https://www.facebook.com/casaitaliarestaurant/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Facebook"
+                className="w-9 h-9 bg-white border border-[#ba935a]/30 flex items-center justify-center text-[#ba935a] hover:bg-[#ba935a] hover:text-white transition-colors shadow-sm"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="w-4 h-4"
+                >
+                  <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                </svg>
               </a>
-              <a href="https://www.tripadvisor.com/Restaurant_Review-g311425-d33991658-Reviews-Casa_Italia_Port_Ghalib-Marsa_Alam_Red_Sea_and_Sinai.html" target="_blank" rel="noopener noreferrer" aria-label="TripAdvisor" title="TripAdvisor" className="w-9 h-9 bg-white border border-[#ba935a]/30 flex items-center justify-center text-[#ba935a] hover:bg-[#ba935a] hover:text-white transition-colors shadow-sm">
+              <a
+                href="https://www.tripadvisor.com/Restaurant_Review-g311425-d33991658-Reviews-Casa_Italia_Port_Ghalib-Marsa_Alam_Red_Sea_and_Sinai.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="TripAdvisor"
+                title="TripAdvisor"
+                className="w-9 h-9 bg-white border border-[#ba935a]/30 flex items-center justify-center text-[#ba935a] hover:bg-[#ba935a] hover:text-white transition-colors shadow-sm"
+              >
                 <TripAdvisorNavIcon className="w-4 h-4" />
               </a>
             </div>
           </div>
         </div>
       </div>
-
-
     </header>
   );
 };

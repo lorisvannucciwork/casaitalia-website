@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
-import { LanguageProvider } from "../context/LanguageContext";
-import { CookieConsent } from "../components/CookieConsent";
+import { LanguageProvider } from "@/context";
+import { CookieConsent, RestaurantJsonLd } from "@/components/layout";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -47,6 +47,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col font-sans bg-[#ededed] text-[#1a1816]">
+        <RestaurantJsonLd />
         <LanguageProvider>
           {children}
           <CookieConsent />

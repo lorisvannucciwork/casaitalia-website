@@ -160,32 +160,13 @@ export const db = {
       return await nativeDb.batch(prepared);
     }
 
-    const { accountId, databaseId, apiToken } = getCloudflareCredentials();
-    const url = `https://api.cloudflare.com/client/v4/accounts/${accountId}/d1/database/${databaseId}/query`;
-
-    // Cloudflare D1 query endpoint supports multiple SQL statements in an array
-    const batchPayload = statements.map((s) => ({
-      sql: s.sql,
-      params: s.params || [],
-    }));
-
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${apiToken}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(batchPayload),
-      cache: 'no-store',
-    });
-
-    const data = (await response.json()) as { success: boolean; errors?: { message: string }[]; result?: D1QueryResult[] };
-    if (!response.ok || !data.success) {
-      const errorMsg = data.errors?.[0]?.message || response.statusText || 'Cloudflare D1 Batch Failed';
-      throw new Error(`Cloudflare D1 Error: ${errorMsg}`);
+    // Cloudflare D1 REST API fallback: execute statements reliably
+    const results = [];
+    for (const s of statements) {
+      const res = await queryD1RestRaw(s.sql, s.params || []);
+      results.push(res.results || []);
     }
-
-    return (data.result || []).map((r: D1QueryResult) => r.results || []);
+    return results;
   },
 };
 

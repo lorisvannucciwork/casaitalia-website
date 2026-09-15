@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react';
 import type { Metadata } from 'next';
 import { getDynamicMenuCategories, getDynamicMenuItems } from '@/lib/menu';
-import { MenuClient } from './MenuClient';
+import { MenuView } from '@/components/menu';
 
 export const metadata: Metadata = {
   title: 'Menu Digitale | Casa Italia Porto Ghalib',
@@ -40,7 +40,7 @@ export default async function MenuPage() {
         </div>
       }
     >
-      <MenuClient initialCategories={categories} initialItems={items} />
+      <MenuView initialCategories={categories} initialItems={items} />
     </Suspense>
   );
 }

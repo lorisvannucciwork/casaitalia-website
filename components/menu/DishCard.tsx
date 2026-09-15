@@ -2,10 +2,9 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { MenuItem } from '../data/menuData';
-import { useLanguage } from '../context/LanguageContext';
-
-import { getTranslatedMenuItem } from '../utils/menuTranslations';
+import { MenuItem } from '@/data/menuData';
+import { useLanguage } from '@/context/LanguageContext';
+import { getTranslatedMenuItem } from '@/utils/menuTranslations';
 
 interface DishCardProps {
   item: MenuItem;
@@ -32,7 +31,9 @@ export const DishCard: React.FC<DishCardProps> = ({ item, onSelectDish }) => {
           onSelectDish(item);
         }
       }}
-      className="group relative bg-white/70 backdrop-blur-2xl p-2.5 sm:p-3 overflow-hidden border border-white/60 shadow-lg hover:shadow-2xl hover:shadow-[#ba935a]/20 hover:border-[#ba935a]/40 transition-all duration-500 flex flex-col transform hover:-translate-y-1.5 h-full focus:outline-none focus:ring-2 focus:ring-[#ba935a]"
+      className={`group relative bg-white/70 backdrop-blur-2xl p-2.5 sm:p-3 overflow-hidden border border-white/60 shadow-lg hover:shadow-2xl hover:shadow-[#ba935a]/20 hover:border-[#ba935a]/40 transition-all duration-500 flex flex-col transform hover:-translate-y-1.5 h-full focus:outline-none focus:ring-2 focus:ring-[#ba935a] ${
+        onSelectDish ? 'cursor-pointer' : ''
+      }`}
     >
       {/* Top Image Container with Loading Skeleton */}
       <div className="relative w-full h-52 sm:h-60 bg-[#f5eedf] overflow-hidden shadow-inner shrink-0 flex items-center justify-center">
@@ -126,6 +127,12 @@ export const DishCard: React.FC<DishCardProps> = ({ item, onSelectDish }) => {
           <span className="font-serif font-bold text-xl sm:text-2xl text-[#1a1816] leading-none">
             {formatCurrency(item.price)}
           </span>
+          {onSelectDish && (
+            <span className="text-[11px] font-bold uppercase tracking-wider text-[#ba935a] group-hover:text-[#a37f48] group-hover:translate-x-0.5 transition-all flex items-center gap-1 select-none">
+              <span>{language === 'it' ? 'Dettagli' : 'Details'}</span>
+              <span>→</span>
+            </span>
+          )}
         </div>
       </div>
     </div>

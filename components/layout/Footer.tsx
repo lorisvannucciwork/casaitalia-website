@@ -4,6 +4,7 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { MapPin } from 'lucide-react';
+import { useLanguage } from '@/context/LanguageContext';
 
 const FacebookIcon = ({ className }: { className?: string }) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
@@ -31,19 +32,15 @@ const TripAdvisorIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-import { useLanguage } from '../context/LanguageContext';
-
 export const Footer: React.FC = () => {
   const { t } = useLanguage();
 
   return (
     <footer className="bg-[#faf7f2] border-t border-[#ba935a]/30 pt-16 pb-12 text-[#1a1816] relative overflow-hidden flex flex-col items-center text-center">
-      
       {/* Background Accent */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-[#ba935a]/5 blur-3xl pointer-events-none" />
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 relative z-10 w-full flex flex-col items-center">
-        
         {/* Top Section: Brand Identity */}
         <div className="flex flex-col items-center text-center space-y-4">
           <Link href="/" className="inline-block transition-transform hover:scale-105">
@@ -149,6 +146,7 @@ export const Footer: React.FC = () => {
               {t('footer.cookies')}
             </Link>
             <button
+              type="button"
               onClick={() => {
                 if (typeof window !== 'undefined' && window.openCookiePreferences) {
                   window.openCookiePreferences();

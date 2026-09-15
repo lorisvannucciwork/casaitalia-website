@@ -6,7 +6,6 @@ const projectRoot = path.resolve(__dirname, '..');
 const publicDir = path.join(projectRoot, 'public');
 const legalDir = path.join(publicDir, 'legal');
 const htmlOutputFile = path.join(legalDir, 'casa-italia-policies.html');
-const pdfOutputFileRoot = path.join(projectRoot, 'Casa_Italia_Legal_Policies_EN.pdf');
 const pdfOutputFilePublic = path.join(publicDir, 'Casa_Italia_Legal_Policies_EN.pdf');
 
 // Ensure directories exist
@@ -1040,17 +1039,13 @@ console.log('Using Edge executable:', edgeExe);
 
 try {
   // Command to print to PDF
-  const cmd = `"${edgeExe}" --headless --disable-gpu --run-all-compositor-stages-before-draw --no-pdf-header-footer --print-to-pdf="${pdfOutputFileRoot}" "file:///${htmlOutputFile.replace(/\\/g, '/')}"`;
+  const cmd = `"${edgeExe}" --headless --disable-gpu --run-all-compositor-stages-before-draw --no-pdf-header-footer --print-to-pdf="${pdfOutputFilePublic}" "file:///${htmlOutputFile.replace(/\\/g, '/')}"`;
   console.log('Running Edge headless export command...');
   execSync(cmd, { stdio: 'inherit' });
 
-  if (fs.existsSync(pdfOutputFileRoot)) {
-    const stats = fs.statSync(pdfOutputFileRoot);
-    console.log(`PDF successfully created at root: ${pdfOutputFileRoot} (${stats.size} bytes)`);
-    
-    // Copy to public folder as well
-    fs.copyFileSync(pdfOutputFileRoot, pdfOutputFilePublic);
-    console.log(`PDF successfully copied to public folder: ${pdfOutputFilePublic}`);
+  if (fs.existsSync(pdfOutputFilePublic)) {
+    const stats = fs.statSync(pdfOutputFilePublic);
+    console.log(`PDF successfully created in public folder: ${pdfOutputFilePublic} (${stats.size} bytes)`);
   } else {
     console.error('PDF file was not generated.');
     process.exit(1);

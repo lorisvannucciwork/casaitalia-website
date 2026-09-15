@@ -12,7 +12,7 @@ export const DEFAULT_PUBLIC_SETTINGS: PublicSettings = {
   currency: '€',
   guestWifiSsid: 'CasaItalia_Guest',
   guestWifiPassword: 'casaitaliaportghalib',
-  restaurantPhone: '+20 123 456 7890',
+  restaurantPhone: '+20 150 830 0656',
   restaurantName: 'Casa Italia Ristorante',
 };
 

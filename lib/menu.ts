@@ -64,9 +64,23 @@ export async function getDynamicMenuItems(): Promise<MenuItem[]> {
             const cdn = (process.env.NEXT_PUBLIC_CDN_URL || 'https://cdn.casaitaliarestaurants.com').replace(/\/$/, '');
             return `${cdn}/${raw.replace(/^\//, '')}`;
           })(),
-          tags: fallback?.tags || [],
-          badge: fallback?.badge,
-          pronunciation: fallback?.pronunciation,
+          tags: (() => {
+            if (item.tags) {
+              if (typeof item.tags === 'string') {
+                try {
+                  const parsed = JSON.parse(item.tags);
+                  if (Array.isArray(parsed)) return parsed.map(String);
+                } catch {
+                  return item.tags.split(',').map((t) => t.trim()).filter(Boolean);
+                }
+              } else if (Array.isArray(item.tags)) {
+                return (item.tags as unknown[]).map(String);
+              }
+            }
+            return fallback?.tags || [];
+          })(),
+          badge: item.badge || fallback?.badge || undefined,
+          pronunciation: item.pronunciation || fallback?.pronunciation || undefined,
           calories: item.calories || fallback?.calories || undefined,
           preparationTime: item.preparation_time || fallback?.preparationTime || undefined,
         };

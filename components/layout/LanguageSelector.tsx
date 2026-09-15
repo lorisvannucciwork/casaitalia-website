@@ -1,9 +1,8 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { useLanguage, Language } from '../context/LanguageContext';
+import { useLanguage, Language } from '@/context/LanguageContext';
 import { ChevronDown, Check } from 'lucide-react';
-
 import { FlagIT, FlagEN } from './FlagIcons';
 
 interface LanguageOption {
@@ -39,21 +38,28 @@ export const LanguageSelector: React.FC<{ compact?: boolean }> = ({ compact = fa
   return (
     <div className="relative inline-block text-left" ref={dropdownRef}>
       <button
+        type="button"
         onClick={() => setIsOpen(!isOpen)}
         aria-label="Select Language"
-        className={`h-10 flex items-center gap-2 px-2.5 sm:px-3 bg-white/80 hover:bg-white text-[#1a1816] border border-[#ba935a]/40 shadow-sm transition-all text-xs sm:text-sm font-bold group ${
+        className={`h-10 flex items-center gap-2 px-2.5 sm:px-3 bg-white/80 hover:bg-white text-[#1a1816] border border-[#ba935a]/40 shadow-sm transition-all text-xs sm:text-sm font-bold group cursor-pointer ${
           isOpen ? 'ring-1 ring-[#ba935a]' : ''
         }`}
       >
         <CurrentFlag className="w-5 h-3.5" />
         <span className="uppercase tracking-wider">{currentLang.label}</span>
-        <ChevronDown className={`w-3.5 h-3.5 text-[#ba935a] transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
+        <ChevronDown
+          className={`w-3.5 h-3.5 text-[#ba935a] transition-transform duration-300 ${
+            isOpen ? 'rotate-180' : ''
+          }`}
+        />
       </button>
 
       {isOpen && (
-        <div className={`absolute z-50 mt-1.5 w-44 bg-[#faf7f2] border border-[#ba935a]/40 shadow-xl overflow-hidden animate-fade-in ${
-          compact ? 'left-0' : 'right-0'
-        }`}>
+        <div
+          className={`absolute z-50 mt-1.5 w-44 bg-[#faf7f2] border border-[#ba935a]/40 shadow-xl overflow-hidden animate-fade-in ${
+            compact ? 'left-0' : 'right-0'
+          }`}
+        >
           <div className="py-1">
             {LANGUAGES.map((lang) => {
               const isSelected = language === lang.code;
@@ -61,21 +67,22 @@ export const LanguageSelector: React.FC<{ compact?: boolean }> = ({ compact = fa
               return (
                 <button
                   key={lang.code}
+                  type="button"
                   onClick={() => {
                     setLanguage(lang.code);
                     setIsOpen(false);
                   }}
-                  className={`w-full flex items-center justify-between px-3 py-2 text-xs sm:text-sm font-medium transition-colors text-left ${
+                  className={`w-full flex items-center justify-between px-3 py-2.5 text-xs font-bold transition-colors cursor-pointer ${
                     isSelected
-                      ? 'bg-[#ba935a] text-white font-bold'
-                      : 'text-[#1a1816] hover:bg-[#f2ebda]'
+                      ? 'bg-[#ba935a]/15 text-[#1a1816]'
+                      : 'text-[#6e675e] hover:bg-[#ba935a]/10 hover:text-[#1a1816]'
                   }`}
                 >
                   <div className="flex items-center gap-2.5">
                     <FlagComp className="w-5 h-3.5" />
                     <span>{lang.nativeName}</span>
                   </div>
-                  {isSelected && <Check className="w-4 h-4 text-white shrink-0" />}
+                  {isSelected && <Check className="w-3.5 h-3.5 text-[#ba935a]" />}
                 </button>
               );
             })}

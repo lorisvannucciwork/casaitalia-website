@@ -18,8 +18,9 @@ export async function POST(req: NextRequest) {
     const expectedSecret = process.env.INTERNAL_API_SECRET;
 
     if (
-      expectedSecret &&
-      expectedSecret !== 'your_secure_internal_api_secret' &&
+      !expectedSecret ||
+      expectedSecret === 'your_secure_internal_api_secret' ||
+      !authSecret ||
       authSecret !== expectedSecret
     ) {
       return NextResponse.json({ error: 'Unauthorized revalidation' }, { status: 401, headers: cors });
