@@ -20,9 +20,15 @@ export interface MenuViewProps {
 export function MenuView({ initialCategories, initialItems, className = '' }: MenuViewProps) {
   const { t, language } = useLanguage();
 
-  // Navigation & Menu State
-  const [categories, setCategories] = useState<Category[]>(initialCategories);
-  const [activeCategory, setActiveCategory] = useState<string>('all');
+  // Navigation & Menu State (first specific category selected by default)
+  const initialValidCategories = useMemo(
+    () => initialCategories.filter((c) => c.id.toLowerCase() !== 'all'),
+    [initialCategories]
+  );
+  const [categories, setCategories] = useState<Category[]>(initialValidCategories);
+  const [activeCategory, setActiveCategory] = useState<string>(
+    initialValidCategories[0]?.id || 'antipasti'
+  );
   const [menuItems, setMenuItems] = useState<MenuItem[]>(initialItems);
   const [selectedDish, setSelectedDish] = useState<MenuItem | null>(null);
 
@@ -53,7 +59,9 @@ export function MenuView({ initialCategories, initialItems, className = '' }: Me
       .then((res) => res.json() as Promise<{ success?: boolean; categories?: Category[] }>)
       .then((data) => {
         if (data.success && Array.isArray(data.categories) && data.categories.length > 0) {
-          setCategories(data.categories);
+          const valid = data.categories.filter((c) => c.id.toLowerCase() !== 'all');
+          setCategories(valid);
+          setActiveCategory((prev) => (prev === 'all' || !prev ? (valid[0]?.id || 'antipasti') : prev));
         }
       })
       .catch(() => {});
@@ -61,7 +69,6 @@ export function MenuView({ initialCategories, initialItems, className = '' }: Me
 
   // Filter menu items by selected category
   const filteredDishes = useMemo(() => {
-    if (activeCategory === 'all') return menuItems;
     return menuItems.filter(
       (item) => item.category.toLowerCase() === activeCategory.toLowerCase()
     );
@@ -72,7 +79,6 @@ export function MenuView({ initialCategories, initialItems, className = '' }: Me
   );
 
   const currentCategoryTitle = useMemo(() => {
-    if (activeCategory === 'all') return t('categories.all');
     if (!currentCategoryObj) return activeCategory;
     const trans = t(`categories.${currentCategoryObj.id}`);
     if (trans && trans !== `categories.${currentCategoryObj.id}`) return trans;
@@ -104,7 +110,7 @@ export function MenuView({ initialCategories, initialItems, className = '' }: Me
 
             {/* Menu Grid or Empty State */}
             {filteredDishes.length === 0 ? (
-              <MenuEmptyState onResetCategory={() => setActiveCategory('all')} />
+              <MenuEmptyState onResetCategory={() => setActiveCategory(categories[0]?.id || 'antipasti')} />
             ) : (
               <MenuGrid
                 dishes={filteredDishes}

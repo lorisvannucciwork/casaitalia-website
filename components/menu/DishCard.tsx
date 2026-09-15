@@ -129,7 +129,7 @@ export const DishCard: React.FC<DishCardProps> = ({ item, onSelectDish }) => {
           </span>
           {onSelectDish && (
             <span className="text-[11px] font-bold uppercase tracking-wider text-[#ba935a] group-hover:text-[#a37f48] group-hover:translate-x-0.5 transition-all flex items-center gap-1 select-none">
-              <span>{language === 'it' ? 'Dettagli' : 'Details'}</span>
+              <span>{language === 'it' ? 'Visualizza' : 'View'}</span>
               <span>→</span>
             </span>
           )}

@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { MenuItem } from '@/data/menuData';
 import { useLanguage } from '@/context/LanguageContext';
 import { getTranslatedMenuItem } from '@/utils/menuTranslations';
-import { X, Clock, Flame } from 'lucide-react';
+import { Clock, Flame } from 'lucide-react';
 
 interface DishModalProps {
   dish: MenuItem | null;
@@ -63,14 +63,7 @@ export const DishModal: React.FC<DishModalProps> = ({ dish, onClose }) => {
         <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-[#ba935a] z-20 pointer-events-none" />
         <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-[#ba935a] z-20 pointer-events-none" />
 
-        {/* Close Button */}
-        <button
-          onClick={onClose}
-          aria-label="Close dish details"
-          className="absolute top-3 right-3 z-30 w-8 h-8 rounded-full bg-black/50 hover:bg-[#ba935a] text-white flex items-center justify-center transition-all cursor-pointer shadow-md"
-        >
-          <X className="w-4 h-4" />
-        </button>
+
 
         {/* Dish Image Container */}
         <div className="relative w-full h-56 sm:h-64 bg-[#f5eedf] overflow-hidden shrink-0 flex items-center justify-center">

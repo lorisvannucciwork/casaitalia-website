@@ -39,21 +39,14 @@ export const CategoryNav: React.FC<CategoryNavProps> = ({
     return () => document.removeEventListener('pointerdown', handleOutsideClick);
   }, [isOpen]);
 
-  // Combine All Dishes option as the first item followed by all categories
+  // Filter out any "all" category so only specific categories are displayed
   const displayCategories: Category[] = useMemo(() => {
-    const allItem: Category = {
-      id: 'all',
-      name: 'All Dishes',
-      italianTitle: 'Tutti i Piatti',
-      description: '',
-    };
-    return [allItem, ...categories.filter((c) => c.id.toLowerCase() !== 'all')];
+    return categories.filter((c) => c.id.toLowerCase() !== 'all');
   }, [categories]);
 
   const totalPages = Math.max(1, Math.ceil(displayCategories.length / ITEMS_PER_PAGE));
 
   const getCategoryTitle = (cat: Category) => {
-    if (cat.id === 'all') return t('categories.all');
     const key = `categories.${cat.id}`;
     const trans = t(key);
     if (trans && trans !== key) return trans;
@@ -77,7 +70,7 @@ export const CategoryNav: React.FC<CategoryNavProps> = ({
   );
   const activeCategoryName = activeCategoryObj
     ? getCategoryTitle(activeCategoryObj)
-    : (activeCategory === 'all' ? t('categories.all') : t('categories.select'));
+    : (displayCategories[0] ? getCategoryTitle(displayCategories[0]) : t('categories.select'));
 
   const startIndex = page * ITEMS_PER_PAGE;
 
