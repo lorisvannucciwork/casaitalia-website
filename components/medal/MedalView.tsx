@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { Navbar, Footer } from '@/components/layout';
+import { Navbar } from '@/components/layout';
 import { MedalSocialCard } from './MedalSocialCard';
 import { MedalMapModal } from './MedalMapModal';
 
@@ -61,12 +61,12 @@ export const MedalView: React.FC<MedalViewProps> = ({ className = '' }) => {
   };
 
   return (
-    <div className={`min-h-screen flex flex-col bg-[#ededed] text-[#1a1816] font-sans antialiased selection:bg-[#ba935a] selection:text-white ${className}`}>
+    <div className={`h-[100dvh] max-h-[100dvh] overflow-hidden flex flex-col bg-[#ededed] text-[#1a1816] font-sans antialiased selection:bg-[#ba935a] selection:text-white relative ${className}`}>
       {/* Top Navbar */}
       <Navbar />
 
-      {/* Main Content Body */}
-      <main className="flex-1 relative flex flex-col items-center justify-center pt-[90px] sm:pt-[110px] pb-12 sm:pb-16 px-4">
+      {/* Main Content Body - Fits Full Screen */}
+      <main className="flex-1 w-full h-full max-h-full overflow-hidden relative flex flex-col items-center justify-center pt-[70px] sm:pt-[80px] pb-3 px-3 sm:px-4">
         {/* Background Restaurant Photo */}
         <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
           <Image
@@ -80,8 +80,8 @@ export const MedalView: React.FC<MedalViewProps> = ({ className = '' }) => {
           <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-black/60" />
         </div>
 
-        {/* Main Social Card */}
-        <div className="w-full max-w-md mx-auto relative z-10 py-2 sm:py-4">
+        {/* Main Social Card - Optical Center */}
+        <div className="w-full max-w-md mx-auto my-auto relative z-10 py-1 flex flex-col items-center justify-center max-h-[calc(100dvh-85px)]">
           <MedalSocialCard
             onOpenMap={() => setShowMapEmbed(true)}
             onShare={handleShare}
@@ -89,9 +89,6 @@ export const MedalView: React.FC<MedalViewProps> = ({ className = '' }) => {
           />
         </div>
       </main>
-
-      {/* Global Footer */}
-      <Footer />
 
       {/* Interactive Map Modal */}
       <MedalMapModal
