@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Utensils, Menu, X, Award } from 'lucide-react';
+import { Utensils, Menu, X } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import { LanguageSelector } from './LanguageSelector';
 
@@ -86,15 +86,6 @@ export const Navbar: React.FC = () => {
               <Utensils className="w-4 h-4" />
               <span>{t('nav.menu')}</span>
             </Link>
-            <Link
-              href="/medal"
-              className={`transition-colors py-1 flex items-center gap-1.5 ${
-                pathname === '/medal' ? 'text-[#ba935a]' : 'hover:text-[#ba935a]'
-              }`}
-            >
-              <Award className="w-4 h-4" />
-              <span>{t('nav.medal')}</span>
-            </Link>
           </nav>
         </div>
 
@@ -142,22 +133,12 @@ export const Navbar: React.FC = () => {
             <Link
               href="/menu"
               onClick={() => setIsMobileMenuOpen(false)}
-              className={`flex items-center gap-2 text-sm font-bold py-2 border-b border-[#ba935a]/10 transition-colors ${
+              className={`flex items-center gap-2 text-sm font-bold py-2 transition-colors ${
                 pathname === '/menu' ? 'text-[#ba935a]' : 'text-[#1a1816] hover:text-[#ba935a]'
               }`}
             >
               <Utensils className="w-4 h-4" />
               <span>{t('nav.menu')}</span>
-            </Link>
-            <Link
-              href="/medal"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className={`flex items-center gap-2 text-sm font-bold py-2 transition-colors ${
-                pathname === '/medal' ? 'text-[#ba935a]' : 'text-[#1a1816] hover:text-[#ba935a]'
-              }`}
-            >
-              <Award className="w-4 h-4" />
-              <span>{t('nav.medal')}</span>
             </Link>
 
             {/* Social Media & Review Links */}
