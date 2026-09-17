@@ -53,7 +53,7 @@ export const MedalMapModal: React.FC<MedalMapModalProps> = ({ isOpen, onClose })
 
         <div className="pt-4 mt-2 flex items-center justify-between gap-3">
           <a
-            href="https://maps.app.goo.gl/r6f7FfWk1uX1qYdMA"
+            href="https://maps.app.goo.gl/F4FC3zM7Pki94YYC6"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 text-xs font-bold text-[#ba935a] hover:underline uppercase tracking-wider"

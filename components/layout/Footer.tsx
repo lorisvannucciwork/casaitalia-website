@@ -108,7 +108,7 @@ export const Footer: React.FC = () => {
             </h4>
             <div className="flex flex-col items-center gap-1">
               <a 
-                href="https://maps.app.goo.gl/HNufX8h9iE7dDJbR9" 
+                href="https://maps.app.goo.gl/F4FC3zM7Pki94YYC6" 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="text-sm font-semibold text-[#1a1816] hover:text-[#ba935a] transition-colors flex items-center gap-2"
@@ -120,7 +120,7 @@ export const Footer: React.FC = () => {
             </div>
             
             <a
-              href="https://maps.app.goo.gl/HNufX8h9iE7dDJbR9"
+              href="https://maps.app.goo.gl/F4FC3zM7Pki94YYC6"
               target="_blank"
               rel="noopener noreferrer"
               className="text-xs text-[#ba935a] font-semibold underline hover:text-[#a37f48] transition-colors mt-2"

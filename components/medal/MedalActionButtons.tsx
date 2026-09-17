@@ -24,7 +24,7 @@ export const MedalActionButtons: React.FC<MedalActionButtonsProps> = ({
     <div className="w-full space-y-2.5 sm:space-y-3">
       {/* 1. Google Maps Review Card */}
       <a
-        href="https://maps.app.goo.gl/r6f7FfWk1uX1qYdMA"
+        href="https://maps.app.goo.gl/F4FC3zM7Pki94YYC6"
         target="_blank"
         rel="noopener noreferrer"
         className="w-full group relative flex items-center justify-between p-3 sm:p-3.5 bg-white hover:bg-[#faf7f2] border-2 border-[#1a73e8]/40 hover:border-[#1a73e8] transition-all duration-300 shadow-xs hover:shadow-md"
@@ -44,7 +44,7 @@ export const MedalActionButtons: React.FC<MedalActionButtonsProps> = ({
 
       {/* 2. TripAdvisor Review Card */}
       <a
-        href="https://www.tripadvisor.com/Restaurant_Review-g311425-d2380582-Reviews-Casa_Italia-Port_Ghalib_Marsa_Alam_Red_Sea_and_Sinai.html"
+        href="https://www.tripadvisor.com/Restaurant_Review-g311425-d33991658-Reviews-Casa_Italia_Port_Ghalib-Marsa_Alam_Red_Sea_and_Sinai.html"
         target="_blank"
         rel="noopener noreferrer"
         className="w-full group relative flex items-center justify-between p-3 sm:p-3.5 bg-white hover:bg-[#faf7f2] border-2 border-[#00af87]/40 hover:border-[#00af87] transition-all duration-300 shadow-xs hover:shadow-md"
