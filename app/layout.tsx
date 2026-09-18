@@ -35,6 +35,15 @@ export const metadata: Metadata = {
   creator: "Casa Italia Ristorante",
   publisher: "Casa Italia Ristorante",
   manifest: "/manifest.webmanifest",
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/logo/logo-01.svg", type: "image/svg+xml" },
+    ],
+    apple: [
+      { url: "/logo/logo-01.webp", sizes: "180x180", type: "image/webp" },
+    ],
+  },
   alternates: {
     canonical: "/",
     languages: {
