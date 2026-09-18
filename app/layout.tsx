@@ -2,12 +2,15 @@ import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import "./globals.css";
 import { LanguageProvider } from "@/context";
-import { CookieConsent, RestaurantJsonLd } from "@/components/layout";
+import { CookieConsent, RestaurantJsonLd, DisableZoom } from "@/components/layout";
 import { PwaManager } from "@/components/pwa";
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
+  maximumScale: 1,
+  minimumScale: 1,
+  userScalable: false,
   themeColor: "#ba935a",
 };
 
@@ -114,6 +117,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col font-sans bg-[#ededed] text-[#1a1816]">
+        <DisableZoom />
         <RestaurantJsonLd />
         <LanguageProvider>
           {children}
