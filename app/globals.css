@@ -36,11 +36,43 @@
   }
 
   body {
+    top: 0px !important;
+    position: static !important;
     background-color: var(--casa-bg);
     color: var(--casa-charcoal);
     font-family: var(--font-source-serif), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     overflow-x: hidden;
     -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Google Translate Suppression & Annihilation */
+  .notranslate,
+  [translate="no"] {
+    -webkit-transform: none !important;
+  }
+
+  .goog-te-banner-frame,
+  .goog-te-menu-frame,
+  .goog-te-balloon-frame,
+  .goog-te-spinner-pos,
+  #goog-gt-tt,
+  .goog-tooltip,
+  .goog-tooltip:hover,
+  .goog-text-highlight,
+  iframe[class*="goog"],
+  iframe[id*="goog"],
+  .VIpgJd-ZVi9od-ORHb-OEVmcd,
+  .VIpgJd-ZVi9od-xl07Ob-OEVmcd,
+  .VIpgJd-ZVi9od-vH1Gmf-ibnC6b,
+  #google_translate_element {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    height: 0 !important;
+    width: 0 !important;
+    position: absolute !important;
+    z-index: -9999 !important;
   }
 }
 

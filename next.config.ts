@@ -70,6 +70,11 @@ const securityHeaders = [
     key: 'X-DNS-Prefetch-Control',
     value: 'on',
   },
+  // 9. Multilingual site declaration to prevent forced auto-translation popups
+  {
+    key: 'Content-Language',
+    value: 'it, en',
+  },
 ];
 
 const nextConfig: NextConfig = {

@@ -103,6 +103,9 @@ export const metadata: Metadata = {
     },
   },
   category: "restaurant",
+  other: {
+    google: "notranslate",
+  },
 };
 
 export default function RootLayout({
@@ -113,10 +116,14 @@ export default function RootLayout({
   return (
     <html
       lang="it"
-      className="h-full antialiased light"
+      translate="no"
+      className="notranslate h-full antialiased light"
       suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col font-sans bg-[#ededed] text-[#1a1816]">
+      <head>
+        <meta name="google" content="notranslate" />
+      </head>
+      <body className="notranslate min-h-full flex flex-col font-sans bg-[#ededed] text-[#1a1816]">
         <DisableZoom />
         <RestaurantJsonLd />
         <LanguageProvider>
