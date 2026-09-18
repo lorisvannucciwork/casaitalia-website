@@ -16,24 +16,40 @@ const DEFAULT_COOKIES: CookieItem[] = [
   {
     name: 'casaItaliaLanguage',
     purpose: {
-      it: 'Memorizza la preferenza della lingua (Italiano / Inglese)',
-      en: 'Stores chosen language preference (IT/EN)',
+      it: 'Memorizza la preferenza della lingua scelta (Italiano / Inglese)',
+      en: 'Stores chosen language preference (IT/EN) across visits',
     },
     duration: '1 Anno',
   },
   {
     name: 'casa_italia_cookie_consent',
     purpose: {
-      it: 'Memorizza la scelta del consenso ai cookie',
-      en: 'Stores the cookie consent status',
+      it: 'Memorizza lo stato del consenso privacy e preferenze cookie',
+      en: 'Stores guest cookie consent status and timestamp',
     },
     duration: '6 Mesi',
   },
   {
+    name: 'casa_italia_pwa_dismissed',
+    purpose: {
+      it: 'Memorizza temporaneamente la chiusura del banner di installazione App',
+      en: 'Remembers install prompt dismissal in Local Storage',
+    },
+    duration: '7 Giorni (Local Storage)',
+  },
+  {
+    name: 'casa-italia-pwa-v1',
+    purpose: {
+      it: 'Cache Storage locale per la consultazione del menu offline',
+      en: 'Cache Storage API storing offline dining menu and brand assets',
+    },
+    duration: 'Fino all’aggiornamento PWA',
+  },
+  {
     name: '__cf_bm / cf_clearance',
     purpose: {
-      it: 'Sicurezza anti-bot e mitigazione DDoS Cloudflare',
-      en: 'Cloudflare edge security & bot mitigation',
+      it: 'Sicurezza anti-bot e mitigazione attacchi DDoS Cloudflare',
+      en: 'Cloudflare edge security, rate limiting & bot mitigation',
     },
     duration: 'Sessione / 30 min',
   },

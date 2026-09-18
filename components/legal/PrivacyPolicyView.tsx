@@ -85,6 +85,15 @@ export const PrivacyPolicyView: React.FC<PrivacyPolicyViewProps> = () => {
               : 'Table identifier (when scanning table QR codes), preferred language token, and temporary menu session state.'}
           </li>
           <li>
+            <strong>
+              {isIt ? 'Progressive Web App (PWA) & Memoria Locale' : 'Progressive Web App (PWA) & Local Cache'}
+            </strong>
+            :{' '}
+            {isIt
+              ? 'Archiviazione locale (Cache Storage e Local Storage) sul tuo dispositivo per garantire la consultazione offline del menu e ricordare lo stato dell’App, senza raccolta di dati personali traccianti.'
+              : 'Local browser cache (Cache Storage & Local Storage) enabling offline culinary menu browsing and remembering app preferences with zero invasive tracking.'}
+          </li>
+          <li>
             <strong>{isIt ? 'Dati Tecnici & Cookie' : 'Technical & Analytics Data'}</strong>:{' '}
             {isIt
               ? 'Indirizzo IP anonimizzato, tipologia di dispositivo e browser, orari di visita, aggregati tramite la rete Cloudflare per garantire sicurezza e tempi di caricamento istantanei.'
@@ -162,7 +171,13 @@ export const PrivacyPolicyView: React.FC<PrivacyPolicyViewProps> = () => {
         </p>
         <ul className="list-disc pl-5 space-y-1.5 text-xs text-[#6e675e]">
           <li>
-            <strong>Cloudflare Workers &amp; Edge</strong>: Hosting ad alte prestazioni, crittografia SSL/TLS e protezione DDoS.
+            <strong>Cloudflare Workers, D1 &amp; Edge</strong>: Hosting ad alte prestazioni, crittografia SSL/TLS, database D1 distribuito e protezione DDoS globale.
+          </li>
+          <li>
+            <strong>Cloudflare Web Analytics</strong>: Statistiche di navigazione anonime e aggregate senza l'uso di cookie traccianti e senza profilazione personale.
+          </li>
+          <li>
+            <strong>Upstash Redis</strong>: Analisi in transito degli indirizzi IP per rate-limiting e mitigazione automatica di abusi o sovraccarichi delle API.
           </li>
           <li>
             <strong>Google Maps</strong>: Fornitura di mappe interattive e calcolo del percorso per raggiungere il ristorante a Porto Ghalib.

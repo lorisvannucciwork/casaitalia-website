@@ -115,10 +115,10 @@ export const TermsView: React.FC<TermsViewProps> = () => {
         </LegalNoticeCard>
       </LegalSectionCard>
 
-      {/* Section 4: Menu Pricing & Availability */}
+      {/* Section 4: Menu Pricing, PWA & Availability */}
       <LegalSectionCard
         number="04"
-        title={isIt ? 'Prezzi, Menu Digitale e Disponibilità' : 'Menu Pricing & Availability'}
+        title={isIt ? 'Prezzi, Menu Digitale (PWA) e Disponibilità' : 'Menu Pricing, PWA & Availability'}
       >
         <p>
           {isIt
@@ -129,6 +129,11 @@ export const TermsView: React.FC<TermsViewProps> = () => {
           {isIt
             ? 'La disponibilità del pescato del giorno e di specifici tagli di carne o vini DOCG può variare in base alla freschezza del mercato e alle importazioni settimanali dall’Italia.'
             : 'Catch-of-the-day seafood and specialty Italian DOCG wine vintages remain subject to seasonal availability and direct imports.'}
+        </p>
+        <p className="text-xs text-[#6e675e] pt-1">
+          {isIt
+            ? 'La nostra Progressive Web App (PWA) consente la consultazione dei piatti anche offline. In modalità non connessa, i dati riflettono l’ultima sincronizzazione; le disponibilità in tempo reale e le variazioni di listino sono garantite con connessione attiva.'
+            : 'Our Progressive Web App (PWA) enables offline menu browsing. In offline state, displayed items reflect your last synchronized cache; real-time kitchen availability and seasonal updates are confirmed upon network reconnection.'}
         </p>
       </LegalSectionCard>
 

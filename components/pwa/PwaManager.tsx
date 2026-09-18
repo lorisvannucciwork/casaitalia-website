@@ -81,20 +81,29 @@ export const PwaManager: React.FC = () => {
     const isIosDevice = /iphone|ipad|ipod/.test(userAgent) && !(window as unknown as { MSStream?: unknown }).MSStream;
     setIsIos(isIosDevice);
 
+    const checkAndShowBanner = (delay = 2500) => {
+      const hasCookieChoice = localStorage.getItem('casa_italia_cookie_consent');
+      if (hasCookieChoice) {
+        setTimeout(() => setShowBanner(true), delay);
+      } else {
+        const onConsent = () => {
+          window.removeEventListener('cookieConsentChanged', onConsent);
+          setTimeout(() => setShowBanner(true), 2500);
+        };
+        window.addEventListener('cookieConsentChanged', onConsent);
+      }
+    };
+
     if (isIosDevice) {
-      // Show install banner on iOS after a brief polite delay (4s)
-      const timer = setTimeout(() => {
-        setShowBanner(true);
-      }, 4000);
-      return () => clearTimeout(timer);
+      checkAndShowBanner(3000);
+      return;
     }
 
     // Android / Chrome / Edge beforeinstallprompt listener
     const handleBeforeInstall = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
-      // Show banner after brief delay
-      setTimeout(() => setShowBanner(true), 3000);
+      checkAndShowBanner(2500);
     };
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstall);

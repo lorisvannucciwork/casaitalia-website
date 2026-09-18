@@ -99,6 +99,20 @@ export const CookiePolicyView: React.FC<CookiePolicyViewProps> = () => {
                 : 'Activated when exploring Google Maps interactive previews or navigating to official TripAdvisor and WhatsApp concierge links.'}
             </p>
           </div>
+
+          {/* Analytics & PWA Offline Storage */}
+          <div className="border-l-2 border-[#10B981] pl-4">
+            <h4 className="font-bold text-[#1a1816] text-sm mb-1">
+              {isIt
+                ? 'Statistiche Senza Cookie & Archiviazione Offline (PWA)'
+                : 'Cookie-less Analytics & Offline PWA Storage'}
+            </h4>
+            <p className="text-xs text-[#6e675e] mb-2">
+              {isIt
+                ? 'Utilizziamo Cloudflare Web Analytics per analizzare in forma rigorosamente aggregata e anonima le prestazioni del sito, senza rilasciare cookie traccianti e senza profilazione dell’utente. La nostra Progressive Web App (PWA) utilizza la memoria locale (Cache Storage) per consentirti di consultare il menu gastronomico anche in assenza momentanea di connessione alla Marina.'
+                : 'We utilize Cloudflare Web Analytics to measure aggregated performance metrics with zero tracking cookies and zero individual profiling. Our Progressive Web App (PWA) uses local browser Cache Storage so you can browse our culinary menu seamlessly even with intermittent marina connectivity.'}
+            </p>
+          </div>
         </div>
       </LegalSectionCard>
 

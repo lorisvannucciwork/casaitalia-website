@@ -736,7 +736,9 @@
         </div>
         <p><strong>Zero Data Selling Commitment:</strong> Personal data is never sold, leased, or rented. Transfers occur strictly with verified partners:</p>
         <ul class="legal-bullets">
-          <li><strong>Cloudflare Inc. (Workers &amp; Edge):</strong> Global content distribution, TLS/SSL 256-bit encryption, bot protection, and DDoS defense.</li>
+          <li><strong>Cloudflare Inc. (Workers, D1 &amp; Edge):</strong> Global content distribution, TLS/SSL 256-bit encryption, distributed D1 database, and bot/DDoS defense.</li>
+          <li><strong>Cloudflare Web Analytics:</strong> Non-intrusive, privacy-first performance analytics operating with zero tracking cookies and no cross-site profiling.</li>
+          <li><strong>Upstash Inc. (Redis):</strong> Ephemeral IP-hash rate limiting solely to prevent automated DDoS floods and API abuse.</li>
           <li><strong>Google Maps (Alphabet Inc.):</strong> Interactive geographic mapping to facilitate turn-by-turn guest navigation to our marina premises.</li>
           <li><strong>TripAdvisor LLC:</strong> Direct portal connection to authentic, verified international traveler reviews and community ratings.</li>
           <li><strong>WhatsApp Concierge (Meta):</strong> Rapid, encrypted direct communication between guests and our front-of-house hospitality team.</li>
@@ -922,22 +924,28 @@
               <td>6 Months</td>
             </tr>
             <tr>
+              <td><code>casa_italia_pwa_dismissed</code></td>
+              <td>First-Party / Local Storage</td>
+              <td>Stores dismissal of the App installation prompt to prevent repetitive notifications.</td>
+              <td>7 Days (Local)</td>
+            </tr>
+            <tr>
+              <td><code>casa-italia-pwa-v1</code></td>
+              <td>First-Party / Cache Storage</td>
+              <td>Stores cached dining menu, typography, and static visual assets for offline browsing.</td>
+              <td>Until PWA Update</td>
+            </tr>
+            <tr>
               <td><code>__cf_bm</code> / <code>cf_clearance</code></td>
               <td>Cloudflare / Security</td>
               <td>Cloudflare bot detection, DDoS traffic mitigation, and request verification.</td>
               <td>Session / 30m</td>
             </tr>
             <tr>
-              <td><code>google_maps_storage</code></td>
-              <td>Third-Party / Functional</td>
-              <td>Stores zoom level and map coordinates when viewing marina venue location.</td>
-              <td>Session</td>
-            </tr>
-            <tr>
-              <td><code>tripadvisor_widget</code></td>
-              <td>Third-Party / Functional</td>
-              <td>Provides direct access to verified guest traveler ratings and reviews.</td>
-              <td>Session</td>
+              <td><code>Cloudflare Analytics</code></td>
+              <td>Edge Telemetry / Privacy</td>
+              <td>Aggregated, privacy-preserving performance telemetry (Zero tracking cookies).</td>
+              <td>Cookie-less</td>
             </tr>
           </tbody>
         </table>
@@ -960,14 +968,14 @@
         </ul>
       </div>
 
-      <!-- Clause 3.4: Table QR Architecture -->
+      <!-- Clause 3.4: Table QR & PWA Architecture -->
       <div class="clause-card">
         <div class="clause-head">
           <span class="clause-id">04.</span>
-          <h3 class="clause-title">Contactless Table QR &amp; Digital Ordering Architecture</h3>
+          <h3 class="clause-title">Contactless Table QR &amp; Progressive Web App (PWA) Architecture</h3>
         </div>
         <p>
-          Physical QR codes located on dining tables contain read-only encrypted URLs pointing directly to our authenticated digital menu. Scanning a table QR code does not install software or extract device data. It securely loads your assigned table session for streamlined ordering.
+          Physical QR codes on dining tables contain read-only encrypted URLs pointing directly to our digital dining hub. Scanning a table QR code does not extract device data or install unauthorized software. Our Progressive Web App (PWA) optionally enables offline menu browsing and instantaneous table Wi-Fi concierge access.
         </p>
       </div>
 
