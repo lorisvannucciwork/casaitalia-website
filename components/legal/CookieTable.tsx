@@ -38,12 +38,12 @@ const DEFAULT_COOKIES: CookieItem[] = [
     duration: '7 Giorni / Permanente (Local Storage)',
   },
   {
-    name: 'casa-italia-pwa-v1',
+    name: 'casa-italia-media-v2 / static-v2',
     purpose: {
-      it: 'Cache Storage locale per la consultazione del menu offline',
-      en: 'Cache Storage API storing offline dining menu and brand assets',
+      it: 'Cache Storage per salvare immagini dei piatti, video e dati dell’ultima sessione online per la consultazione offline',
+      en: 'Cache Storage holding dish images, hero video, and data from your last online activity for offline browsing',
     },
-    duration: 'Fino all’aggiornamento PWA',
+    duration: 'Fino al prossimo aggiornamento / Svuotamento cache',
   },
   {
     name: '__cf_bm / cf_clearance',

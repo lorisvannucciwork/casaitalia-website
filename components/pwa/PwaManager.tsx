@@ -59,6 +59,33 @@ export const PwaManager: React.FC = () => {
               });
             }
           });
+
+          // Pre-warm media cache in background during idle time so dishes and images are available offline
+          const primeOfflineMedia = async () => {
+            if (typeof window === 'undefined' || !navigator.onLine) return;
+            try {
+              const res = await fetch('/api/menu');
+              const data = (await res.json()) as { items?: { image?: string }[] };
+              if (data?.items && Array.isArray(data.items)) {
+                data.items.slice(0, 30).forEach((dish) => {
+                  if (dish.image) {
+                    const img = new window.Image();
+                    img.src = dish.image;
+                  }
+                });
+              }
+            } catch {
+              // Ignore background priming errors
+            }
+          };
+
+          if ('requestIdleCallback' in window) {
+            (window as unknown as { requestIdleCallback: (cb: () => void) => void }).requestIdleCallback(() => {
+              setTimeout(primeOfflineMedia, 2500);
+            });
+          } else {
+            setTimeout(primeOfflineMedia, 3500);
+          }
         } catch (err) {
           console.warn('[PWA] Service Worker registration failed:', err);
         }

@@ -951,10 +951,10 @@ const htmlContent = `<!DOCTYPE html>
               <td>7 Days / Persistent (Local)</td>
             </tr>
             <tr>
-              <td><code>casa-italia-pwa-v1</code></td>
+              <td><code>casa-italia-media-v2 / static-v2</code></td>
               <td>First-Party / Cache Storage</td>
-              <td>Stores cached dining menu, typography, and static visual assets for offline browsing.</td>
-              <td>Until PWA Update</td>
+              <td>Stores cached dish images, hero video, and dining menu data from your last online activity for offline browsing.</td>
+              <td>Until Cache Update / Clear</td>
             </tr>
             <tr>
               <td><code>__cf_bm</code> / <code>cf_clearance</code></td>
