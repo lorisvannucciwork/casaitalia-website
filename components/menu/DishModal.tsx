@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { MenuItem } from '@/data/menuData';
 import { useLanguage } from '@/context/LanguageContext';
@@ -14,6 +14,12 @@ interface DishModalProps {
 
 export const DishModal: React.FC<DishModalProps> = ({ dish, onClose }) => {
   const { language, formatCurrency } = useLanguage();
+  const [imgLoaded, setImgLoaded] = useState(false);
+
+  // Reset imgLoaded when dish changes
+  useEffect(() => {
+    setImgLoaded(false);
+  }, [dish]);
 
   // Close on Escape key
   useEffect(() => {
@@ -74,14 +80,27 @@ export const DishModal: React.FC<DishModalProps> = ({ dish, onClose }) => {
           )}
 
           {dishImage ? (
-            <Image
-              src={dishImage}
-              alt={translatedItem.name}
-              fill
-              priority
-              sizes="(max-width: 640px) 100vw, 512px"
-              className="object-cover"
-            />
+            <>
+              {!imgLoaded && (
+                <div className="absolute inset-0 z-0 bg-[#f7f2e8] flex flex-col items-center justify-center overflow-hidden select-none">
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/60 to-transparent animate-shimmer" />
+                  <span className="relative z-10 font-signature text-2xl text-[#ba935a]/80 animate-pulse">
+                    Casa Italia
+                  </span>
+                </div>
+              )}
+              <Image
+                src={dishImage}
+                alt={translatedItem.name}
+                fill
+                priority
+                sizes="(max-width: 640px) 100vw, 512px"
+                className={`object-cover transition-opacity duration-300 ${
+                  imgLoaded ? 'opacity-100' : 'opacity-0'
+                }`}
+                onLoad={() => setImgLoaded(true)}
+              />
+            </>
           ) : (
             <div className="absolute inset-0 flex flex-col items-center justify-center bg-[url('/backgrounds/bg-2.webp')] bg-cover opacity-90">
               <div className="absolute inset-0 bg-[#f2ebda]/75" />

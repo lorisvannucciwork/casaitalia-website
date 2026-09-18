@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useTransition } from 'react';
 import { MenuItem, Category } from '@/data/menuData';
 import { Navbar, Footer } from '@/components/layout';
+import { TopProgressBar } from '@/components/ui';
 import { useLanguage } from '@/context/LanguageContext';
 import {
   MenuHeader,
@@ -29,8 +30,15 @@ export function MenuView({ initialCategories, initialItems, className = '' }: Me
   const [activeCategory, setActiveCategory] = useState<string>(
     initialValidCategories[0]?.id || 'antipasti'
   );
+  const [isPending, startTransition] = useTransition();
   const [menuItems, setMenuItems] = useState<MenuItem[]>(initialItems);
   const [selectedDish, setSelectedDish] = useState<MenuItem | null>(null);
+
+  const handleSelectCategory = (categoryId: string) => {
+    startTransition(() => {
+      setActiveCategory(categoryId);
+    });
+  };
 
   // Clean any legacy table number tokens
   useEffect(() => {
@@ -89,6 +97,9 @@ export function MenuView({ initialCategories, initialItems, className = '' }: Me
 
   return (
     <div className={`min-h-screen flex flex-col bg-[#ededed] text-[#1a1816] font-sans antialiased selection:bg-[#ba935a] selection:text-white ${className}`}>
+      {/* Top Route/Filter Progress Bar */}
+      <TopProgressBar active={isPending} />
+
       {/* Top Navbar */}
       <Navbar />
 
@@ -105,18 +116,20 @@ export function MenuView({ initialCategories, initialItems, className = '' }: Me
               dishCount={filteredDishes.length}
               categories={categories}
               activeCategory={activeCategory}
-              onSelectCategory={setActiveCategory}
+              onSelectCategory={handleSelectCategory}
             />
 
-            {/* Menu Grid or Empty State */}
-            {filteredDishes.length === 0 ? (
-              <MenuEmptyState onResetCategory={() => setActiveCategory(categories[0]?.id || 'antipasti')} />
-            ) : (
-              <MenuGrid
-                dishes={filteredDishes}
-                onSelectDish={setSelectedDish}
-              />
-            )}
+            {/* Menu Grid or Empty State with Transition Smoothing */}
+            <div className={`transition-opacity duration-200 ${isPending ? 'opacity-50 pointer-events-none' : 'opacity-100'}`}>
+              {filteredDishes.length === 0 ? (
+                <MenuEmptyState onResetCategory={() => handleSelectCategory(categories[0]?.id || 'antipasti')} />
+              ) : (
+                <MenuGrid
+                  dishes={filteredDishes}
+                  onSelectDish={setSelectedDish}
+                />
+              )}
+            </div>
 
             {/* Luxury Dish Detail Modal */}
             <DishModal
