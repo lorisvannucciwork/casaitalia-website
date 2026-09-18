@@ -60,10 +60,56 @@ export const PwaManager: React.FC = () => {
             }
           });
 
+          // Proactively cache all active CSS stylesheets and Google fonts currently on the page
+          const cacheActiveStylesheets = async () => {
+            if (typeof window === 'undefined' || !('caches' in window) || !navigator.onLine) return;
+            try {
+              const staticCache = await caches.open('casa-italia-static-v4');
+              const linkElements = Array.from(
+                document.querySelectorAll<HTMLLinkElement>('link[rel="stylesheet"]')
+              );
+              const urls: string[] = [];
+
+              for (const link of linkElements) {
+                if (!link.href) continue;
+                urls.push(link.href);
+                try {
+                  const res = await fetch(link.href);
+                  if (res && (res.status === 200 || res.type === 'opaque')) {
+                    await staticCache.put(link.href, res.clone());
+                    if (
+                      link.href.includes('.css') &&
+                      !link.href.includes('fonts.googleapis.com') &&
+                      !link.href.includes('fonts.gstatic.com')
+                    ) {
+                      await staticCache.put('/__casa_italia_master_app_style__.css', res.clone());
+                    }
+                  }
+                } catch {
+                  // ignore
+                }
+              }
+
+              // Also notify Service Worker controller to ensure worker cache is synchronized
+              if (navigator.serviceWorker.controller && urls.length > 0) {
+                navigator.serviceWorker.controller.postMessage({
+                  type: 'CACHE_STYLES',
+                  urls,
+                });
+              }
+            } catch {
+              // ignore
+            }
+          };
+
+          // Cache active styles shortly after load
+          setTimeout(cacheActiveStylesheets, 800);
+
           // Pre-warm media cache in background during idle time so dishes and images are available offline
           const primeOfflineMedia = async () => {
             if (typeof window === 'undefined' || !navigator.onLine) return;
             try {
+              cacheActiveStylesheets();
               const res = await fetch('/api/menu');
               const data = (await res.json()) as { items?: { image?: string }[] };
               if (data?.items && Array.isArray(data.items)) {
