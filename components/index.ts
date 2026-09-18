@@ -6,3 +6,4 @@ export * from './table';
 export * from './legal';
 export * from './feedback';
 export * from './ui';
+export * from './pwa';

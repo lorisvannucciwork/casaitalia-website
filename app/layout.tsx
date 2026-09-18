@@ -3,6 +3,7 @@ import Script from "next/script";
 import "./globals.css";
 import { LanguageProvider } from "@/context";
 import { CookieConsent, RestaurantJsonLd } from "@/components/layout";
+import { PwaManager } from "@/components/pwa";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -39,11 +40,20 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "any" },
+      { url: "/icons/android/launchericon-192x192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icons/android/launchericon-512x512.png", sizes: "512x512", type: "image/png" },
       { url: "/logo/logo-01.svg", type: "image/svg+xml" },
     ],
     apple: [
-      { url: "/logo/logo-01.webp", sizes: "180x180", type: "image/webp" },
+      { url: "/icons/ios/180.png", sizes: "180x180", type: "image/png" },
+      { url: "/icons/ios/167.png", sizes: "167x167", type: "image/png" },
+      { url: "/icons/ios/152.png", sizes: "152x152", type: "image/png" },
     ],
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Casa Italia",
   },
   alternates: {
     canonical: "/",
@@ -108,6 +118,7 @@ export default function RootLayout({
         <LanguageProvider>
           {children}
           <CookieConsent />
+          <PwaManager />
         </LanguageProvider>
         {process.env.NEXT_PUBLIC_CF_ANALYTICS_TOKEN && (
           <Script

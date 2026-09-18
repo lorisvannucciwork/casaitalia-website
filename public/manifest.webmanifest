@@ -1,18 +1,77 @@
 {
+  "id": "/?source=pwa",
   "name": "Casa Italia Ristorante • Porto Ghalib",
   "short_name": "Casa Italia",
-  "description": "Authentic Italian dining at Porto Ghalib Marina. Fresh handmade pasta, wood-fired Neapolitan pizza, steak, seafood, and fine wine pairings.",
-  "start_url": "/",
+  "description": "Autentica cucina italiana a Porto Ghalib Marina. Menu digitale, pizza cotta a legna, pasta fresca artigianale e servizio al tavolo.",
+  "start_url": "/?source=pwa",
+  "scope": "/",
   "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
   "background_color": "#1a1816",
   "theme_color": "#ba935a",
   "orientation": "portrait",
-  "categories": ["food", "dining", "restaurant"],
+  "dir": "ltr",
+  "lang": "it-IT",
+  "categories": ["food", "dining", "restaurant", "lifestyle"],
   "icons": [
     {
-      "src": "/logo/logo-01.webp",
-      "sizes": "800x600",
-      "type": "image/webp",
+      "src": "/icons/android/launchericon-48x48.png",
+      "sizes": "48x48",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/android/launchericon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/android/launchericon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/android/launchericon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/android/launchericon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/android/launchericon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icons/android/launchericon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/android/launchericon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icons/ios/180.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/ios/1024.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
       "purpose": "any"
     },
     {
@@ -20,6 +79,60 @@
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Menu Digitale",
+      "short_name": "Menu",
+      "description": "Sfoglia il menu e la carta dei vini",
+      "url": "/menu?source=pwa_shortcut",
+      "icons": [
+        {
+          "src": "/icons/android/launchericon-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Servizio Tavolo",
+      "short_name": "Tavolo",
+      "description": "Wi-Fi ospiti e servizi al tavolo",
+      "url": "/tables?source=pwa_shortcut",
+      "icons": [
+        {
+          "src": "/icons/android/launchericon-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Recensioni & Social",
+      "short_name": "Social",
+      "description": "Connettiti con Casa Italia",
+      "url": "/medal?source=pwa_shortcut",
+      "icons": [
+        {
+          "src": "/icons/android/launchericon-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/backgrounds/bg-1.webp",
+      "sizes": "1920x1080",
+      "type": "image/webp",
+      "form_factor": "wide",
+      "label": "Casa Italia Ristorante - Vista Sala"
+    },
+    {
+      "src": "/backgrounds/bg-2.webp",
+      "sizes": "1920x1080",
+      "type": "image/webp",
+      "form_factor": "narrow",
+      "label": "Casa Italia Ristorante - Atmosfera"
     }
   ]
 }
