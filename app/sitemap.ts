@@ -10,18 +10,38 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: now,
       changeFrequency: 'weekly',
       priority: 1.0,
+      images: [
+        `${baseUrl}/logo/logo-01.webp`,
+        `${baseUrl}/backgrounds/bg-1.webp`,
+      ],
     },
     {
       url: `${baseUrl}/menu`,
       lastModified: now,
       changeFrequency: 'daily',
       priority: 0.9,
+      images: [
+        `${baseUrl}/logo/logo-01.webp`,
+        `${baseUrl}/backgrounds/bg-2.webp`,
+      ],
+    },
+    {
+      url: `${baseUrl}/tables`,
+      lastModified: now,
+      changeFrequency: 'daily',
+      priority: 0.9,
+      images: [
+        `${baseUrl}/logo/logo-01.webp`,
+      ],
     },
     {
       url: `${baseUrl}/medal`,
       lastModified: now,
       changeFrequency: 'weekly',
       priority: 0.8,
+      images: [
+        `${baseUrl}/logo/logo-01.webp`,
+      ],
     },
     {
       url: `${baseUrl}/privacy`,

@@ -1,0 +1,25 @@
+{
+  "name": "Casa Italia Ristorante • Porto Ghalib",
+  "short_name": "Casa Italia",
+  "description": "Authentic Italian dining at Porto Ghalib Marina. Fresh handmade pasta, wood-fired Neapolitan pizza, steak, seafood, and fine wine pairings.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a1816",
+  "theme_color": "#ba935a",
+  "orientation": "portrait",
+  "categories": ["food", "dining", "restaurant"],
+  "icons": [
+    {
+      "src": "/logo/logo-01.webp",
+      "sizes": "800x600",
+      "type": "image/webp",
+      "purpose": "any"
+    },
+    {
+      "src": "/logo/logo-01.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
