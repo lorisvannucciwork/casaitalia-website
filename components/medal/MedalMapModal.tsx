@@ -40,7 +40,7 @@ export const MedalMapModal: React.FC<MedalMapModalProps> = ({ isOpen, onClose })
         <div className="w-full aspect-[4/3] sm:aspect-video bg-[#faf7f2] border border-[#ba935a]/30 overflow-hidden relative">
           <iframe
             title="Casa Italia Restaurant Google Map Location"
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3559.227448208889!2d34.48202977626914!3d25.53488737749539!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x144e594459d80d29%3A0xc07a8baee5ca8e3f!2sCasa%20Italia!5e0!3m2!1sen!2seg!4v1709472000000!5m2!1sen!2seg"
+            src="https://www.google.com/maps/embed?origin=mfe&pb=!1m3!3m2!1m1!4s8427411180873439439"
             width="100%"
             height="100%"
             style={{ border: 0 }}
