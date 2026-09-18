@@ -32,10 +32,10 @@ const DEFAULT_COOKIES: CookieItem[] = [
   {
     name: 'casa_italia_pwa_dismissed',
     purpose: {
-      it: 'Memorizza temporaneamente la chiusura del banner di installazione App',
-      en: 'Remembers install prompt dismissal in Local Storage',
+      it: 'Memorizza la scelta "Non mostrare più" o il rinvio del banner App (riattivabile dal footer)',
+      en: 'Stores "Never show again" preference or snooze state for the App banner (re-triggerable via footer)',
     },
-    duration: '7 Giorni (Local Storage)',
+    duration: '7 Giorni / Permanente (Local Storage)',
   },
   {
     name: 'casa-italia-pwa-v1',

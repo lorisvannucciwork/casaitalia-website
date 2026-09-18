@@ -156,6 +156,17 @@ export const Footer: React.FC = () => {
             >
               {t('footer.cookiePreferences')}
             </button>
+            <button
+              type="button"
+              onClick={() => {
+                if (typeof window !== 'undefined' && window.openPwaInstallPrompt) {
+                  window.openPwaInstallPrompt();
+                }
+              }}
+              className="hover:text-[#ba935a] transition-colors underline-offset-4 hover:underline cursor-pointer bg-transparent border-none p-0 text-xs text-[#8c8479]"
+            >
+              {t('footer.installApp')}
+            </button>
           </div>
 
           <p className="text-[11px] text-center sm:text-right">

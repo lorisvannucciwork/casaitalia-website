@@ -10,6 +10,12 @@ interface BeforeInstallPromptEvent extends Event {
   userChoice: Promise<{ outcome: 'accepted' | 'dismissed'; platform: string }>;
 }
 
+declare global {
+  interface Window {
+    openPwaInstallPrompt?: () => void;
+  }
+}
+
 export const PwaManager: React.FC = () => {
   const { language } = useLanguage();
   const isIt = language === 'it';
@@ -20,7 +26,21 @@ export const PwaManager: React.FC = () => {
   const [isIos, setIsIos] = useState(false);
   const [isStandalone, setIsStandalone] = useState(false);
 
-  // 1. Service Worker Registration
+  // 1. Expose global opener for Footer button
+  useEffect(() => {
+    window.openPwaInstallPrompt = () => {
+      if (isIos) {
+        setShowIosModal(true);
+      } else {
+        setShowBanner(true);
+      }
+    };
+    return () => {
+      delete window.openPwaInstallPrompt;
+    };
+  }, [isIos]);
+
+  // 2. Service Worker Registration
   useEffect(() => {
     if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
       const registerSw = async () => {
@@ -53,7 +73,7 @@ export const PwaManager: React.FC = () => {
     }
   }, []);
 
-  // 2. Install Prompt Detection & Handling
+  // 3. Install Prompt Detection & Handling
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
@@ -67,11 +87,14 @@ export const PwaManager: React.FC = () => {
       return;
     }
 
-    // Check if dismissed recently (within 7 days)
+    // Check if dismissed permanently ('never') or recently (within 7 days)
     const dismissedAt = localStorage.getItem('casa_italia_pwa_dismissed');
     if (dismissedAt) {
+      if (dismissedAt === 'never') {
+        return; // Permanently suppressed from auto-showing
+      }
       const timeSince = Date.now() - parseInt(dismissedAt, 10);
-      if (timeSince < 7 * 24 * 60 * 60 * 1000) {
+      if (!isNaN(timeSince) && timeSince < 7 * 24 * 60 * 60 * 1000) {
         return;
       }
     }
@@ -143,7 +166,7 @@ export const PwaManager: React.FC = () => {
     }
   };
 
-  const handleDismiss = () => {
+  const handleLater = () => {
     setShowBanner(false);
     try {
       localStorage.setItem('casa_italia_pwa_dismissed', Date.now().toString());
@@ -152,61 +175,62 @@ export const PwaManager: React.FC = () => {
     }
   };
 
-  if (isStandalone || !showBanner) return null;
+  const handleNeverShowAgain = () => {
+    setShowBanner(false);
+    try {
+      localStorage.setItem('casa_italia_pwa_dismissed', 'never');
+    } catch {
+      // ignore
+    }
+  };
+
+  if (isStandalone || (!showBanner && !showIosModal)) return null;
 
   return (
     <>
-      {/* Luxury Bottom Floating PWA Banner */}
+      {/* Luxury Bottom Floating PWA Banner — Navbar-Matched Palette */}
       <aside
         aria-label="Install App Banner"
-        className="fixed bottom-4 left-3 right-3 sm:left-auto sm:right-5 sm:max-w-md z-40 bg-[#1a1816]/95 backdrop-blur-xl border border-[#ba935a]/50 p-3.5 sm:p-4 shadow-[0_10px_35px_rgba(0,0,0,0.5)] animate-in slide-in-from-bottom-5 duration-500 rounded-none text-[#faf7f2]"
+        className="fixed bottom-4 left-3 right-3 sm:left-auto sm:right-5 sm:max-w-md z-40 bg-[#faf7f2]/95 backdrop-blur-xl border border-[#ba935a]/40 p-3.5 sm:p-4 shadow-[0_10px_35px_rgba(26,24,22,0.18)] animate-in slide-in-from-bottom-5 duration-500 rounded-none text-[#1a1816]"
       >
-        <div className="flex items-center gap-3.5">
-          {/* App Icon */}
-          <div className="relative w-12 h-12 shrink-0 border border-[#ba935a]/40 bg-[#141210] overflow-hidden shadow-inner">
-            <Image
-              src="/icons/android/launchericon-192x192.png"
-              alt="Casa Italia App Icon"
-              width={48}
-              height={48}
-              className="object-cover w-full h-full"
-            />
-          </div>
+        <div className="flex items-center justify-between gap-3.5">
+          <div className="flex items-center gap-3 min-w-0">
+            {/* App Icon */}
+            <div className="relative w-11 h-11 shrink-0 border border-[#ba935a]/40 bg-white overflow-hidden shadow-xs">
+              <Image
+                src="/icons/android/launchericon-192x192.png"
+                alt="Casa Italia App Icon"
+                width={44}
+                height={44}
+                className="object-cover w-full h-full"
+              />
+            </div>
 
-          {/* Text Details */}
-          <div className="flex-1 min-w-0 pr-1">
-            <div className="flex items-center gap-2">
-              <span className="font-serif font-bold text-sm text-[#faf7f2] tracking-wide truncate">
+            {/* Title */}
+            <div className="min-w-0">
+              <span className="font-serif font-bold text-sm sm:text-base text-[#1a1816] tracking-wide truncate block">
                 Casa Italia App
               </span>
-              <span className="px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider bg-[#ba935a]/25 border border-[#ba935a]/50 text-[#ba935a]">
-                PWA
-              </span>
             </div>
-            <p className="text-xs text-[#a8a095] line-clamp-1 mt-0.5">
-              {isIt
-                ? 'Menu offline, Wi-Fi e accesso rapido al tavolo'
-                : 'Offline menu, guest Wi-Fi & instant dining hub'}
-            </p>
           </div>
 
-          {/* Dismiss Button */}
+          {/* Never show again button */}
           <button
             type="button"
-            onClick={handleDismiss}
-            aria-label="Close install prompt"
-            className="p-1 text-[#a8a095] hover:text-white transition-colors cursor-pointer shrink-0"
+            onClick={handleNeverShowAgain}
+            aria-label={isIt ? 'Non mostrare più' : 'Never show again'}
+            className="text-[11px] sm:text-xs text-[#8c8479] hover:text-[#ba935a] transition-colors cursor-pointer shrink-0 font-medium underline underline-offset-2 whitespace-nowrap"
           >
-            <X className="w-4 h-4" />
+            {isIt ? 'Non mostrare più' : 'Never show again'}
           </button>
         </div>
 
-        {/* Action Button */}
+        {/* Action Buttons */}
         <div className="mt-3 flex items-center justify-end gap-2 pt-2 border-t border-[#ba935a]/20">
           <button
             type="button"
-            onClick={handleDismiss}
-            className="px-3 py-1.5 text-xs text-[#a8a095] hover:text-white transition-colors cursor-pointer uppercase font-semibold tracking-wider"
+            onClick={handleLater}
+            className="px-3 py-1.5 text-xs text-[#6e675e] hover:text-[#1a1816] transition-colors cursor-pointer uppercase font-semibold tracking-wider"
           >
             {isIt ? 'Più tardi' : 'Later'}
           </button>
@@ -295,7 +319,7 @@ export const PwaManager: React.FC = () => {
               type="button"
               onClick={() => {
                 setShowIosModal(false);
-                handleDismiss();
+                handleLater();
               }}
               className="w-full py-2.5 bg-[#ba935a] hover:bg-[#a37f48] text-white font-bold text-xs uppercase tracking-wider transition-colors cursor-pointer text-center"
             >

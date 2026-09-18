@@ -107,6 +107,7 @@ const translations: Record<Language, Record<string, string>> = {
     'footer.terms': 'Termini & Condizioni',
     'footer.cookies': 'Politica sui Cookie',
     'footer.cookiePreferences': 'Gestione Cookie',
+    'footer.installApp': 'Installa App',
     'footer.rights': 'Tutti i diritti riservati.',
 
     // Cookie Banner
@@ -209,6 +210,7 @@ const translations: Record<Language, Record<string, string>> = {
     'footer.terms': 'Terms & Conditions',
     'footer.cookies': 'Cookie Policy',
     'footer.cookiePreferences': 'Cookie Settings',
+    'footer.installApp': 'Install App',
     'footer.rights': 'All rights reserved.',
 
     // Cookie Banner

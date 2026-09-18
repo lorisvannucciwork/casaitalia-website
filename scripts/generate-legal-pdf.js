@@ -947,8 +947,8 @@ const htmlContent = `<!DOCTYPE html>
             <tr>
               <td><code>casa_italia_pwa_dismissed</code></td>
               <td>First-Party / Local Storage</td>
-              <td>Stores dismissal of the App installation prompt to prevent repetitive notifications.</td>
-              <td>7 Days (Local)</td>
+              <td>Stores "Never show again" choice or temporary dismissal for the App prompt (re-triggerable from website footer).</td>
+              <td>7 Days / Persistent (Local)</td>
             </tr>
             <tr>
               <td><code>casa-italia-pwa-v1</code></td>
