@@ -17,6 +17,9 @@
       "database_id": "36030f97-d309-40fc-98e8-4708fe2b511f"
     }
   ],
+  "vars": {
+    "INTERNAL_API_SECRET": "cf_sec_9e2f4a1c7d8b50e3218764a0b3d6852e9a710c53f6b4d2e8917ca5b034e6f189"
+  },
   "observability": {
     "enabled": true
   }
