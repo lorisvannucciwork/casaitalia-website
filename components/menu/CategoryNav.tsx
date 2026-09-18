@@ -202,18 +202,7 @@ export const CategoryNav: React.FC<CategoryNavProps> = ({
                               : 'text-[#1a1816] hover:bg-[#f7f2e8]'
                           }`}
                         >
-                          <div className="flex flex-col">
-                            <span>{categoryTitle}</span>
-                            {cat.description && (
-                              <span
-                                className={`text-[11px] truncate max-w-[220px] ${
-                                  isSelected ? 'text-white/80' : 'text-[#8c8479]'
-                                }`}
-                              >
-                                {cat.description}
-                              </span>
-                            )}
-                          </div>
+                          <span>{categoryTitle}</span>
                           {isSelected && <span className="text-xs text-white/90">✓</span>}
                         </button>
                       );
