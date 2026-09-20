@@ -21,7 +21,7 @@ export const PrivacyPolicyView: React.FC<PrivacyPolicyViewProps> = () => {
 
   return (
     <LegalPageLayout title={title} lastUpdated={lastUpdated}>
-      {/* Section 1: Data Controller */}
+
       <LegalSectionCard
         number="01"
         title={isIt ? 'Titolare del Trattamento dei Dati' : 'Data Controller'}
@@ -58,7 +58,6 @@ export const PrivacyPolicyView: React.FC<PrivacyPolicyViewProps> = () => {
         </LegalNoticeCard>
       </LegalSectionCard>
 
-      {/* Section 2: Data Collected */}
       <LegalSectionCard
         number="02"
         title={isIt ? 'Dati Personali Raccolti' : 'Personal Data Collected'}
@@ -102,7 +101,6 @@ export const PrivacyPolicyView: React.FC<PrivacyPolicyViewProps> = () => {
         </ul>
       </LegalSectionCard>
 
-      {/* Section 3: Legal Basis & Purpose */}
       <LegalSectionCard
         number="03"
         title={isIt ? 'Finalità e Base Giuridica del Trattamento' : 'Purposes & Legal Grounds'}
@@ -159,7 +157,6 @@ export const PrivacyPolicyView: React.FC<PrivacyPolicyViewProps> = () => {
         </div>
       </LegalSectionCard>
 
-      {/* Section 4: Third Parties */}
       <LegalSectionCard
         number="04"
         title={isIt ? 'Servizi di Terze Parti' : 'Third-Party Services'}
@@ -174,7 +171,7 @@ export const PrivacyPolicyView: React.FC<PrivacyPolicyViewProps> = () => {
             <strong>Cloudflare Workers, D1 &amp; Edge</strong>: Hosting ad alte prestazioni, crittografia SSL/TLS, database D1 distribuito e protezione DDoS globale.
           </li>
           <li>
-            <strong>Cloudflare Web Analytics</strong>: Statistiche di navigazione anonime e aggregate senza l'uso di cookie traccianti e senza profilazione personale.
+            <strong>Cloudflare Web Analytics</strong>: Statistiche di navigazione anonime e aggregate senza l&apos;uso di cookie traccianti e senza profilazione personale.
           </li>
           <li>
             <strong>Upstash Redis</strong>: Analisi in transito degli indirizzi IP per rate-limiting e mitigazione automatica di abusi o sovraccarichi delle API.
@@ -191,7 +188,6 @@ export const PrivacyPolicyView: React.FC<PrivacyPolicyViewProps> = () => {
         </ul>
       </LegalSectionCard>
 
-      {/* Section 5: Your Rights */}
       <LegalSectionCard
         number="05"
         title={isIt ? 'I Tuoi Diritti (GDPR)' : 'Your Rights Under GDPR'}

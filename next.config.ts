@@ -14,7 +14,7 @@ const connectSources = [
 ].join(' ');
 
 const securityHeaders = [
-  // 1. Content Security Policy (Hardened - No unsafe-eval)
+
   {
     key: 'Content-Security-Policy',
     value: [
@@ -35,42 +35,42 @@ const securityHeaders = [
       "upgrade-insecure-requests",
     ].join('; '),
   },
-  // 2. Clickjacking protection
+
   {
     key: 'X-Frame-Options',
     value: 'SAMEORIGIN',
   },
-  // 3. MIME-type sniffing protection
+
   {
     key: 'X-Content-Type-Options',
     value: 'nosniff',
   },
-  // 4. Referrer policy
+
   {
     key: 'Referrer-Policy',
     value: 'strict-origin-when-cross-origin',
   },
-  // 5. Enforce strict HTTPS transport (HSTS)
+
   {
     key: 'Strict-Transport-Security',
     value: 'max-age=63072000; includeSubDomains; preload',
   },
-  // 6. Restrict sensitive browser features
+
   {
     key: 'Permissions-Policy',
     value: 'camera=(), microphone=(), geolocation=(), payment=()',
   },
-  // 7. Cross-site scripting filter
+
   {
     key: 'X-XSS-Protection',
     value: '1; mode=block',
   },
-  // 8. DNS prefetch control
+
   {
     key: 'X-DNS-Prefetch-Control',
     value: 'on',
   },
-  // 9. Multilingual site declaration to prevent forced auto-translation popups
+
   {
     key: 'Content-Language',
     value: 'it, en',
@@ -78,11 +78,127 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+
+  poweredByHeader: false,
+
+  trailingSlash: false,
+
+  compress: true,
+
   async headers() {
     return [
+
       {
         source: '/:path*',
         headers: securityHeaders,
+      },
+
+      {
+        source: '/api/:path*',
+        headers: [
+          {
+            key: 'X-Robots-Tag',
+            value: 'noindex, nofollow, noarchive',
+          },
+          {
+            key: 'Cache-Control',
+            value: 'no-store, no-cache, must-revalidate',
+          },
+        ],
+      },
+
+      {
+        source: '/logo/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        source: '/icons/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        source: '/backgrounds/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=2592000, stale-while-revalidate=86400',
+          },
+        ],
+      },
+      {
+        source: '/videos/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=2592000, stale-while-revalidate=86400',
+          },
+        ],
+      },
+
+      {
+        source: '/fonts/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+
+      {
+        source: '/manifest.webmanifest',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=86400, stale-while-revalidate=3600',
+          },
+          {
+            key: 'Content-Type',
+            value: 'application/manifest+json',
+          },
+        ],
+      },
+      {
+        source: '/sw.js',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=0, must-revalidate',
+          },
+          {
+            key: 'Service-Worker-Allowed',
+            value: '/',
+          },
+        ],
+      },
+
+      {
+        source: '/favicon.ico',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=2592000, stale-while-revalidate=86400',
+          },
+        ],
+      },
+
+      {
+        source: '/browserconfig.xml',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=2592000',
+          },
+        ],
       },
     ];
   },
@@ -109,6 +225,9 @@ const nextConfig: NextConfig = {
         hostname: 'images.unsplash.com',
       },
     ],
+
+    formats: ['image/avif', 'image/webp'],
+    minimumCacheTTL: 2592000, 
   },
 };
 

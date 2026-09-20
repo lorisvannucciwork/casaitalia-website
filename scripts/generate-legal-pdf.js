@@ -8,12 +8,10 @@ const legalDir = path.join(publicDir, 'legal');
 const htmlOutputFile = path.join(legalDir, 'casa-italia-policies.html');
 const pdfOutputFilePublic = path.join(publicDir, 'Casa_Italia_Legal_Policies_EN.pdf');
 
-// Ensure directories exist
 if (!fs.existsSync(legalDir)) {
   fs.mkdirSync(legalDir, { recursive: true });
 }
 
-// Read SVG logo if available
 let logoSvg = '';
 const logoPath = path.join(publicDir, 'logo', 'logo-01.svg');
 if (fs.existsSync(logoPath)) {
@@ -31,7 +29,7 @@ const htmlContent = `<!DOCTYPE html>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    /* CSS Reset */
+    
     *, *::before, *::after {
       box-sizing: border-box;
       margin: 0;
@@ -62,7 +60,7 @@ const htmlContent = `<!DOCTYPE html>
       print-color-adjust: exact;
     }
 
-    /* Page Sheet Layout (Exact A4 Dimensions) */
+    
     .page-sheet {
       width: 210mm;
       height: 297mm;
@@ -102,7 +100,7 @@ const htmlContent = `<!DOCTYPE html>
       }
     }
 
-    /* Typography */
+    
     h1, h2, h3, h4, .serif {
       font-family: 'Cormorant Garamond', Georgia, serif;
       color: var(--charcoal);
@@ -110,7 +108,7 @@ const htmlContent = `<!DOCTYPE html>
       letter-spacing: -0.01em;
     }
 
-    /* Running Header */
+    
     .running-header {
       display: flex;
       justify-content: space-between;
@@ -132,7 +130,7 @@ const htmlContent = `<!DOCTYPE html>
       font-weight: 600;
     }
 
-    /* Running Footer */
+    
     .running-footer {
       border-top: 1px solid var(--gold-border);
       padding-top: 6px;
@@ -156,7 +154,7 @@ const htmlContent = `<!DOCTYPE html>
       letter-spacing: 0.04em;
     }
 
-    /* Cover / Page 1 Header */
+    
     .brand-cover-header {
       display: flex;
       justify-content: space-between;
@@ -184,7 +182,7 @@ const htmlContent = `<!DOCTYPE html>
       font-size: 8.4pt;
     }
 
-    /* Page 1 Hero Banner */
+    
     .hero-banner {
       background: linear-gradient(135deg, #1a1816 0%, #29241f 100%);
       border-left: 5px solid var(--gold);
@@ -233,7 +231,7 @@ const htmlContent = `<!DOCTYPE html>
       color: #ffffff;
     }
 
-    /* Executive Callout */
+    
     .exec-box {
       background: var(--gold-light);
       border: 1px solid var(--gold-border);
@@ -248,7 +246,7 @@ const htmlContent = `<!DOCTYPE html>
       color: var(--charcoal);
     }
 
-    /* Table of Contents Grid */
+    
     .toc-card {
       border: 1px solid var(--border-gray);
       background: #ffffff;
@@ -297,7 +295,7 @@ const htmlContent = `<!DOCTYPE html>
       font-weight: 600;
     }
 
-    /* Core Principles 3-col on Cover */
+    
     .principles-grid {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
@@ -322,7 +320,7 @@ const htmlContent = `<!DOCTYPE html>
       margin-bottom: 3px;
     }
 
-    /* Scope pill bar on Cover */
+    
     .scope-bar {
       border: 1px dashed var(--gold-border);
       padding: 7px 11px;
@@ -337,7 +335,7 @@ const htmlContent = `<!DOCTYPE html>
       color: var(--charcoal);
     }
 
-    /* Section Headers on Pages 2, 3, 4 */
+    
     .part-banner {
       display: flex;
       align-items: center;
@@ -368,7 +366,7 @@ const htmlContent = `<!DOCTYPE html>
       text-align: right;
     }
 
-    /* Clause Blocks */
+    
     .clause-card {
       border: 1px solid var(--border-gray);
       background: #ffffff;
@@ -402,7 +400,7 @@ const htmlContent = `<!DOCTYPE html>
       margin-bottom: 0;
     }
 
-    /* Legal Bullet Lists */
+    
     ul.legal-bullets {
       list-style: none;
       padding-left: 0;
@@ -427,7 +425,7 @@ const htmlContent = `<!DOCTYPE html>
       color: var(--charcoal);
     }
 
-    /* Entity Strip */
+    
     .entity-strip {
       background: var(--bg-cream);
       border-left: 3px solid var(--gold);
@@ -442,7 +440,7 @@ const htmlContent = `<!DOCTYPE html>
       color: var(--charcoal);
     }
 
-    /* 4-card grid for Legal Grounds */
+    
     .grounds-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -466,7 +464,7 @@ const htmlContent = `<!DOCTYPE html>
       letter-spacing: 0.02em;
     }
 
-    /* Critical Allergen Alert Box */
+    
     .alert-allergen {
       background: #fffcf7;
       border: 1.5px solid #d49537;
@@ -496,7 +494,7 @@ const htmlContent = `<!DOCTYPE html>
       line-height: 1.42;
     }
 
-    /* Tables */
+    
     .cookie-table {
       width: 100%;
       border-collapse: collapse;
@@ -529,7 +527,7 @@ const htmlContent = `<!DOCTYPE html>
       font-weight: 600;
     }
 
-    /* Official Sign-off Stamp */
+    
     .signoff-card {
       border: 1px solid var(--gold-border);
       background: var(--bg-cream);
@@ -669,7 +667,6 @@ const htmlContent = `<!DOCTYPE html>
     </footer>
   </div>
 
-
   <!-- ========================================================================= -->
   <!-- PAGE 2: PART I — PRIVACY POLICY & PERSONAL DATA PROTECTION                -->
   <!-- ========================================================================= -->
@@ -785,7 +782,6 @@ const htmlContent = `<!DOCTYPE html>
     </footer>
   </div>
 
-
   <!-- ========================================================================= -->
   <!-- PAGE 3: PART II — TERMS & CONDITIONS OF SERVICE & ALLERGEN SAFETY         -->
   <!-- ========================================================================= -->
@@ -881,7 +877,6 @@ const htmlContent = `<!DOCTYPE html>
     </footer>
   </div>
 
-
   <!-- ========================================================================= -->
   <!-- PAGE 4: PART III — COOKIE POLICY & DIGITAL PREFERENCES + CERTIFICATION    -->
   <!-- ========================================================================= -->
@@ -921,7 +916,7 @@ const htmlContent = `<!DOCTYPE html>
           <h3 class="clause-title">Comprehensive Technical Cookie Inventory</h3>
         </div>
         <p>Casa Italia maintains a privacy-first platform without third-party advertising trackers. Our cookies are detailed below:</p>
-        
+
         <table class="cookie-table">
           <thead>
             <tr>
@@ -1026,14 +1021,11 @@ const htmlContent = `<!DOCTYPE html>
 </html>
 `;
 
-// 1. Write HTML file
 fs.writeFileSync(htmlOutputFile, htmlContent, 'utf8');
-console.log('HTML document written to:', htmlOutputFile);
 
-// 2. Locate Microsoft Edge
 const edgePaths = [
-  'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
-  'C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe'
+  'C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe',
+  'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe'
 ];
 
 const edgeExe = edgePaths.find(p => fs.existsSync(p));
@@ -1043,17 +1035,13 @@ if (!edgeExe) {
   process.exit(1);
 }
 
-console.log('Using Edge executable:', edgeExe);
-
 try {
-  // Command to print to PDF
+
   const cmd = `"${edgeExe}" --headless --disable-gpu --run-all-compositor-stages-before-draw --no-pdf-header-footer --print-to-pdf="${pdfOutputFilePublic}" "file:///${htmlOutputFile.replace(/\\/g, '/')}"`;
-  console.log('Running Edge headless export command...');
   execSync(cmd, { stdio: 'inherit' });
 
   if (fs.existsSync(pdfOutputFilePublic)) {
     const stats = fs.statSync(pdfOutputFilePublic);
-    console.log(`PDF successfully created in public folder: ${pdfOutputFilePublic} (${stats.size} bytes)`);
   } else {
     console.error('PDF file was not generated.');
     process.exit(1);

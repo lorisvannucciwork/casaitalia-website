@@ -1,7 +1,3 @@
--- ==========================================================
--- Casa Italia - Cloudflare D1 Database Schema & Seed Data
--- ==========================================================
-
 CREATE TABLE IF NOT EXISTS users (
   id TEXT PRIMARY KEY,
   name TEXT NOT NULL,
@@ -10,6 +6,7 @@ CREATE TABLE IF NOT EXISTS users (
   color TEXT DEFAULT '#ba935a',
   avatar_url TEXT,
   active INTEGER NOT NULL DEFAULT 1,
+  token_version INTEGER NOT NULL DEFAULT 1,
   created_at TEXT NOT NULL
 );
 

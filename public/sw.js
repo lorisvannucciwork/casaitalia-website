@@ -1,8 +1,3 @@
-/**
- * Casa Italia Ristorante - Progressive Web App Service Worker
- * Bulletproof Offline Engine with Guaranteed CSS, Fonts, Images & Video Caching
- * Version: 4.0.0
- */
 
 const CACHE_VERSION = 'v4';
 const STATIC_CACHE = `casa-italia-static-${CACHE_VERSION}`;
@@ -36,13 +31,11 @@ const PRECACHE_ASSETS = [
   GOOGLE_FONTS_URL,
 ];
 
-// Helper: Store stylesheet and clone under master key if it's an app stylesheet
 async function storeStylesheet(cache, key, response) {
   try {
     const urlString = typeof key === 'string' ? key : key.url;
     await cache.put(key, response.clone());
 
-    // Only update master app style if it's an application stylesheet (not Google Fonts)
     if (
       urlString.includes('.css') &&
       !urlString.includes('fonts.googleapis.com') &&
@@ -51,23 +44,19 @@ async function storeStylesheet(cache, key, response) {
       await cache.put(MASTER_CSS_KEY, response.clone());
     }
   } catch {
-    // ignore
+
   }
 }
 
-// Helper: Match asset with search-param ignoring and intelligent fallback
 async function matchWithFallback(request, cacheName = STATIC_CACHE) {
   const cache = await caches.open(cacheName);
 
-  // 1. Exact match
   let match = await cache.match(request);
   if (match) return match;
 
-  // 2. Ignore query parameters
   match = await cache.match(request, { ignoreSearch: true });
   if (match) return match;
 
-  // 3. Match by clean pathname
   try {
     const url =
       typeof request === 'string'
@@ -76,10 +65,9 @@ async function matchWithFallback(request, cacheName = STATIC_CACHE) {
     match = await cache.match(url.pathname);
     if (match) return match;
   } catch {
-    // ignore
+
   }
 
-  // 4. Dedicated Stylesheet Fallbacks
   const requestUrl = typeof request === 'string' ? request : request.url;
   const isGoogleFont = requestUrl.includes('fonts.googleapis.com');
 
@@ -92,11 +80,10 @@ async function matchWithFallback(request, cacheName = STATIC_CACHE) {
     requestUrl.includes('.css');
 
   if (isAppStyle) {
-    // Priority A: The cached master application stylesheet
+
     const masterCss = await cache.match(MASTER_CSS_KEY);
     if (masterCss) return masterCss;
 
-    // Priority B: Any cached Next.js stylesheet chunk (strictly excluding Google Fonts)
     const keys = await cache.keys();
     for (const key of keys) {
       if (
@@ -109,7 +96,6 @@ async function matchWithFallback(request, cacheName = STATIC_CACHE) {
       }
     }
 
-    // Priority C: Any non-google .css file in cache
     for (const key of keys) {
       if (key.url.includes('.css') && !key.url.includes('fonts.googleapis.com')) {
         const anyCss = await cache.match(key);
@@ -121,7 +107,6 @@ async function matchWithFallback(request, cacheName = STATIC_CACHE) {
   return null;
 }
 
-// Helper: Slice arrayBuffer to construct standard 206 Partial Content response for offline video playback
 async function createPartialResponse(request, fullResponse) {
   const rangeHeader = request.headers.get('range');
   if (!rangeHeader) {
@@ -169,11 +154,9 @@ async function createPartialResponse(request, fullResponse) {
   }
 }
 
-// Helper: Inspect HTML string and proactively cache all linked CSS and JS files
 async function extractAndPrecacheAssets(htmlText, cache) {
   if (!htmlText) return;
 
-  // 1. Extract <link ... href="...css">
   const linkMatches =
     htmlText.match(/href=["'](\/_next\/static\/[^"']+\.css[^"']*)["']/gi) || [];
   for (const matchStr of linkMatches) {
@@ -184,11 +167,10 @@ async function extractAndPrecacheAssets(htmlText, cache) {
         await storeStylesheet(cache, cleanHref, res);
       }
     } catch {
-      // ignore
+
     }
   }
 
-  // 2. Extract <script ... src="...js">
   const scriptMatches =
     htmlText.match(/src=["'](\/_next\/static\/[^"']+\.js[^"']*)["']/gi) || [];
   for (const matchStr of scriptMatches) {
@@ -199,18 +181,16 @@ async function extractAndPrecacheAssets(htmlText, cache) {
         await cache.put(cleanSrc, res);
       }
     } catch {
-      // ignore
+
     }
   }
 }
 
-// 1. Install Event: Resilient Pre-caching with automatic asset discovery
 self.addEventListener('install', (event) => {
   event.waitUntil(
     (async () => {
       const staticCache = await caches.open(STATIC_CACHE);
 
-      // Pre-cache primary routes and static assets resiliently (one failure will not abort the rest)
       await Promise.allSettled(
         PRECACHE_ASSETS.map(async (asset) => {
           try {
@@ -223,12 +203,11 @@ self.addEventListener('install', (event) => {
               }
             }
           } catch {
-            // ignore individual precache failure
+
           }
         })
       );
 
-      // Discover and pre-cache compiled CSS and JS chunks directly from page HTML
       for (const pageUrl of ['/', '/menu', '/tables', '/medal']) {
         try {
           const cachedPage = await staticCache.match(pageUrl);
@@ -244,27 +223,23 @@ self.addEventListener('install', (event) => {
             }
           }
         } catch {
-          // ignore
+
         }
       }
 
-      // Pre-cache hero video into media cache
       try {
         const mediaCache = await caches.open(MEDIA_CACHE);
         const heroVideoRes = await fetch('/videos/hero.mp4');
         if (heroVideoRes && heroVideoRes.status === 200) {
           await mediaCache.put('/videos/hero.mp4', heroVideoRes);
         }
-      } catch (err) {
-        console.warn('[SW] Hero video precache notice:', err);
-      }
+      } catch {}
 
       await self.skipWaiting();
     })()
   );
 });
 
-// 2. Activate Event: Clean up outdated cache stores & claim clients immediately
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches
@@ -282,22 +257,18 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// 3. Fetch Event Routing
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
-  // Skip non-GET requests and unsupported protocols
   if (request.method !== 'GET' || !url.protocol.startsWith('http')) {
     return;
   }
 
-  // Bypass cache for revalidation webhooks and administrative actions
   if (url.pathname.startsWith('/api/menu/revalidate')) {
     return;
   }
 
-  // A. Public Menu & Settings API (Network First, Cache Fallback for offline dishes)
   if (
     url.pathname === '/api/menu' ||
     url.pathname === '/api/menu/categories' ||
@@ -325,12 +296,10 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Skip any other /api/ dynamic calls
   if (url.pathname.startsWith('/api/')) {
     return;
   }
 
-  // B. Stylesheets (CSS), Scripts, and Fonts — CACHE FIRST WITH STALE-WHILE-REVALIDATE
   const isStyle =
     request.destination === 'style' ||
     url.pathname.endsWith('.css') ||
@@ -349,10 +318,9 @@ self.addEventListener('fetch', (event) => {
       (async () => {
         const staticCache = await caches.open(STATIC_CACHE);
 
-        // 1. Check Cache First (Instant load, guaranteed offline styling)
         const cached = await matchWithFallback(request, STATIC_CACHE);
         if (cached) {
-          // In the background if online, revalidate without delaying the page
+
           if (navigator.onLine) {
             fetch(request)
               .then((fresh) => {
@@ -369,7 +337,6 @@ self.addEventListener('fetch', (event) => {
           return cached;
         }
 
-        // 2. Not in cache: fetch from network
         try {
           const networkResponse = await fetch(request);
           if (
@@ -384,13 +351,12 @@ self.addEventListener('fetch', (event) => {
           }
           return networkResponse;
         } catch {
-          // 3. Network failed (offline): match with fallback
+
           const fallback = await matchWithFallback(request, STATIC_CACHE);
           if (fallback) {
             return fallback;
           }
 
-          // 4. Ultimate Stylesheet Fallback: ensure page NEVER renders unstyled
           if (isStyle) {
             const masterFallback = await staticCache.match(MASTER_CSS_KEY);
             if (masterFallback) return masterFallback;
@@ -403,7 +369,7 @@ self.addEventListener('fetch', (event) => {
               }
             }
 
-            return new Response('/* Casa Italia Offline Fallback */', {
+            return new Response('', {
               headers: { 'Content-Type': 'text/css; charset=utf-8' },
             });
           }
@@ -415,7 +381,6 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // C. Video Requests (Hero video, mp4, webm, Range requests)
   const isVideo =
     request.destination === 'video' ||
     url.pathname.endsWith('.mp4') ||
@@ -429,10 +394,8 @@ self.addEventListener('fetch', (event) => {
         const mediaCache = await caches.open(MEDIA_CACHE);
         const cleanUrl = url.origin + url.pathname;
 
-        // Check cache first
         const cachedFull = await mediaCache.match(cleanUrl);
 
-        // If online: fetch full stream and cache it
         if (navigator.onLine) {
           try {
             const networkResponse = await fetch(cleanUrl);
@@ -444,11 +407,10 @@ self.addEventListener('fetch', (event) => {
               return networkResponse;
             }
           } catch {
-            // Fall through to cache
+
           }
         }
 
-        // If offline: slice arrayBuffer to handle Range requests
         if (cachedFull) {
           if (request.headers.has('range')) {
             return await createPartialResponse(request, cachedFull.clone());
@@ -462,7 +424,6 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // D. Image Requests (Next.js image optimizer, local images, CDN images, WebP, SVG, JPG, PNG)
   const isImage =
     request.destination === 'image' ||
     url.pathname.startsWith('/_next/image') ||
@@ -504,7 +465,6 @@ self.addEventListener('fetch', (event) => {
           return freshResponse;
         }
 
-        // Offline fallback for missing images: return cached brand background or logo
         const fallbackBg = await caches.match('/backgrounds/bg-2.webp');
         if (fallbackBg) return fallbackBg;
 
@@ -514,7 +474,6 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // E. HTML Navigation Requests (Network First, Cache Fallback)
   if (request.mode === 'navigate') {
     event.respondWith(
       fetch(request)
@@ -526,7 +485,10 @@ self.addEventListener('fetch', (event) => {
           return response;
         })
         .catch(async () => {
-          const cached = await caches.match(request);
+          let cached = await caches.match(request);
+          if (!cached && url.pathname === '/menu') {
+            cached = await caches.match('/menu');
+          }
           if (cached) return cached;
           const fallback = await caches.match('/');
           if (fallback) return fallback;
@@ -539,7 +501,6 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Default: Network with Cache Fallback
   event.respondWith(
     fetch(request).catch(async () => {
       const cached = await caches.match(request);
@@ -548,7 +509,6 @@ self.addEventListener('fetch', (event) => {
   );
 });
 
-// 4. Message Event Listener (Skip waiting and client-directed stylesheet caching)
 self.addEventListener('message', (event) => {
   if (!event.data) return;
 
@@ -567,7 +527,7 @@ self.addEventListener('message', (event) => {
               await storeStylesheet(cache, url, res);
             }
           } catch {
-            // ignore
+
           }
         }
       })()

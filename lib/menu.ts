@@ -1,5 +1,6 @@
 import db, { MenuCategoryRecord, MenuItemRecord } from './db';
 import { MENU_ITEMS as FALLBACK_MENU_ITEMS, MENU_CATEGORIES as FALLBACK_CATEGORIES, MenuItem, Category } from '../data/menuData';
+import { cacheManager } from './cache';
 
 export { type MenuItem, type CategoryId, type Category, MENU_CATEGORIES } from '../data/menuData';
 
@@ -7,10 +8,7 @@ const staticCategoryMap = new Map(FALLBACK_CATEGORIES.map((c) => [c.id.toLowerCa
 const staticItemMap = new Map(FALLBACK_MENU_ITEMS.map((item) => [item.id.toLowerCase(), item]));
 const staticItemByName = new Map(FALLBACK_MENU_ITEMS.map((item) => [item.name.toLowerCase(), item]));
 
-/**
- * Fetches active menu categories live from Cloudflare D1 with graceful static fallback
- */
-export async function getDynamicMenuCategories(): Promise<Category[]> {
+async function fetchRawCategoriesFromD1(): Promise<Category[]> {
   try {
     const rawCategories = await db.query<MenuCategoryRecord>(
       `SELECT * FROM menu_categories WHERE active = 1 ORDER BY display_order ASC, name ASC`
@@ -28,21 +26,30 @@ export async function getDynamicMenuCategories(): Promise<Category[]> {
         };
       });
     }
-  } catch (err) {
-    console.warn('D1 menu_categories query skipped or fallback used:', err);
+  } catch {
   }
 
   return FALLBACK_CATEGORIES;
 }
 
-/**
- * Fetches active menu items live from Cloudflare D1 with graceful static fallback
- */
-export async function getDynamicMenuItems(): Promise<MenuItem[]> {
+export async function getDynamicMenuCategories(): Promise<Category[]> {
+  return cacheManager.getOrSet('menu_categories', fetchRawCategoriesFromD1, {
+    ttlSeconds: 300,
+    staleSeconds: 1800,
+    tags: ['categories', 'menu'],
+  });
+}
+
+async function fetchRawItemsFromD1(category?: string): Promise<MenuItem[]> {
+  const cleanCategory = category?.trim().toLowerCase();
+
   try {
-    const rawItems = await db.query<MenuItemRecord>(
-      `SELECT * FROM menu_items WHERE active = 1 ORDER BY category ASC, display_order ASC, name ASC`
-    );
+    const querySql = cleanCategory
+      ? `SELECT * FROM menu_items WHERE active = 1 AND LOWER(category) = ? ORDER BY display_order ASC, name ASC`
+      : `SELECT * FROM menu_items WHERE active = 1 ORDER BY category ASC, display_order ASC, name ASC`;
+    const queryParams = cleanCategory ? [cleanCategory] : [];
+
+    const rawItems = await db.query<MenuItemRecord>(querySql, queryParams);
 
     if (rawItems && rawItems.length > 0) {
       return rawItems.map((item): MenuItem => {
@@ -86,10 +93,28 @@ export async function getDynamicMenuItems(): Promise<MenuItem[]> {
         };
       });
     }
-  } catch (err) {
-    console.warn('D1 menu_items query skipped or fallback used:', err);
+  } catch {
+  }
+
+  if (cleanCategory) {
+    return FALLBACK_MENU_ITEMS.filter((item) => item.category.toLowerCase() === cleanCategory);
   }
 
   return FALLBACK_MENU_ITEMS;
 }
 
+export async function getDynamicMenuItems(category?: string): Promise<MenuItem[]> {
+  const cleanCategory = category?.trim().toLowerCase();
+  const cacheKey = cleanCategory ? `menu_items_${cleanCategory}` : 'menu_items';
+  const tags = cleanCategory ? ['items', 'menu', `cat_${cleanCategory}`] : ['items', 'menu'];
+
+  return cacheManager.getOrSet(
+    cacheKey,
+    () => fetchRawItemsFromD1(cleanCategory),
+    {
+      ttlSeconds: 300,
+      staleSeconds: 1800,
+      tags,
+    }
+  );
+}

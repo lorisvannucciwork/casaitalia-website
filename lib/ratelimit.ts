@@ -1,7 +1,6 @@
 import { Ratelimit } from '@upstash/ratelimit';
 import { Redis } from '@upstash/redis';
 
-// In-memory sliding window cache for local development / edge fallback
 interface RateLimitRecord {
   count: number;
   resetAt: number;
@@ -16,8 +15,7 @@ function getRedisClient(): Redis | null {
   if (url && token && !url.includes('your_') && !token.includes('your_')) {
     try {
       return new Redis({ url, token });
-    } catch (e) {
-      console.warn('Failed to initialize Redis client:', e);
+    } catch {
       return null;
     }
   }
@@ -44,15 +42,12 @@ function getUpstashLimiter(maxRequests: number, windowSeconds: number): Ratelimi
   return limiter;
 }
 
-/**
- * Rate limit check helper (Upstash Redis with fallback to in-memory sliding window)
- */
 export async function checkRateLimit(
   identifier: string,
   maxRequests: number = 5,
   windowSeconds: number = 30
 ): Promise<{ success: boolean; limit: number; remaining: number; reset: number }> {
-  // 1. Try Upstash Redis if configured
+
   const limiter = getUpstashLimiter(maxRequests, windowSeconds);
   if (limiter) {
     try {
@@ -63,16 +58,13 @@ export async function checkRateLimit(
         remaining: res.remaining,
         reset: res.reset,
       };
-    } catch (err) {
-      console.warn('Upstash Redis error, falling back to memory rate limiting:', err);
+    } catch {
     }
   }
 
-  // 2. High-performance In-Memory Sliding Window Fallback
   const now = Date.now();
   const windowMs = windowSeconds * 1000;
 
-  // Evict stale entries periodically
   if (memoryStore.size > 2000) {
     for (const [k, v] of memoryStore.entries()) {
       if (now > v.resetAt) memoryStore.delete(k);
@@ -116,26 +108,20 @@ function isValidIp(ip: string): boolean {
   return IPV4_REGEX.test(ip) || IPV6_REGEX.test(ip) || ip === '::1' || ip === '127.0.0.1';
 }
 
-/**
- * Extract trusted client IP from cloudflare/forwarded headers safely
- */
 export function getClientIp(req: Request): string {
-  // Cloudflare's trusted connecting IP (highest priority in Cloudflare edge network)
+
   const cfIp = req.headers.get('cf-connecting-ip')?.trim();
   if (cfIp && isValidIp(cfIp)) return cfIp;
 
-  // NGINX / Proxy real IP
   const realIp = req.headers.get('x-real-ip')?.trim();
   if (realIp && isValidIp(realIp)) return realIp;
 
-  // Standard Forwarded For
   const forwarded = req.headers.get('x-forwarded-for');
   if (forwarded) {
     const firstIp = forwarded.split(',')[0].trim();
     if (isValidIp(firstIp)) return firstIp;
   }
 
-  // Generate fallback pseudo-identifier based on User-Agent to avoid global lockout
   const ua = req.headers.get('user-agent') || '';
   if (ua) {
     let hash = 0;
@@ -148,4 +134,3 @@ export function getClientIp(req: Request): string {
 
   return '127.0.0.1';
 }
-

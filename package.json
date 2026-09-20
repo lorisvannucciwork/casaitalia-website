@@ -10,6 +10,10 @@
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
     "cf-typegen": "wrangler types --env-interface CloudflareEnv env.d.ts",
     "start": "next start",
+    "d1:migrate": "wrangler d1 execute casaitalia --file=schema.sql --remote",
+    "d1:migrate:local": "wrangler d1 execute casaitalia --file=schema.sql --local",
+    "d1:seed": "wrangler d1 execute casaitalia --file=seed.sql --remote",
+    "d1:seed:local": "wrangler d1 execute casaitalia --file=seed.sql --local",
     "generate:legal-pdf": "node scripts/generate-legal-pdf.js",
     "lint": "eslint"
   },

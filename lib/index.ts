@@ -6,3 +6,4 @@ export * from './menu';
 export * from './ratelimit';
 export * from './security';
 export * from './settings';
+export * from './cache';

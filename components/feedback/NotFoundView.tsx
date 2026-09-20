@@ -18,13 +18,12 @@ export const NotFoundView: React.FC<NotFoundViewProps> = ({ className = '' }) =>
       <Navbar />
 
       <main className="flex-1 relative w-full flex items-center justify-center py-16 sm:py-24 bg-[url('/backgrounds/bg-1.webp')] bg-cover bg-center bg-fixed">
-        {/* Soft warmth overlay */}
+
         <div className="absolute inset-0 bg-[#faf7f2]/85 z-0" />
 
         <div className="relative z-10 max-w-2xl mx-auto w-full px-4 sm:px-6 text-center">
           <div className="bg-white/80 backdrop-blur-md border-2 border-[#ba935a]/30 p-8 sm:p-12 shadow-[0_20px_50px_rgba(186,147,90,0.15)] space-y-6">
-            
-            {/* 404 Numbers & Translated Subtitle */}
+
             <div className="space-y-2">
               <span className="text-6xl sm:text-8xl font-serif font-black text-[#ba935a] tracking-tight block [text-shadow:0_4px_12px_rgba(186,147,90,0.2)]">
                 404
@@ -36,7 +35,6 @@ export const NotFoundView: React.FC<NotFoundViewProps> = ({ className = '' }) =>
 
             <div className="w-16 h-[2px] bg-[#ba935a]/40 mx-auto" />
 
-            {/* Translated Quote & Explanation */}
             <div className="space-y-3 max-w-md mx-auto">
               <p className="font-serif italic text-lg sm:text-xl text-[#1a1816]">
                 {t('notFound.quote')}
@@ -46,7 +44,6 @@ export const NotFoundView: React.FC<NotFoundViewProps> = ({ className = '' }) =>
               </p>
             </div>
 
-            {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4">
               <Link
                 href="/"

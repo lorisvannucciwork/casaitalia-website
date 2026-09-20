@@ -23,10 +23,23 @@ export const PwaManager: React.FC = () => {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showBanner, setShowBanner] = useState(false);
   const [showIosModal, setShowIosModal] = useState(false);
-  const [isIos, setIsIos] = useState(false);
-  const [isStandalone, setIsStandalone] = useState(false);
+  const [isIos] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const userAgent = window.navigator.userAgent.toLowerCase();
+      return /iphone|ipad|ipod/.test(userAgent) && !(window as unknown as { MSStream?: unknown }).MSStream;
+    }
+    return false;
+  });
+  const [isStandalone] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return (
+        window.matchMedia('(display-mode: standalone)').matches ||
+        (window.navigator as unknown as { standalone?: boolean }).standalone === true
+      );
+    }
+    return false;
+  });
 
-  // 1. Expose global opener for Footer button
   useEffect(() => {
     window.openPwaInstallPrompt = () => {
       if (isIos) {
@@ -40,27 +53,24 @@ export const PwaManager: React.FC = () => {
     };
   }, [isIos]);
 
-  // 2. Service Worker Registration
   useEffect(() => {
     if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
       const registerSw = async () => {
         try {
           const reg = await navigator.serviceWorker.register('/sw.js', { scope: '/' });
-          
-          // Check for service worker updates
+
           reg.addEventListener('updatefound', () => {
             const newWorker = reg.installing;
             if (newWorker) {
               newWorker.addEventListener('statechange', () => {
                 if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                  // New content available
+
                   newWorker.postMessage({ type: 'SKIP_WAITING' });
                 }
               });
             }
           });
 
-          // Proactively cache all active CSS stylesheets and Google fonts currently on the page
           const cacheActiveStylesheets = async () => {
             if (typeof window === 'undefined' || !('caches' in window) || !navigator.onLine) return;
             try {
@@ -86,11 +96,10 @@ export const PwaManager: React.FC = () => {
                     }
                   }
                 } catch {
-                  // ignore
+
                 }
               }
 
-              // Also notify Service Worker controller to ensure worker cache is synchronized
               if (navigator.serviceWorker.controller && urls.length > 0) {
                 navigator.serviceWorker.controller.postMessage({
                   type: 'CACHE_STYLES',
@@ -98,14 +107,12 @@ export const PwaManager: React.FC = () => {
                 });
               }
             } catch {
-              // ignore
+
             }
           };
 
-          // Cache active styles shortly after load
           setTimeout(cacheActiveStylesheets, 800);
 
-          // Pre-warm media cache in background during idle time so dishes and images are available offline
           const primeOfflineMedia = async () => {
             if (typeof window === 'undefined' || !navigator.onLine) return;
             try {
@@ -121,7 +128,7 @@ export const PwaManager: React.FC = () => {
                 });
               }
             } catch {
-              // Ignore background priming errors
+
             }
           };
 
@@ -132,9 +139,7 @@ export const PwaManager: React.FC = () => {
           } else {
             setTimeout(primeOfflineMedia, 3500);
           }
-        } catch (err) {
-          console.warn('[PWA] Service Worker registration failed:', err);
-        }
+        } catch {}
       };
 
       if (document.readyState === 'complete') {
@@ -146,36 +151,23 @@ export const PwaManager: React.FC = () => {
     }
   }, []);
 
-  // 3. Install Prompt Detection & Handling
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
-    // Check if app is already installed in standalone mode
-    const standaloneCheck =
-      window.matchMedia('(display-mode: standalone)').matches ||
-      (window.navigator as unknown as { standalone?: boolean }).standalone === true;
-
-    if (standaloneCheck) {
-      setIsStandalone(true);
+    if (isStandalone) {
       return;
     }
 
-    // Check if dismissed permanently ('never') or recently (within 7 days)
     const dismissedAt = localStorage.getItem('casa_italia_pwa_dismissed');
     if (dismissedAt) {
       if (dismissedAt === 'never') {
-        return; // Permanently suppressed from auto-showing
+        return; 
       }
       const timeSince = Date.now() - parseInt(dismissedAt, 10);
       if (!isNaN(timeSince) && timeSince < 7 * 24 * 60 * 60 * 1000) {
         return;
       }
     }
-
-    // Detect iOS
-    const userAgent = window.navigator.userAgent.toLowerCase();
-    const isIosDevice = /iphone|ipad|ipod/.test(userAgent) && !(window as unknown as { MSStream?: unknown }).MSStream;
-    setIsIos(isIosDevice);
 
     const checkAndShowBanner = (delay = 2500) => {
       const hasCookieChoice = localStorage.getItem('casa_italia_cookie_consent');
@@ -190,12 +182,11 @@ export const PwaManager: React.FC = () => {
       }
     };
 
-    if (isIosDevice) {
+    if (isIos) {
       checkAndShowBanner(3000);
       return;
     }
 
-    // Android / Chrome / Edge beforeinstallprompt listener
     const handleBeforeInstall = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
@@ -204,11 +195,9 @@ export const PwaManager: React.FC = () => {
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstall);
 
-    // App installed event
     const handleAppInstalled = () => {
       setDeferredPrompt(null);
       setShowBanner(false);
-      setIsStandalone(true);
     };
 
     window.addEventListener('appinstalled', handleAppInstalled);
@@ -217,7 +206,7 @@ export const PwaManager: React.FC = () => {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstall);
       window.removeEventListener('appinstalled', handleAppInstalled);
     };
-  }, []);
+  }, [isStandalone, isIos]);
 
   const handleInstallClick = async () => {
     if (isIos) {
@@ -235,7 +224,7 @@ export const PwaManager: React.FC = () => {
       }
       setDeferredPrompt(null);
     } catch {
-      // ignore
+
     }
   };
 
@@ -244,7 +233,7 @@ export const PwaManager: React.FC = () => {
     try {
       localStorage.setItem('casa_italia_pwa_dismissed', Date.now().toString());
     } catch {
-      // ignore
+
     }
   };
 
@@ -253,7 +242,7 @@ export const PwaManager: React.FC = () => {
     try {
       localStorage.setItem('casa_italia_pwa_dismissed', 'never');
     } catch {
-      // ignore
+
     }
   };
 
@@ -261,14 +250,14 @@ export const PwaManager: React.FC = () => {
 
   return (
     <>
-      {/* Luxury Bottom Floating PWA Banner — Navbar-Matched Palette */}
+
       <aside
         aria-label="Install App Banner"
         className="fixed bottom-4 left-3 right-3 sm:left-auto sm:right-5 sm:max-w-md z-40 bg-[#faf7f2]/95 backdrop-blur-xl border border-[#ba935a]/40 p-3.5 sm:p-4 shadow-[0_10px_35px_rgba(26,24,22,0.18)] animate-in slide-in-from-bottom-5 duration-500 rounded-none text-[#1a1816]"
       >
         <div className="flex items-center justify-between gap-3.5">
           <div className="flex items-center gap-3 min-w-0">
-            {/* App Icon */}
+
             <div className="relative w-11 h-11 shrink-0 border border-[#ba935a]/40 bg-white overflow-hidden shadow-xs">
               <Image
                 src="/icons/android/launchericon-192x192.png"
@@ -279,7 +268,6 @@ export const PwaManager: React.FC = () => {
               />
             </div>
 
-            {/* Title */}
             <div className="min-w-0">
               <span className="font-serif font-bold text-sm sm:text-base text-[#1a1816] tracking-wide truncate block">
                 Casa Italia App
@@ -287,7 +275,6 @@ export const PwaManager: React.FC = () => {
             </div>
           </div>
 
-          {/* Never show again button */}
           <button
             type="button"
             onClick={handleNeverShowAgain}
@@ -298,7 +285,6 @@ export const PwaManager: React.FC = () => {
           </button>
         </div>
 
-        {/* Action Buttons */}
         <div className="mt-3 flex items-center justify-end gap-2 pt-2 border-t border-[#ba935a]/20">
           <button
             type="button"
@@ -319,7 +305,6 @@ export const PwaManager: React.FC = () => {
         </div>
       </aside>
 
-      {/* iOS Safari Instruction Modal */}
       {showIosModal && (
         <div
           role="dialog"
@@ -327,7 +312,7 @@ export const PwaManager: React.FC = () => {
           className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-300"
         >
           <div className="relative w-full max-w-sm bg-[#1a1816] border-2 border-[#ba935a] p-6 text-[#faf7f2] shadow-2xl space-y-5">
-            {/* Header */}
+
             <div className="flex items-center justify-between pb-3 border-b border-[#ba935a]/30">
               <div className="flex items-center gap-2.5">
                 <Image
@@ -350,7 +335,6 @@ export const PwaManager: React.FC = () => {
               </button>
             </div>
 
-            {/* Step-by-step Visual Instructions */}
             <div className="space-y-4 text-xs sm:text-sm text-[#d4cbbe] leading-relaxed">
               <div className="flex items-start gap-3 p-3 bg-[#262320] border border-[#ba935a]/20">
                 <div className="w-7 h-7 rounded-full bg-[#ba935a]/20 text-[#ba935a] flex items-center justify-center font-bold shrink-0 mt-0.5">
@@ -387,7 +371,6 @@ export const PwaManager: React.FC = () => {
               </div>
             </div>
 
-            {/* Confirm Button */}
             <button
               type="button"
               onClick={() => {

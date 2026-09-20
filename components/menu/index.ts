@@ -6,3 +6,4 @@ export * from './CategoryNav';
 export * from './DishCard';
 export * from './DishModal';
 export * from './MenuView';
+export * from './MenuLoadingView';

@@ -39,7 +39,7 @@ export const CookiePolicyView: React.FC<CookiePolicyViewProps> = () => {
 
   return (
     <LegalPageLayout title={title} lastUpdated={lastUpdated} headerAction={headerAction}>
-      {/* Section 1: What are cookies */}
+
       <LegalSectionCard
         number="01"
         title={isIt ? 'Cosa sono i Cookie?' : 'What are Cookies?'}
@@ -64,13 +64,12 @@ export const CookiePolicyView: React.FC<CookiePolicyViewProps> = () => {
         </p>
       </LegalSectionCard>
 
-      {/* Section 2: Table of Cookies */}
       <LegalSectionCard
         number="02"
         title={isIt ? 'Tipologie di Cookie Utilizzati' : 'Types of Cookies We Use'}
       >
         <div className="space-y-6">
-          {/* Essential */}
+
           <div className="border-l-2 border-[#ba935a] pl-4">
             <h4 className="font-bold text-[#1a1816] text-sm mb-1">
               {isIt
@@ -86,7 +85,6 @@ export const CookiePolicyView: React.FC<CookiePolicyViewProps> = () => {
             <CookieTable />
           </div>
 
-          {/* Functional & External */}
           <div className="border-l-2 border-[#4285F4] pl-4">
             <h4 className="font-bold text-[#1a1816] text-sm mb-1">
               {isIt
@@ -100,7 +98,6 @@ export const CookiePolicyView: React.FC<CookiePolicyViewProps> = () => {
             </p>
           </div>
 
-          {/* Analytics & PWA Offline Storage */}
           <div className="border-l-2 border-[#10B981] pl-4">
             <h4 className="font-bold text-[#1a1816] text-sm mb-1">
               {isIt
@@ -116,7 +113,6 @@ export const CookiePolicyView: React.FC<CookiePolicyViewProps> = () => {
         </div>
       </LegalSectionCard>
 
-      {/* Section 3: How to manage */}
       <LegalSectionCard
         number="03"
         title={isIt ? 'Come Modificare o Disabilitare i Cookie' : 'Managing & Disabling Cookies'}

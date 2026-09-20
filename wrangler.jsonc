@@ -18,7 +18,12 @@
     }
   ],
   "vars": {
-    "INTERNAL_API_SECRET": "cf_sec_9e2f4a1c7d8b50e3218764a0b3d6852e9a710c53f6b4d2e8917ca5b034e6f189"
+    "INTERNAL_API_SECRET": "cf_sec_9e2f4a1c7d8b50e3218764a0b3d6852e9a710c53f6b4d2e8917ca5b034e6f189",
+    "NEXT_PUBLIC_WEBSITE_URL": "https://casaitaliarestaurants.com",
+    "NEXT_PUBLIC_CLOUD_SYSTEM_URL": "https://systemcinpos.casaitaliarestaurants.com",
+    "NEXT_PUBLIC_CDN_URL": "https://cdn.casaitaliarestaurants.com",
+    "UPSTASH_REDIS_REST_URL": "https://delicate-boxer-70813.upstash.io",
+    "UPSTASH_REDIS_REST_TOKEN": "gQAAAAAAARSdAAIgcDI0ZTU2OTA3N2JhMmI0OWRhYWViNWU0MGFkMTdhNTcwZA"
   },
   "observability": {
     "enabled": true

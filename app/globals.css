@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Pinyon+Script&family=Satisfy&family=Source+Serif+4:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
 
 @theme {
@@ -45,7 +44,6 @@
     -webkit-tap-highlight-color: transparent;
   }
 
-  /* Google Translate Suppression & Annihilation */
   .notranslate,
   [translate="no"] {
     -webkit-transform: none !important;
@@ -76,7 +74,6 @@
   }
 }
 
-/* Custom Utilities & Animations */
 .bg-casa-gold { background-color: #ba935a; }
 .bg-casa-gold-hover:hover { background-color: #a37f48; }
 .bg-casa-gold-light { background-color: #f7f2e8; }
@@ -111,7 +108,6 @@
   backdrop-filter: blur(8px);
 }
 
-/* Smooth scrollbar styling */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -165,12 +161,10 @@
   animation: progress-bar 1.5s infinite ease-in-out;
 }
 
-/* Hide scrollbar for elements with no-scrollbar class */
 .no-scrollbar {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;  
+  scrollbar-width: none;  
 }
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
-

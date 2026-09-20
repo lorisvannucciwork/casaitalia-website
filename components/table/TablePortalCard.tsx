@@ -40,7 +40,7 @@ export const TablePortalCard: React.FC<TablePortalCardProps> = ({
 
   return (
     <div className="space-y-4">
-      {/* Table & Welcome Banner */}
+
       <div className="text-center space-y-2 pt-2 pb-1">
         <div className="inline-flex items-center gap-2 px-3.5 py-1 bg-[#262320] border border-[#ba935a]/60 text-xs font-bold uppercase tracking-widest text-[#ba935a] shadow-lg">
           <ShieldCheck className="w-4 h-4 text-[#ba935a]" />
@@ -59,7 +59,6 @@ export const TablePortalCard: React.FC<TablePortalCardProps> = ({
         </p>
       </div>
 
-      {/* 1. PRIMARY FEATURE: Restaurant Menu */}
       <Link
         href={menuHref}
         className="group block relative bg-gradient-to-br from-[#2a241e] via-[#211d19] to-[#1a1714] border-2 border-[#ba935a] p-5 sm:p-6 shadow-[0_15px_35px_rgba(0,0,0,0.6)] hover:border-[#dfba82] transition-all duration-300 transform hover:-translate-y-1 overflow-hidden"
@@ -95,7 +94,6 @@ export const TablePortalCard: React.FC<TablePortalCardProps> = ({
         </div>
       </Link>
 
-      {/* 2. Complimentary Guest Wi-Fi */}
       <WifiCard
         ssid={wifiSsid}
         pass={wifiPass}
@@ -103,9 +101,8 @@ export const TablePortalCard: React.FC<TablePortalCardProps> = ({
         onCopy={onCopyWifi}
       />
 
-      {/* 3. Quick Action Cards (Reviews & Waiter Assistance) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        {/* Social Hub & Reviews */}
+
         <Link
           href="/medal"
           className="group block bg-[#1e1b18] hover:bg-[#262320] border border-[#ba935a]/30 hover:border-[#ba935a] p-4 transition-all duration-200"
@@ -125,7 +122,6 @@ export const TablePortalCard: React.FC<TablePortalCardProps> = ({
           </div>
         </Link>
 
-        {/* WhatsApp Assistance */}
         <a
           href={whatsappAssistantHref}
           target="_blank"
@@ -148,7 +144,6 @@ export const TablePortalCard: React.FC<TablePortalCardProps> = ({
         </a>
       </div>
 
-      {/* 4. Restaurant Hours & Address */}
       <div className="bg-[#141210] border border-[#ba935a]/20 p-3.5 text-[11px] text-[#8c8479] flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left">
         <div className="flex items-center gap-1.5">
           <Clock className="w-3.5 h-3.5 text-[#ba935a] shrink-0" />

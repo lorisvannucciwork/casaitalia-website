@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
 import { getCorsHeaders, handleCorsPreflight } from '@/lib/cors';
+import { cacheManager } from '@/lib/cache';
 
 export const dynamic = 'force-dynamic';
 
@@ -26,16 +27,42 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized revalidation' }, { status: 401, headers: cors });
     }
 
-    // Revalidate menu paths and API routes
-    revalidatePath('/menu');
-    revalidatePath('/');
+    let parsedBody: { tags?: string[]; paths?: string[] } = {};
+    try {
+      const text = await req.text();
+      if (text) {
+        parsedBody = JSON.parse(text);
+      }
+    } catch {
+
+    }
+
+    let purgedTagsCount = 0;
+    if (parsedBody.tags && Array.isArray(parsedBody.tags) && parsedBody.tags.length > 0) {
+      purgedTagsCount = cacheManager.invalidateByTag(...parsedBody.tags);
+    } else {
+      cacheManager.invalidateAll();
+    }
+
+    const pathsToRevalidate = new Set(['/menu', '/tables', '/']);
+    if (parsedBody.paths && Array.isArray(parsedBody.paths)) {
+      parsedBody.paths.forEach((p) => pathsToRevalidate.add(p));
+    }
+
+    for (const p of pathsToRevalidate) {
+      try {
+        revalidatePath(p);
+      } catch {}
+    }
 
     return NextResponse.json(
       {
         success: true,
         revalidated: true,
         timestamp: new Date().toISOString(),
-        paths: ['/menu', '/'],
+        paths: Array.from(pathsToRevalidate),
+        purgedTagsCount,
+        memoryCacheStats: cacheManager.getStats(),
       },
       { headers: cors }
     );

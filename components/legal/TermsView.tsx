@@ -22,7 +22,7 @@ export const TermsView: React.FC<TermsViewProps> = () => {
 
   return (
     <LegalPageLayout title={title} lastUpdated={lastUpdated}>
-      {/* Section 1: General Scope */}
+
       <LegalSectionCard
         number="01"
         title={isIt ? 'Premessa & Ambito di Applicazione' : 'General Scope & Acceptance'}
@@ -48,7 +48,6 @@ export const TermsView: React.FC<TermsViewProps> = () => {
         </p>
       </LegalSectionCard>
 
-      {/* Section 2: Reservation & Seating Policies */}
       <LegalSectionCard
         number="02"
         title={isIt ? 'Politica di Prenotazione e Gestione Tavoli' : 'Reservation & Seating Policies'}
@@ -80,7 +79,6 @@ export const TermsView: React.FC<TermsViewProps> = () => {
         </ul>
       </LegalSectionCard>
 
-      {/* Section 3: Allergens & Dietary Requirements */}
       <LegalSectionCard
         number="03"
         title={isIt ? 'Allergeni & Intolleranze Alimentari' : 'Allergens & Dietary Requirements'}
@@ -115,7 +113,6 @@ export const TermsView: React.FC<TermsViewProps> = () => {
         </LegalNoticeCard>
       </LegalSectionCard>
 
-      {/* Section 4: Menu Pricing, PWA & Availability */}
       <LegalSectionCard
         number="04"
         title={isIt ? 'Prezzi, Menu Digitale (PWA) e Disponibilità' : 'Menu Pricing, PWA & Availability'}
@@ -137,7 +134,6 @@ export const TermsView: React.FC<TermsViewProps> = () => {
         </p>
       </LegalSectionCard>
 
-      {/* Section 5: Intellectual Property */}
       <LegalSectionCard
         number="05"
         title={isIt ? 'Proprietà Intellettuale & Legge Applicabile' : 'Intellectual Property & Jurisdiction'}

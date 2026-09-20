@@ -88,8 +88,6 @@ export const menuItems = sqliteTable(
   ]
 );
 
-
-// Direct D1 Row Types
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
 
@@ -107,5 +105,3 @@ export type NewMenuCategoryRecord = typeof menuCategories.$inferInsert;
 
 export type MenuItemRecord = typeof menuItems.$inferSelect;
 export type NewMenuItemRecord = typeof menuItems.$inferInsert;
-
-

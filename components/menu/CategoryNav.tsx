@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect, useMemo } from 'react';
+import Link from 'next/link';
 import { MENU_CATEGORIES, Category } from '@/data/menuData';
 import { ChevronDown, ChevronLeft, ChevronRight, UtensilsCrossed } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
@@ -27,7 +28,6 @@ export const CategoryNav: React.FC<CategoryNavProps> = ({
   const navRef = useRef<HTMLDivElement>(null);
   const touchStartX = useRef<number | null>(null);
 
-  // Close dropdown on outside click
   useEffect(() => {
     if (!isOpen) return;
     const handleOutsideClick = (e: MouseEvent | PointerEvent) => {
@@ -39,7 +39,6 @@ export const CategoryNav: React.FC<CategoryNavProps> = ({
     return () => document.removeEventListener('pointerdown', handleOutsideClick);
   }, [isOpen]);
 
-  // Filter out any "all" category so only specific categories are displayed
   const displayCategories: Category[] = useMemo(() => {
     return categories.filter((c) => c.id.toLowerCase() !== 'all');
   }, [categories]);
@@ -74,7 +73,6 @@ export const CategoryNav: React.FC<CategoryNavProps> = ({
 
   const startIndex = page * ITEMS_PER_PAGE;
 
-  // Touch swipe handlers for mobile sliding
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
   };
@@ -92,7 +90,7 @@ export const CategoryNav: React.FC<CategoryNavProps> = ({
 
   return (
     <div ref={navRef} className="relative z-40 w-full sm:w-auto">
-      {/* Category Dropdown Trigger Button */}
+
       <button
         type="button"
         onClick={handleToggle}
@@ -111,13 +109,12 @@ export const CategoryNav: React.FC<CategoryNavProps> = ({
         />
       </button>
 
-      {/* Paginated / Sliding Dropdown Menu */}
       {isOpen && (
         <div
           role="listbox"
           className="absolute left-0 sm:left-auto sm:right-0 w-full sm:w-80 mt-2 bg-white border border-[#ba935a]/30 shadow-xl overflow-hidden animate-fade-in rounded-none z-50"
         >
-          {/* Header Pagination Bar */}
+
           <div className="flex items-center justify-between px-3.5 py-2.5 bg-[#faf7f2] border-b border-[#ba935a]/20 text-xs font-semibold text-[#1a1816]">
             <span className="text-[#6e675e]">
               {t('nav.page')} {formatNumber(page + 1)} / {formatNumber(totalPages)}
@@ -136,7 +133,6 @@ export const CategoryNav: React.FC<CategoryNavProps> = ({
                 <ChevronLeft className="w-4 h-4" />
               </button>
 
-              {/* Page Dots */}
               <div className="flex items-center gap-1">
                 {Array.from({ length: totalPages }).map((_, idx) => (
                   <button
@@ -168,7 +164,6 @@ export const CategoryNav: React.FC<CategoryNavProps> = ({
             </div>
           </div>
 
-          {/* Smooth Sliding Pages Container */}
           <div
             className="overflow-hidden relative"
             onTouchStart={handleTouchStart}
@@ -189,10 +184,11 @@ export const CategoryNav: React.FC<CategoryNavProps> = ({
                       const isSelected = activeCategory.toLowerCase() === cat.id.toLowerCase();
                       const categoryTitle = getCategoryTitle(cat);
                       return (
-                        <button
+                        <Link
                           key={cat.id}
-                          type="button"
-                          onClick={() => {
+                          href={`/menu?category=${encodeURIComponent(cat.id)}`}
+                          onClick={(e) => {
+                            e.preventDefault();
                             onSelectCategory(cat.id);
                             setIsOpen(false);
                           }}
@@ -204,7 +200,7 @@ export const CategoryNav: React.FC<CategoryNavProps> = ({
                         >
                           <span>{categoryTitle}</span>
                           {isSelected && <span className="text-xs text-white/90">✓</span>}
-                        </button>
+                        </Link>
                       );
                     })}
                   </div>
@@ -213,7 +209,6 @@ export const CategoryNav: React.FC<CategoryNavProps> = ({
             </div>
           </div>
 
-          {/* Footer Navigation Bar */}
           <div className="flex items-center justify-between px-3.5 py-2 bg-[#faf7f2] border-t border-[#ba935a]/15 text-[11px] text-[#6e675e]">
             <button
               type="button"

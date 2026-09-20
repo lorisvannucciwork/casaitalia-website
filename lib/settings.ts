@@ -1,4 +1,5 @@
 import db, { SystemSetting } from './db';
+import { cacheManager } from './cache';
 
 export interface PublicSettings {
   currency: string;
@@ -16,10 +17,7 @@ export const DEFAULT_PUBLIC_SETTINGS: PublicSettings = {
   restaurantName: 'Casa Italia Ristorante',
 };
 
-/**
- * Fetch public settings from Cloudflare D1 with safe defaults
- */
-export async function getPublicSettings(): Promise<PublicSettings> {
+async function fetchRawPublicSettings(): Promise<PublicSettings> {
   try {
     const rows = await db.query<SystemSetting>(
       `SELECT key, value FROM system_settings WHERE key IN ('currency', 'guest_wifi_ssid', 'guest_wifi_password', 'restaurant_phone', 'restaurant_name')`
@@ -39,8 +37,15 @@ export async function getPublicSettings(): Promise<PublicSettings> {
       restaurantPhone: map['restaurant_phone'] || DEFAULT_PUBLIC_SETTINGS.restaurantPhone,
       restaurantName: map['restaurant_name'] || DEFAULT_PUBLIC_SETTINGS.restaurantName,
     };
-  } catch (err) {
-    console.warn('Failed to load system settings from D1, using defaults:', err);
+  } catch {
     return DEFAULT_PUBLIC_SETTINGS;
   }
+}
+
+export async function getPublicSettings(): Promise<PublicSettings> {
+  return cacheManager.getOrSet('public_settings', fetchRawPublicSettings, {
+    ttlSeconds: 600,
+    staleSeconds: 3600,
+    tags: ['settings'],
+  });
 }

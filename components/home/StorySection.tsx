@@ -18,7 +18,7 @@ export const StorySection: React.FC = () => {
       className="border-t border-[#ba935a]/20"
     >
       <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
-        {/* Story Narrative Text */}
+
         <div className="flex-1 space-y-8 text-center lg:text-start">
           <SectionHeader
             title={t('story.title')}
@@ -47,9 +47,8 @@ export const StorySection: React.FC = () => {
           </div>
         </div>
 
-        {/* Owners Avatar Showcase */}
         <div className="flex-1 w-full max-w-lg lg:max-w-none relative aspect-[4/5] sm:aspect-square lg:aspect-[4/5] mx-auto mt-8 lg:mt-0">
-          {/* Mr. Loris */}
+
           <OwnerAvatarCard
             src="/home/mr-loris.jpg"
             alt="Mr. Loris"
@@ -57,7 +56,6 @@ export const StorySection: React.FC = () => {
             zIndexClass="z-10 hover:z-30"
           />
 
-          {/* Mrs. Veronica */}
           <OwnerAvatarCard
             src="/home/mrs-veronica.jpg"
             alt="Mrs. Veronica"

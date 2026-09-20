@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import db, { RestaurantTable } from '@/lib/db';
+import { cacheManager } from '@/lib/cache';
 import { getCorsHeaders, handleCorsPreflight } from '@/lib/cors';
 import { checkRateLimit, getClientIp } from '@/lib/ratelimit';
 
@@ -18,18 +19,32 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'Too many requests' }, { status: 429, headers: corsHeaders });
     }
 
-    const tables = await db.query<RestaurantTable>(
-      `SELECT id, table_number, name, active FROM tables WHERE active = 1 ORDER BY table_number ASC`
+    const safeTables = await cacheManager.getOrSet(
+      'tables_list',
+      async () => {
+        const rows = await db.query<RestaurantTable>(
+          `SELECT id, table_number, name, active FROM tables WHERE active = 1 ORDER BY table_number ASC`
+        );
+        return rows.map((t) => ({
+          id: t.id,
+          table_number: t.table_number,
+          name: t.name,
+          active: t.active,
+        }));
+      },
+      { ttlSeconds: 300, staleSeconds: 1800, tags: ['tables'] }
     );
 
-    const safeTables = tables.map((t) => ({
-      id: t.id,
-      table_number: t.table_number,
-      name: t.name,
-      active: t.active,
-    }));
-
-    return NextResponse.json({ tables: safeTables }, { headers: corsHeaders });
+    return NextResponse.json(
+      { tables: safeTables },
+      {
+        headers: {
+          ...corsHeaders,
+          'Cache-Control': 'public, s-maxage=120, stale-while-revalidate=600',
+          'CDN-Cache-Control': 'public, s-maxage=300, stale-while-revalidate=86400',
+        },
+      }
+    );
   } catch (error: unknown) {
     console.error('Error fetching tables on website:', error);
     return NextResponse.json({ error: 'Failed to fetch available tables' }, { status: 500, headers: corsHeaders });

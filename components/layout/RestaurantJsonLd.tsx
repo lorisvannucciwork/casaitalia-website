@@ -1,24 +1,115 @@
 import React from 'react';
+import { SITE_URL, SITE_CONFIG } from '@/config/site';
 
 export function RestaurantJsonLd() {
+  const baseUrl = SITE_URL;
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@graph': [
+
       {
-        '@type': ['Restaurant', 'ItalianRestaurant'],
-        '@id': 'https://casaitaliarestaurants.com/#restaurant',
-        name: 'Casa Italia',
+        '@type': 'Organization',
+        '@id': `${baseUrl}/#organization`,
+        name: SITE_CONFIG.name,
         alternateName: [
-          'Casa Italia Ristorante',
+          SITE_CONFIG.shortName,
+          'Casa Italia Port Ghalib',
+          'Casa Italia Restaurant',
+        ],
+        url: baseUrl,
+        logo: {
+          '@type': 'ImageObject',
+          '@id': `${baseUrl}/#logo`,
+          url: `${baseUrl}/logo/logo-01.webp`,
+          contentUrl: `${baseUrl}/logo/logo-01.webp`,
+          width: 1200,
+          height: 630,
+          caption: 'Casa Italia Ristorante Logo',
+        },
+        image: {
+          '@id': `${baseUrl}/#logo`,
+        },
+        sameAs: [
+          SITE_CONFIG.socials.googleMaps,
+          SITE_CONFIG.socials.tripadvisor,
+          SITE_CONFIG.socials.instagram,
+          SITE_CONFIG.socials.tiktok,
+          SITE_CONFIG.socials.facebook,
+        ],
+        contactPoint: [
+          {
+            '@type': 'ContactPoint',
+            telephone: SITE_CONFIG.contact.phone,
+            contactType: 'reservations',
+            areaServed: 'EG',
+            availableLanguage: ['Italian', 'English', 'Arabic'],
+          },
+        ],
+        founder: [
+          { '@type': 'Person', name: 'Loris' },
+          { '@type': 'Person', name: 'Veronica' },
+        ],
+      },
+
+      {
+        '@type': ['Restaurant', 'ItalianRestaurant', 'FoodEstablishment', 'LocalBusiness'],
+        '@id': `${baseUrl}/#restaurant`,
+        name: SITE_CONFIG.shortName,
+        alternateName: [
+          SITE_CONFIG.name,
           'Casa Italia Port Ghalib',
           'Casa Italia Restaurant Marsa Alam',
+          'كازا إيطاليا بورتو غالب',
         ],
-        description:
-          'Authentic Italian dining at Porto Ghalib Marina, Red Sea. Fresh homemade pasta, wood-fired Neapolitan pizza, Angus charcoal steaks, seafood, and fine Italian wine pairings.',
-        url: 'https://casaitaliarestaurants.com',
-        menu: 'https://casaitaliarestaurants.com/menu',
-        hasMenu: 'https://casaitaliarestaurants.com/menu',
-        telephone: '+201508300656',
+        description: SITE_CONFIG.description,
+        url: baseUrl,
+        menu: `${baseUrl}/menu`,
+        hasMenu: {
+          '@type': 'Menu',
+          '@id': `${baseUrl}/#menu`,
+          name: 'Casa Italia Full Menu',
+          description: 'Authentic Italian restaurant menu featuring wood-fired pizza, handmade pasta, charcoal steaks, fresh seafood, and Italian wines.',
+          url: `${baseUrl}/menu`,
+          hasMenuSection: [
+            {
+              '@type': 'MenuSection',
+              name: 'Pizza Napoletana',
+              description: 'Traditional Neapolitan pizzas baked in our wood-fired oven at 450°C',
+            },
+            {
+              '@type': 'MenuSection',
+              name: 'Pasta Fresca',
+              description: 'Daily handmade fresh pasta with authentic Italian sauces',
+            },
+            {
+              '@type': 'MenuSection',
+              name: 'Carne alla Brace',
+              description: 'Premium Angus steaks and meats grilled on charcoal',
+            },
+            {
+              '@type': 'MenuSection',
+              name: 'Pesce Fresco',
+              description: 'Fresh catch of the day and seafood specialties from the Red Sea',
+            },
+            {
+              '@type': 'MenuSection',
+              name: 'Carta dei Vini',
+              description: 'Fine Italian DOCG wines, prosecco, and signature cocktails',
+            },
+            {
+              '@type': 'MenuSection',
+              name: 'Antipasti & Insalate',
+              description: 'Traditional Italian starters, bruschetta, carpaccio, and fresh salads',
+            },
+            {
+              '@type': 'MenuSection',
+              name: 'Dolci',
+              description: 'Homemade Italian desserts including tiramisù, panna cotta, and gelato',
+            },
+          ],
+        },
+        telephone: SITE_CONFIG.contact.phone,
         servesCuisine: [
           'Italian',
           'Neapolitan',
@@ -26,46 +117,76 @@ export function RestaurantJsonLd() {
           'Pizza',
           'Pasta',
           'Seafood',
+          'Steak',
         ],
         priceRange: '$$',
         currenciesAccepted: 'EGP, EUR, USD, GBP',
-        paymentAccepted: 'Cash, Credit Card',
+        paymentAccepted: 'Cash, Credit Card, Visa, Mastercard',
         acceptsReservations: true,
+        smokingAllowed: false,
+        keywords:
+          'Italian restaurant, pizza, pasta, Porto Ghalib, Marsa Alam, Red Sea, wood-fired pizza, handmade pasta, seafood, fine dining, marina dining, family restaurant, romantic dinner, charcoal steak',
+        amenityFeature: [
+          { '@type': 'LocationFeatureSpecification', name: 'Free Wi-Fi', value: true },
+          { '@type': 'LocationFeatureSpecification', name: 'Outdoor Seating', value: true },
+          { '@type': 'LocationFeatureSpecification', name: 'Marina View', value: true },
+          { '@type': 'LocationFeatureSpecification', name: 'Bar', value: true },
+          { '@type': 'LocationFeatureSpecification', name: 'Wheelchair Accessible', value: true },
+          { '@type': 'LocationFeatureSpecification', name: 'Family Friendly', value: true },
+          { '@type': 'LocationFeatureSpecification', name: 'Live Music', value: true },
+          { '@type': 'LocationFeatureSpecification', name: 'Digital Menu', value: true },
+        ],
         founder: [
-          {
-            '@type': 'Person',
-            name: 'Loris',
-          },
-          {
-            '@type': 'Person',
-            name: 'Veronica',
-          },
+          { '@type': 'Person', name: 'Loris' },
+          { '@type': 'Person', name: 'Veronica' },
         ],
         image: [
-          'https://casaitaliarestaurants.com/logo/logo-01.webp',
-          'https://casaitaliarestaurants.com/backgrounds/bg-1.webp',
-          'https://casaitaliarestaurants.com/backgrounds/bg-2.webp',
+          {
+            '@type': 'ImageObject',
+            url: `${baseUrl}/logo/logo-01.webp`,
+            width: 1200,
+            height: 630,
+          },
+          {
+            '@type': 'ImageObject',
+            url: `${baseUrl}/backgrounds/bg-1.webp`,
+            width: 1920,
+            height: 1080,
+          },
+          {
+            '@type': 'ImageObject',
+            url: `${baseUrl}/backgrounds/bg-2.webp`,
+            width: 1920,
+            height: 1080,
+          },
         ],
-        logo: 'https://casaitaliarestaurants.com/logo/logo-01.webp',
+        logo: {
+          '@id': `${baseUrl}/#logo`,
+        },
         address: {
           '@type': 'PostalAddress',
-          streetAddress: 'Marina Promenade',
-          addressLocality: 'Porto Ghalib',
-          addressRegion: 'Red Sea Governorate',
-          postalCode: '84721',
-          addressCountry: 'EG',
+          streetAddress: SITE_CONFIG.address.street,
+          addressLocality: SITE_CONFIG.address.city,
+          addressRegion: SITE_CONFIG.address.region,
+          postalCode: SITE_CONFIG.address.postalCode,
+          addressCountry: {
+            '@type': 'Country',
+            name: SITE_CONFIG.address.country,
+          },
         },
         geo: {
           '@type': 'GeoCoordinates',
-          latitude: 25.5348,
-          longitude: 34.6367,
+          latitude: SITE_CONFIG.geo.latitude,
+          longitude: SITE_CONFIG.geo.longitude,
         },
+        hasMap: SITE_CONFIG.socials.googleMaps,
+        isAccessibleForFree: false,
         sameAs: [
-          'https://maps.app.goo.gl/F4FC3zM7Pki94YYC6',
-          'https://www.tripadvisor.com/Restaurant_Review-g311425-d33991658-Reviews-Casa_Italia_Port_Ghalib-Marsa_Alam_Red_Sea_and_Sinai.html',
-          'https://www.instagram.com/casaitalia.portghalib/',
-          'https://www.tiktok.com/@casaitalia.eg',
-          'https://www.facebook.com/casaitaliarestaurant/',
+          SITE_CONFIG.socials.googleMaps,
+          SITE_CONFIG.socials.tripadvisor,
+          SITE_CONFIG.socials.instagram,
+          SITE_CONFIG.socials.tiktok,
+          SITE_CONFIG.socials.facebook,
         ],
         aggregateRating: {
           '@type': 'AggregateRating',
@@ -86,39 +207,145 @@ export function RestaurantJsonLd() {
               'Saturday',
               'Sunday',
             ],
-            opens: '12:00',
-            closes: '23:30',
+            opens: SITE_CONFIG.hours.openingTime,
+            closes: SITE_CONFIG.hours.closingTime,
           },
         ],
-        potentialAction: {
-          '@type': 'ReserveAction',
-          target: {
-            '@type': 'EntryPoint',
-            urlTemplate:
-              'https://wa.me/201508300656?text=Hello%20Casa%20Italia%20team,%20I%20would%20like%20to%20reserve%20a%20table.',
-            inLanguage: ['en', 'it'],
-            actionPlatform: [
-              'http://schema.org/DesktopWebPlatform',
-              'http://schema.org/MobileWebPlatform',
-            ],
+        potentialAction: [
+          {
+            '@type': 'ReserveAction',
+            target: {
+              '@type': 'EntryPoint',
+              urlTemplate: SITE_CONFIG.contact.whatsappUrl,
+              inLanguage: ['en', 'it'],
+              actionPlatform: [
+                'http://schema.org/DesktopWebPlatform',
+                'http://schema.org/MobileWebPlatform',
+              ],
+            },
+            result: {
+              '@type': 'FoodEstablishmentReservation',
+              name: 'Table Reservation',
+            },
           },
-          result: {
-            '@type': 'FoodEstablishmentReservation',
-            name: 'Table Reservation',
+          {
+            '@type': 'OrderAction',
+            target: {
+              '@type': 'EntryPoint',
+              urlTemplate: `${baseUrl}/menu`,
+              inLanguage: ['en', 'it'],
+              actionPlatform: [
+                'http://schema.org/DesktopWebPlatform',
+                'http://schema.org/MobileWebPlatform',
+              ],
+            },
           },
+        ],
+        parentOrganization: {
+          '@id': `${baseUrl}/#organization`,
         },
       },
+
       {
         '@type': 'WebSite',
-        '@id': 'https://casaitaliarestaurants.com/#website',
-        url: 'https://casaitaliarestaurants.com',
-        name: 'Casa Italia Ristorante',
+        '@id': `${baseUrl}/#website`,
+        url: baseUrl,
+        name: SITE_CONFIG.name,
+        alternateName: 'Casa Italia Porto Ghalib',
         description:
-          'Official website and digital menu of Casa Italia Ristorante in Porto Ghalib Marina, Red Sea, Egypt.',
+          'Official website and digital menu of Casa Italia Ristorante in Porto Ghalib Marina, Red Sea, Egypt. Browse our authentic Italian menu, make reservations, and discover our story.',
         publisher: {
-          '@id': 'https://casaitaliarestaurants.com/#restaurant',
+          '@id': `${baseUrl}/#organization`,
         },
         inLanguage: ['it', 'en'],
+        copyrightHolder: {
+          '@id': `${baseUrl}/#organization`,
+        },
+        copyrightYear: 2024,
+      },
+
+      {
+        '@type': 'FAQPage',
+        '@id': `${baseUrl}/#faq`,
+        mainEntity: [
+          {
+            '@type': 'Question',
+            name: 'What are the opening hours of Casa Italia Porto Ghalib?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Casa Italia is open daily from 12:00 PM to 11:30 PM, seven days a week including weekends and holidays.',
+            },
+          },
+          {
+            '@type': 'Question',
+            name: 'Where is Casa Italia located?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Casa Italia is located at the Marina Promenade in Porto Ghalib, Red Sea Governorate, Egypt. We are right on the marina waterfront with beautiful views.',
+            },
+          },
+          {
+            '@type': 'Question',
+            name: 'How can I make a reservation at Casa Italia?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: `You can make a reservation via WhatsApp at ${SITE_CONFIG.contact.phoneFormatted}, or simply walk in. We recommend reservations for dinner, especially on weekends.`,
+            },
+          },
+          {
+            '@type': 'Question',
+            name: 'Does Casa Italia offer gluten-free options?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Yes, Casa Italia offers gluten-free pizza and pasta options. Please inform your server about any dietary requirements or allergies.',
+            },
+          },
+          {
+            '@type': 'Question',
+            name: 'What type of cuisine does Casa Italia serve?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Casa Italia serves authentic Italian cuisine including wood-fired Neapolitan pizza, fresh handmade pasta, Angus charcoal steaks, Red Sea seafood, and a curated selection of Italian DOCG wines.',
+            },
+          },
+          {
+            '@type': 'Question',
+            name: 'Does Casa Italia have outdoor seating?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Yes, Casa Italia features beautiful outdoor terrace seating with views of Porto Ghalib Marina, as well as comfortable indoor dining.',
+            },
+          },
+          {
+            '@type': 'Question',
+            name: 'Is there free Wi-Fi at Casa Italia?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Yes, Casa Italia offers free guest Wi-Fi for all diners. You can connect through our digital table portal.',
+            },
+          },
+          {
+            '@type': 'Question',
+            name: 'What payment methods does Casa Italia accept?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Casa Italia accepts cash (EGP, EUR, USD, GBP) as well as all major credit and debit cards including Visa and Mastercard.',
+            },
+          },
+        ],
+      },
+
+      {
+        '@type': 'BreadcrumbList',
+        '@id': `${baseUrl}/#breadcrumb`,
+        itemListElement: [
+          {
+            '@type': 'ListItem',
+            position: 1,
+            name: 'Home',
+            item: baseUrl,
+          },
+        ],
       },
     ],
   };

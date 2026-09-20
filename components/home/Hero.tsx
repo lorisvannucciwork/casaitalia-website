@@ -13,7 +13,6 @@ export const Hero: React.FC = () => {
     const video = videoRef.current;
     if (!video) return;
 
-    // Explicitly set DOM properties to satisfy desktop browser autoplay policy
     video.defaultMuted = true;
     video.muted = true;
     video.volume = 0;
@@ -25,7 +24,7 @@ export const Hero: React.FC = () => {
       const playPromise = video.play();
       if (playPromise !== undefined) {
         playPromise.catch(() => {
-          // Autoplay was blocked on desktop; retry on any user gesture
+
           const handleGesture = () => {
             if (videoRef.current) {
               videoRef.current.defaultMuted = true;
@@ -47,10 +46,8 @@ export const Hero: React.FC = () => {
       }
     };
 
-    // Immediate attempt
     playVideo();
 
-    // Event hooks when metadata or frames become available
     video.addEventListener('loadedmetadata', playVideo, { once: true });
     video.addEventListener('loadeddata', playVideo, { once: true });
     video.addEventListener('canplay', playVideo, { once: true });
@@ -58,7 +55,7 @@ export const Hero: React.FC = () => {
 
   return (
     <section className="relative min-h-screen h-[100dvh] flex flex-col items-center justify-center pt-20 pb-12 sm:pt-24 sm:pb-16 overflow-hidden bg-[#1a1816]">
-      {/* Background Video with Dark Luxury Overlay */}
+
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
         <video
           ref={videoRef}
@@ -75,13 +72,13 @@ export const Hero: React.FC = () => {
         >
           <source src="/videos/hero.mp4" type="video/mp4" />
         </video>
-        {/* Soft Vignette and Luxury Cream-Gold Glow Overlay */}
+
         <div className="absolute inset-0 bg-gradient-to-t from-[#1a1816] via-[#1a1816]/40 to-[#1a1816]/60" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(186,147,90,0.12)_0%,_transparent_70%)]" />
       </div>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center flex flex-col items-center space-y-8 my-auto">
-        {/* Main Headline */}
+
         <div className="space-y-4 max-w-3xl">
           <h1 className="text-4xl sm:text-6xl lg:text-7xl font-serif font-bold text-[#faf7f2] tracking-tight leading-[1.12] drop-shadow-md">
             {t('hero.title1')}{' '}
@@ -96,7 +93,6 @@ export const Hero: React.FC = () => {
           </p>
         </div>
 
-        {/* Interactive Hero CTA */}
         <div className="flex flex-wrap items-center justify-center gap-4 w-full sm:w-auto pt-2">
           <Button
             href="/menu"

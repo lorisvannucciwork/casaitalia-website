@@ -1,26 +1,19 @@
-/**
- * Strips HTML tags, javascript: protocols, inline handlers, control chars, and excessive whitespace
- */
 export function sanitizeText(val?: string | null): string {
   if (!val) return '';
   return String(val)
-    .replace(/<[^>]*>?/gm, '') // Strip HTML tags
-    .replace(/javascript:/gi, '') // Strip javascript: pseudo-protocols
-    .replace(/on\w+="[^"]*"/gi, '') // Strip inline event handlers
+    .replace(/<[^>]*>?/gm, '') 
+    .replace(/javascript:/gi, '') 
+    .replace(/on\w+="[^"]*"/gi, '')
     .replace(/on\w+='[^']*'/gi, '')
-    .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '') // Strip control chars
+    .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
     .trim();
 }
 
-/**
- * Validates and sanitizes a URL, enforcing safe protocols (https, http, tel, mailto)
- */
 export function sanitizeUrl(url?: string | null): string {
   if (!url) return '';
   const cleaned = sanitizeText(url);
   if (!cleaned) return '';
 
-  // Handle tel: and mailto:
   if (/^tel:\+?[0-9\s\-()]+$/i.test(cleaned)) {
     return cleaned.replace(/\s+/g, '');
   }
@@ -28,7 +21,6 @@ export function sanitizeUrl(url?: string | null): string {
     return cleaned;
   }
 
-  // Prepend https:// if no protocol provided
   let candidate = cleaned;
   if (!/^https?:\/\//i.test(candidate)) {
     candidate = `https://${candidate}`;
@@ -46,17 +38,12 @@ export function sanitizeUrl(url?: string | null): string {
   return '';
 }
 
-/**
- * Strict validator for safe redirect URLs
- */
 export function validateRedirectUrl(url?: string | null): string | null {
   if (!url) return null;
   const raw = String(url).trim();
   if (!raw) return null;
 
-  // 1. Safe relative paths (starts with single '/' and not '//' to prevent protocol-relative redirects)
   if (raw.startsWith('/') && !raw.startsWith('//') && !raw.startsWith('/\\')) {
-    // Strip control characters
     const cleanRelative = raw.replace(/[\x00-\x1F\x7F]/g, '');
     return cleanRelative.startsWith('/') ? cleanRelative : `/${cleanRelative}`;
   }
@@ -69,7 +56,6 @@ export function validateRedirectUrl(url?: string | null): string | null {
     if (parsed.protocol === 'https:' || (process.env.NODE_ENV !== 'production' && parsed.protocol === 'http:')) {
       const hostname = parsed.hostname.toLowerCase();
 
-      // Whitelist of trusted production domains
       const ALLOWED_HOSTS = new Set([
         'casaitaliarestaurants.com',
         'www.casaitaliarestaurants.com',
@@ -81,7 +67,6 @@ export function validateRedirectUrl(url?: string | null): string | null {
         try {
           ALLOWED_HOSTS.add(new URL(customCloud).hostname.toLowerCase());
         } catch {
-          // ignore invalid env url
         }
       }
 
@@ -99,4 +84,3 @@ export function validateRedirectUrl(url?: string | null): string | null {
 
   return null;
 }
-

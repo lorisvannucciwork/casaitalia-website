@@ -1,77 +1,121 @@
 import React, { Suspense } from 'react';
 import type { Metadata } from 'next';
+import { redirect } from 'next/navigation';
+import { SITE_URL } from '@/config/site';
+import { MENU_CATEGORIES } from '@/data/menuCategories';
 import { getDynamicMenuCategories, getDynamicMenuItems } from '@/lib/menu';
-import { MenuView } from '@/components/menu';
-import { Navbar, Footer } from '@/components/layout';
-import { MenuGridSkeleton, TopProgressBar } from '@/components/ui';
+import { MenuView, MenuLoadingView } from '@/components/menu';
+import { MenuJsonLd, BreadcrumbJsonLd } from '@/components/layout';
 
-export const metadata: Metadata = {
-  title: 'Menu Digitale & Carta dei Vini',
-  description:
-    'Browse the authentic Italian dining menu of Casa Italia in Porto Ghalib Marina. Fresh handmade pastas, wood-fired Neapolitan pizzas, Angus charcoal steaks, fresh seafood, and Italian DOCG wines.',
-  keywords: [
-    'Casa Italia Menu',
-    'Menu Casa Italia Porto Ghalib',
-    'Italian Food Porto Ghalib',
-    'Wood Fired Pizza Marsa Alam',
-    'Fresh Pasta Egypt',
-    'Porto Ghalib Seafood',
-    'Gluten Free Pizza Egypt',
-    'Carta dei Vini Casa Italia',
-  ],
-  alternates: {
-    canonical: '/menu',
-  },
-  openGraph: {
-    title: 'Menu Digitale & Carta dei Vini | Casa Italia Porto Ghalib',
-    description:
-      'Explore authentic Italian dining at Casa Italia in Porto Ghalib Marina: wood-fired pizza, handmade pasta, Angus steaks, and fine wines.',
-    url: 'https://casaitaliarestaurants.com/menu',
-    images: [
-      {
-        url: '/logo/logo-01.webp',
-        width: 1200,
-        height: 630,
-        alt: 'Casa Italia Menu - Porto Ghalib Marina',
-      },
+interface MenuPageProps {
+  searchParams?: Promise<{
+    category?: string;
+  }>;
+}
+
+export async function generateMetadata({ searchParams }: MenuPageProps): Promise<Metadata> {
+  const resolvedParams = searchParams ? await searchParams : {};
+  const requestedCategory =
+    typeof resolvedParams.category === 'string'
+      ? resolvedParams.category.trim().toLowerCase()
+      : undefined;
+
+  const matchedCategory = MENU_CATEGORIES.find(
+    (c) => c.id.toLowerCase() === requestedCategory
+  );
+
+  const title = matchedCategory
+    ? `${matchedCategory.italianTitle || matchedCategory.name}`
+    : 'Menu Digitale & Carta dei Vini';
+
+  const description = matchedCategory
+    ? `Scopri ${matchedCategory.italianTitle || matchedCategory.name} (${matchedCategory.description}) al Ristorante Casa Italia a Porto Ghalib Marina. Ingredienti italiani freschi e ricette della tradizione.`
+    : 'Browse the complete digital menu of Casa Italia in Porto Ghalib Marina. Fresh handmade pastas, wood-fired Neapolitan pizzas, Angus charcoal steaks, Red Sea seafood, Italian DOCG wines, and homemade desserts.';
+
+  const canonicalPath = matchedCategory
+    ? `/menu?category=${matchedCategory.id}`
+    : '/menu';
+
+  return {
+    title,
+    description,
+    keywords: [
+      matchedCategory ? matchedCategory.name : 'Casa Italia Menu',
+      'Casa Italia Menu',
+      'Porto Ghalib Italian Food',
+      'Wood Fired Pizza Marsa Alam',
+      'Fresh Pasta Egypt',
+      'Red Sea Dining',
     ],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Menu Digitale & Carta dei Vini | Casa Italia Porto Ghalib',
-    description:
-      'Browse fresh homemade pasta, wood-fired pizza, Angus steaks & fine Italian wines at Casa Italia.',
-    images: ['/logo/logo-01.webp'],
-  },
-};
+    alternates: {
+      canonical: canonicalPath,
+      languages: {
+        'it-IT': canonicalPath,
+        'en-US': canonicalPath,
+        'x-default': canonicalPath,
+      },
+    },
+    openGraph: {
+      title: `${title} | Casa Italia Porto Ghalib`,
+      description,
+      url: `${SITE_URL}${canonicalPath}`,
+      images: [
+        {
+          url: '/logo/logo-01.webp',
+          width: 1200,
+          height: 630,
+          alt: `Casa Italia Digital Menu - ${matchedCategory ? matchedCategory.name : 'Porto Ghalib'}`,
+          type: 'image/webp',
+        },
+      ],
+    },
+  };
+}
 
-export const revalidate = 60; // Incremental Static Regeneration / edge cache for 60 seconds
+export const revalidate = 60; 
 
-export default async function MenuPage() {
-  const [categories, items] = await Promise.all([
-    getDynamicMenuCategories(),
-    getDynamicMenuItems(),
-  ]);
+export default async function MenuPage({ searchParams }: MenuPageProps) {
+  const resolvedParams = searchParams ? await searchParams : {};
+  const requestedCategory =
+    typeof resolvedParams.category === 'string'
+      ? resolvedParams.category.trim().toLowerCase()
+      : undefined;
+
+  const categories = await getDynamicMenuCategories();
+  const validCategories = categories.filter((c) => c.id.toLowerCase() !== 'all');
+  const defaultCategory = validCategories[0]?.id || 'antipasti';
+
+  if (!requestedCategory) {
+    redirect(`/menu?category=${defaultCategory}`);
+  }
+
+  const matchedCategory = validCategories.find(
+    (c) => c.id.toLowerCase() === requestedCategory
+  );
+
+  if (!matchedCategory) {
+    redirect(`/menu?category=${defaultCategory}`);
+  }
+
+  const activeCategory = matchedCategory.id;
+
+  const items = await getDynamicMenuItems(activeCategory);
 
   return (
-    <Suspense
-      fallback={
-        <div className="min-h-screen flex flex-col bg-[#ededed] text-[#1a1816] font-sans antialiased">
-          <TopProgressBar />
-          <Navbar />
-          <main className="flex-1 relative">
-            <div className="absolute inset-0 z-0 bg-[url('/backgrounds/bg-1.webp')] bg-[length:100%_auto] bg-repeat-y opacity-80" />
-            <section id="menu-section" className="relative z-10 pt-[90px] sm:pt-[110px] pb-8 sm:pb-12 min-h-screen">
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 space-y-6">
-                <MenuGridSkeleton cardCount={6} />
-              </div>
-            </section>
-          </main>
-          <Footer />
-        </div>
-      }
-    >
-      <MenuView initialCategories={categories} initialItems={items} />
+    <Suspense fallback={<MenuLoadingView />}>
+      <MenuJsonLd />
+      <BreadcrumbJsonLd
+        items={[
+          { name: 'Home', url: SITE_URL },
+          { name: 'Menu', url: `${SITE_URL}/menu?category=${activeCategory}` },
+        ]}
+      />
+      <MenuView
+        key={activeCategory}
+        initialCategories={validCategories}
+        initialCategory={activeCategory}
+        initialItems={items}
+      />
     </Suspense>
   );
 }

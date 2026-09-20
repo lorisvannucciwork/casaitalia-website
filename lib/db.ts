@@ -38,9 +38,6 @@ function getCloudflareCredentials() {
   return { accountId, databaseId, apiToken };
 }
 
-/**
- * Direct raw query execution against Cloudflare D1 REST API
- */
 async function queryD1RestRaw<T = unknown>(sql: string, params: unknown[] = []): Promise<D1QueryResult<T>> {
   const { accountId, databaseId, apiToken } = getCloudflareCredentials();
   const url = `https://api.cloudflare.com/client/v4/accounts/${accountId}/d1/database/${databaseId}/query`;
@@ -67,9 +64,6 @@ async function queryD1RestRaw<T = unknown>(sql: string, params: unknown[] = []):
   return data.result?.[0] || {};
 }
 
-/**
- * Direct query execution against Cloudflare D1 REST API returning rows
- */
 async function queryD1Rest<T>(sql: string, params: unknown[] = []): Promise<T[]> {
   const res = await queryD1RestRaw<T>(sql, params);
   return (res.results || []) as T[];
@@ -85,9 +79,6 @@ interface NativeD1Database {
   batch: (statements: unknown[]) => Promise<unknown[]>;
 }
 
-/**
- * Resolves native D1 database binding from Cloudflare runtime or global injection
- */
 async function getNativeDb(): Promise<NativeD1Database | null> {
   const direct = (globalThis as Record<string, unknown>).__D1_DB__ || (process.env as Record<string, unknown>).DB;
   if (direct && typeof (direct as NativeD1Database).prepare === 'function') {
@@ -101,21 +92,15 @@ async function getNativeDb(): Promise<NativeD1Database | null> {
       return ctx.env.DB as NativeD1Database;
     }
   } catch {
-    // Non-Cloudflare or build-time environment
+
   }
 
   return null;
 }
 
-/**
- * Native or REST-backed Database Client with Drizzle ORM support
- */
 export const db = {
   schema,
 
-  /**
-   * Execute SELECT query
-   */
   async query<T = unknown>(sql: string, params: unknown[] = []): Promise<T[]> {
     const nativeDb = await getNativeDb();
     if (nativeDb && typeof nativeDb.prepare === 'function') {
@@ -127,17 +112,11 @@ export const db = {
     return queryD1Rest<T>(sql, params);
   },
 
-  /**
-   * Execute query and return single row or null
-   */
   async queryFirst<T = unknown>(sql: string, params: unknown[] = []): Promise<T | null> {
     const rows = await this.query<T>(sql, params);
     return rows.length > 0 ? rows[0] : null;
   },
 
-  /**
-   * Execute INSERT / UPDATE / DELETE statement
-   */
   async execute(sql: string, params: unknown[] = []): Promise<{ success: boolean; changes?: number; lastRowId?: number }> {
     const nativeDb = await getNativeDb();
     if (nativeDb && typeof nativeDb.prepare === 'function') {
@@ -150,9 +129,6 @@ export const db = {
     return { success: true, changes: res.meta?.changes, lastRowId: res.meta?.last_row_id };
   },
 
-  /**
-   * Execute multiple statements in an atomic batch
-   */
   async batch(statements: { sql: string; params?: unknown[] }[]): Promise<unknown[]> {
     const nativeDb = await getNativeDb();
     if (nativeDb && typeof nativeDb.batch === 'function') {
@@ -160,7 +136,6 @@ export const db = {
       return await nativeDb.batch(prepared);
     }
 
-    // Cloudflare D1 REST API fallback: execute statements reliably
     const results = [];
     for (const s of statements) {
       const res = await queryD1RestRaw(s.sql, s.params || []);

@@ -18,13 +18,17 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'Too many requests' }, { status: 429, headers: corsHeaders });
     }
 
-    const items = await getDynamicMenuItems();
+    const categoryParam = req.nextUrl.searchParams.get('category')?.trim().toLowerCase();
+    const category = categoryParam && categoryParam !== 'all' ? categoryParam : undefined;
+
+    const items = await getDynamicMenuItems(category);
     return NextResponse.json(
-      { success: true, items, total: items.length },
+      { success: true, items, total: items.length, category: category || 'all' },
       {
         headers: {
           ...corsHeaders,
-          'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=300',
+          'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=86400',
+          'CDN-Cache-Control': 'public, s-maxage=600, stale-while-revalidate=86400',
         },
       }
     );

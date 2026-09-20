@@ -26,7 +26,7 @@ export const OwnerAvatarCard: React.FC<OwnerAvatarCardProps> = ({
     >
       {!imgError && src ? (
         <>
-          {/* Loading shimmer */}
+
           {!imgLoaded && (
             <div className="absolute inset-0 bg-[#f7f2e8] flex items-center justify-center overflow-hidden z-0 select-none">
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent animate-shimmer" />

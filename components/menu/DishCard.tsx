@@ -35,9 +35,9 @@ export const DishCard: React.FC<DishCardProps> = ({ item, onSelectDish }) => {
         onSelectDish ? 'cursor-pointer' : ''
       }`}
     >
-      {/* Top Image Container with Loading Skeleton */}
+
       <div className="relative w-full h-52 sm:h-60 bg-[#f5eedf] overflow-hidden shadow-inner shrink-0 flex items-center justify-center">
-        {/* Badge if present (e.g. Chef's Special) */}
+
         {item.badge && (
           <div className="absolute top-2 left-2 z-20 px-2.5 py-1 bg-[#ba935a] text-white text-[10px] font-bold uppercase tracking-wider shadow-md">
             {item.badge}
@@ -46,13 +46,12 @@ export const DishCard: React.FC<DishCardProps> = ({ item, onSelectDish }) => {
 
         {dishImage && !hasImageError ? (
           <>
-            {/* Elegant Skeleton / Loading UI */}
+
             {!isImageLoaded && (
               <div className="absolute inset-0 z-0 bg-[#f7f2e8] flex flex-col items-center justify-center overflow-hidden select-none">
-                {/* Shimmer sweep */}
+
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent animate-shimmer" />
-                
-                {/* Centered brand text */}
+
                 <div className="relative z-10 flex flex-col items-center opacity-70">
                   <span className="font-signature text-2xl text-[#ba935a]/90 tracking-wide animate-pulse">
                     Casa Italia
@@ -61,7 +60,6 @@ export const DishCard: React.FC<DishCardProps> = ({ item, onSelectDish }) => {
               </div>
             )}
 
-            {/* Dish Image - Only visible when fully loaded */}
             <Image
               src={dishImage}
               alt={translatedItem.name}
@@ -89,10 +87,9 @@ export const DishCard: React.FC<DishCardProps> = ({ item, onSelectDish }) => {
         )}
       </div>
 
-      {/* Body Information */}
       <div className="px-2 sm:px-3 pt-4 pb-2 flex-1 flex flex-col justify-between">
         <div className="space-y-2">
-          {/* Header titles */}
+
           <h3 className="font-serif font-bold text-lg sm:text-xl text-[#1a1816] group-hover:text-[#ba935a] transition-colors leading-tight line-clamp-2">
             {translatedItem.name}
           </h3>
@@ -107,7 +104,6 @@ export const DishCard: React.FC<DishCardProps> = ({ item, onSelectDish }) => {
             {translatedItem.description}
           </p>
 
-          {/* Dietary Tags */}
           {item.tags && item.tags.length > 0 && (
             <div className="flex flex-wrap gap-1.5 pt-1">
               {item.tags.map((tag) => (
@@ -122,7 +118,6 @@ export const DishCard: React.FC<DishCardProps> = ({ item, onSelectDish }) => {
           )}
         </div>
 
-        {/* Price Row */}
         <div className="pt-4 mt-4 border-t border-[#ba935a]/15 flex items-center justify-between gap-2">
           <span className="font-serif font-bold text-xl sm:text-2xl text-[#1a1816] leading-none">
             {formatCurrency(item.price)}
