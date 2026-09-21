@@ -29,6 +29,7 @@ export async function GET(req: NextRequest) {
           ...corsHeaders,
           'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=86400',
           'CDN-Cache-Control': 'public, s-maxage=600, stale-while-revalidate=86400',
+          'Vary': 'Origin, Accept',
         },
       }
     );

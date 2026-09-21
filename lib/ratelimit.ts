@@ -6,6 +6,12 @@ interface RateLimitRecord {
   resetAt: number;
 }
 
+/**
+ * WARNING: This in-memory fallback is per-isolate on Cloudflare Workers.
+ * Each request may run in a fresh isolate, meaning the Map is frequently empty
+ * and rate limiting is effectively best-effort. Upstash Redis is REQUIRED
+ * for reliable production rate limiting.
+ */
 const memoryStore = new Map<string, RateLimitRecord>();
 
 function getRedisClient(): Redis | null {
@@ -62,6 +68,7 @@ export async function checkRateLimit(
     }
   }
 
+  // In-memory fallback — best-effort only on Workers (per-isolate)
   const now = Date.now();
   const windowMs = windowSeconds * 1000;
 
@@ -122,11 +129,22 @@ export function getClientIp(req: Request): string {
     if (isValidIp(firstIp)) return firstIp;
   }
 
+  /**
+   * Fallback: Generate a pseudo-identifier from multiple request signals.
+   * This combines User-Agent, Accept-Language, and Sec-CH-UA to create
+   * a more unique fingerprint than UA alone. Still imperfect — users with
+   * identical browser configs will share a bucket — but significantly
+   * reduces false collisions compared to hashing only the UA string.
+   */
   const ua = req.headers.get('user-agent') || '';
-  if (ua) {
+  const acceptLang = req.headers.get('accept-language') || '';
+  const secChUa = req.headers.get('sec-ch-ua') || '';
+  const fingerprint = `${ua}|${acceptLang}|${secChUa}`;
+
+  if (fingerprint.length > 2) {
     let hash = 0;
-    for (let i = 0; i < ua.length; i++) {
-      hash = ((hash << 5) - hash) + ua.charCodeAt(i);
+    for (let i = 0; i < fingerprint.length; i++) {
+      hash = ((hash << 5) - hash) + fingerprint.charCodeAt(i);
       hash |= 0;
     }
     return `anon_${Math.abs(hash)}`;

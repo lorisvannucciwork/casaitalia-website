@@ -1,3 +1,14 @@
+/**
+ * Drizzle ORM schema definitions — used for TYPE INFERENCE ONLY.
+ *
+ * Queries are executed via raw SQL through the custom D1 REST client in db.ts,
+ * not through Drizzle's query builder. The Drizzle schema is kept here because:
+ * 1. `$inferSelect` / `$inferInsert` provide type-safe row types across the codebase
+ * 2. drizzle-kit is used for migration tooling
+ * 3. The cloud-system shares these type definitions
+ *
+ * If you need to add/change columns, update both this schema and the raw SQL in schema.sql.
+ */
 import { sqliteTable, text, integer, real, index } from 'drizzle-orm/sqlite-core';
 
 export const users = sqliteTable('users', {

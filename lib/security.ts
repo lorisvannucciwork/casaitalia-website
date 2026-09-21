@@ -1,12 +1,40 @@
+/**
+ * Sanitize text input to prevent XSS vectors.
+ * 
+ * Note: React auto-escapes JSX, so this is a defense-in-depth measure
+ * for contexts where the value might be used outside React (e.g., JSON-LD,
+ * meta tags, database storage, or server-rendered attributes).
+ */
 export function sanitizeText(val?: string | null): string {
   if (!val) return '';
-  return String(val)
-    .replace(/<[^>]*>?/gm, '') 
-    .replace(/javascript:/gi, '') 
-    .replace(/on\w+="[^"]*"/gi, '')
-    .replace(/on\w+='[^']*'/gi, '')
-    .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
-    .trim();
+  let text = String(val);
+
+  // 1. Decode HTML entities that could hide malicious content (e.g., &#60;script&#62;)
+  text = text.replace(/&#x([0-9a-fA-F]+);?/g, (_, hex) => String.fromCharCode(parseInt(hex, 16)));
+  text = text.replace(/&#(\d+);?/g, (_, dec) => String.fromCharCode(parseInt(dec, 10)));
+  text = text.replace(/&lt;/gi, '<');
+  text = text.replace(/&gt;/gi, '>');
+  text = text.replace(/&amp;/gi, '&');
+  text = text.replace(/&quot;/gi, '"');
+  text = text.replace(/&apos;/gi, "'");
+
+  // 2. Strip inline event handlers BEFORE removing tags (so onclick="..." etc. are caught)
+  text = text.replace(/\bon\w+\s*=\s*"[^"]*"/gi, '');
+  text = text.replace(/\bon\w+\s*=\s*'[^']*'/gi, '');
+  text = text.replace(/\bon\w+\s*=\s*[^\s>]*/gi, '');
+
+  // 3. Remove javascript: / data: / vbscript: protocol handlers
+  text = text.replace(/javascript\s*:/gi, '');
+  text = text.replace(/vbscript\s*:/gi, '');
+  text = text.replace(/data\s*:\s*text\/html/gi, '');
+
+  // 4. Strip HTML tags — including unclosed tags like "<script" (no closing >)
+  text = text.replace(/<[^>]*>?/gm, '');
+
+  // 5. Remove control characters (except newline \n and carriage return \r)
+  text = text.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '');
+
+  return text.trim();
 }
 
 export function sanitizeUrl(url?: string | null): string {

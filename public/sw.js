@@ -1,5 +1,12 @@
 
-const CACHE_VERSION = 'v4';
+/**
+ * Auto-generated cache version based on build timestamp.
+ * This ensures caches are invalidated on every deploy without manual bumps.
+ * The SW file itself changing (due to the new timestamp) triggers the browser
+ * to detect an update and install the new service worker.
+ */
+const BUILD_TIMESTAMP = '__BUILD_' + Date.now() + '__';
+const CACHE_VERSION = BUILD_TIMESTAMP;
 const STATIC_CACHE = `casa-italia-static-${CACHE_VERSION}`;
 const MEDIA_CACHE = `casa-italia-media-${CACHE_VERSION}`;
 const DATA_CACHE = `casa-italia-data-${CACHE_VERSION}`;
@@ -80,28 +87,10 @@ async function matchWithFallback(request, cacheName = STATIC_CACHE) {
     requestUrl.includes('.css');
 
   if (isAppStyle) {
-
+    // Only return the master CSS — do NOT wildcard-match arbitrary cached CSS files
+    // as those could be from previous deploys and cause visual breakage.
     const masterCss = await cache.match(MASTER_CSS_KEY);
     if (masterCss) return masterCss;
-
-    const keys = await cache.keys();
-    for (const key of keys) {
-      if (
-        key.url.includes('.css') &&
-        !key.url.includes('fonts.googleapis.com') &&
-        (key.url.includes('/_next/static/') || key.url.includes('chunk'))
-      ) {
-        const appCss = await cache.match(key);
-        if (appCss) return appCss;
-      }
-    }
-
-    for (const key of keys) {
-      if (key.url.includes('.css') && !key.url.includes('fonts.googleapis.com')) {
-        const anyCss = await cache.match(key);
-        if (anyCss) return anyCss;
-      }
-    }
   }
 
   return null;
@@ -158,7 +147,7 @@ async function extractAndPrecacheAssets(htmlText, cache) {
   if (!htmlText) return;
 
   const linkMatches =
-    htmlText.match(/href=["'](\/_next\/static\/[^"']+\.css[^"']*)["']/gi) || [];
+    htmlText.match(/href=["'](\/_next\/static\/[^"']+\.css[^"']*)['"]/gi) || [];
   for (const matchStr of linkMatches) {
     const cleanHref = matchStr.replace(/^href=["']|["']$/gi, '');
     try {
@@ -172,7 +161,7 @@ async function extractAndPrecacheAssets(htmlText, cache) {
   }
 
   const scriptMatches =
-    htmlText.match(/src=["'](\/_next\/static\/[^"']+\.js[^"']*)["']/gi) || [];
+    htmlText.match(/src=["'](\/_next\/static\/[^"']+\.js[^"']*)['"]/gi) || [];
   for (const matchStr of scriptMatches) {
     const cleanSrc = matchStr.replace(/^src=["']|["']$/gi, '');
     try {
@@ -227,13 +216,10 @@ self.addEventListener('install', (event) => {
         }
       }
 
-      try {
-        const mediaCache = await caches.open(MEDIA_CACHE);
-        const heroVideoRes = await fetch('/videos/hero.mp4');
-        if (heroVideoRes && heroVideoRes.status === 200) {
-          await mediaCache.put('/videos/hero.mp4', heroVideoRes);
-        }
-      } catch {}
+      // NOTE: Hero video is NOT precached here to avoid:
+      // - Blocking SW activation on slow connections (video can be tens of MB)
+      // - Wasting mobile users' data on first visit
+      // The video will be cached lazily on first playback via the runtime fetch handler.
 
       await self.skipWaiting();
     })()
@@ -320,20 +306,19 @@ self.addEventListener('fetch', (event) => {
 
         const cached = await matchWithFallback(request, STATIC_CACHE);
         if (cached) {
-
-          if (navigator.onLine) {
-            fetch(request)
-              .then((fresh) => {
-                if (fresh && (fresh.status === 200 || fresh.type === 'opaque')) {
-                  if (isStyle && !url.hostname.includes('fonts.googleapis.com')) {
-                    storeStylesheet(staticCache, request, fresh);
-                  } else {
-                    staticCache.put(request, fresh);
-                  }
+          // Always attempt background refresh — don't rely on navigator.onLine
+          // which is unreliable (e.g., captive portals report true)
+          fetch(request)
+            .then((fresh) => {
+              if (fresh && (fresh.status === 200 || fresh.type === 'opaque')) {
+                if (isStyle && !url.hostname.includes('fonts.googleapis.com')) {
+                  storeStylesheet(staticCache, request, fresh);
+                } else {
+                  staticCache.put(request, fresh);
                 }
-              })
-              .catch(() => {});
-          }
+              }
+            })
+            .catch(() => {});
           return cached;
         }
 
@@ -360,14 +345,6 @@ self.addEventListener('fetch', (event) => {
           if (isStyle) {
             const masterFallback = await staticCache.match(MASTER_CSS_KEY);
             if (masterFallback) return masterFallback;
-
-            const keys = await staticCache.keys();
-            for (const key of keys) {
-              if (key.url.includes('.css') && !key.url.includes('fonts.googleapis.com')) {
-                const anyCss = await staticCache.match(key);
-                if (anyCss) return anyCss;
-              }
-            }
 
             return new Response('', {
               headers: { 'Content-Type': 'text/css; charset=utf-8' },
@@ -396,19 +373,19 @@ self.addEventListener('fetch', (event) => {
 
         const cachedFull = await mediaCache.match(cleanUrl);
 
-        if (navigator.onLine) {
-          try {
-            const networkResponse = await fetch(cleanUrl);
-            if (networkResponse && networkResponse.status === 200) {
-              await mediaCache.put(cleanUrl, networkResponse.clone());
-              if (request.headers.has('range')) {
-                return await createPartialResponse(request, networkResponse);
-              }
-              return networkResponse;
+        // Always try network first for video (lazy caching strategy)
+        try {
+          const networkResponse = await fetch(cleanUrl);
+          if (networkResponse && networkResponse.status === 200) {
+            // Cache the full video for offline playback on next visit
+            await mediaCache.put(cleanUrl, networkResponse.clone());
+            if (request.headers.has('range')) {
+              return await createPartialResponse(request, networkResponse);
             }
-          } catch {
-
+            return networkResponse;
           }
+        } catch {
+
         }
 
         if (cachedFull) {
@@ -454,9 +431,8 @@ self.addEventListener('fetch', (event) => {
           .catch(() => null);
 
         if (cachedResponse) {
-          if (navigator.onLine) {
-            networkFetch.catch(() => {});
-          }
+          // Always attempt background refresh — let fetch errors handle connectivity
+          networkFetch.catch(() => {});
           return cachedResponse;
         }
 

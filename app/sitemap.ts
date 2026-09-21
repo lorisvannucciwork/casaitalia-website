@@ -5,8 +5,10 @@ import { MENU_CATEGORIES } from '@/data/menuCategories';
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = SITE_URL;
 
-  const lastContentUpdate = '2026-09-19T00:00:00.000Z';
-  const lastMenuUpdate = '2026-09-19T00:00:00.000Z';
+  // Dynamic: regenerated on each build / ISR revalidation
+  const lastContentUpdate = new Date().toISOString();
+  const lastMenuUpdate = new Date().toISOString();
+  // Static: legal pages change infrequently
   const lastLegalUpdate = '2026-06-01T00:00:00.000Z';
 
   const categoryRoutes: MetadataRoute.Sitemap = MENU_CATEGORIES.filter(

@@ -21,13 +21,9 @@ interface D1ApiResponse<T = unknown> {
 }
 
 function getCloudflareCredentials() {
-  const rawAccountId = process.env.CLOUDFLARE_ACCOUNT_ID;
-  const rawDatabaseId = process.env.CLOUDFLARE_D1_DATABASE_ID;
-  const rawApiToken = process.env.CLOUDFLARE_API_TOKEN;
-
-  const accountId = rawAccountId ? rawAccountId.replace(/["']/g, '').trim() : '';
-  const databaseId = rawDatabaseId ? rawDatabaseId.replace(/["']/g, '').trim() : '';
-  const apiToken = rawApiToken ? rawApiToken.replace(/["']/g, '').trim() : '';
+  const accountId = (process.env.CLOUDFLARE_ACCOUNT_ID || '').trim();
+  const databaseId = (process.env.CLOUDFLARE_D1_DATABASE_ID || '').trim();
+  const apiToken = (process.env.CLOUDFLARE_API_TOKEN || '').trim();
 
   if (!accountId || !databaseId || !apiToken || accountId.includes('your_') || databaseId.includes('your_') || apiToken.includes('your_')) {
     throw new Error(
@@ -129,6 +125,12 @@ export const db = {
     return { success: true, changes: res.meta?.changes, lastRowId: res.meta?.last_row_id };
   },
 
+  /**
+   * Execute multiple statements as a batch.
+   * NOTE: Native D1 batch() is atomic, but the REST API fallback executes
+   * statements sequentially and is NOT transactional. Partial failures may
+   * leave the database in an inconsistent state when using the REST fallback.
+   */
   async batch(statements: { sql: string; params?: unknown[] }[]): Promise<unknown[]> {
     const nativeDb = await getNativeDb();
     if (nativeDb && typeof nativeDb.batch === 'function') {
@@ -136,6 +138,7 @@ export const db = {
       return await nativeDb.batch(prepared);
     }
 
+    // REST fallback — sequential, non-atomic
     const results = [];
     for (const s of statements) {
       const res = await queryD1RestRaw(s.sql, s.params || []);
