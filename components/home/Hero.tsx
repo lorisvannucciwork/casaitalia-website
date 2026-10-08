@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
-import { Utensils } from 'lucide-react';
+import { Utensils, Bike } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import { Button } from '@/components/ui/Button';
 
@@ -102,6 +102,15 @@ export const Hero: React.FC = () => {
             className="shadow-[0_4px_25px_rgba(186,147,90,0.4)] hover:shadow-[0_6px_30px_rgba(186,147,90,0.6)]"
           >
             {t('hero.exploreMenu')}
+          </Button>
+          <Button
+            href="/delivery"
+            variant="glass"
+            size="lg"
+            leftIcon={<Bike className="w-4 h-4 text-[#ba935a]" />}
+            className="hover:border-[#ba935a]"
+          >
+            {t('nav.delivery')}
           </Button>
         </div>
       </div>

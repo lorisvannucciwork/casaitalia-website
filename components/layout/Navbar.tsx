@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Utensils, Menu, X } from 'lucide-react';
+import { Utensils, Menu, X, Bike } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import { SITE_CONFIG } from '@/config/site';
 import { LanguageSelector } from './LanguageSelector';
@@ -17,27 +17,14 @@ import {
 } from '@/components/ui/icons';
 
 export const Navbar: React.FC = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
   const { t } = useLanguage();
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
   return (
     <header
       role="banner"
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? 'bg-[#faf7f2] py-2 sm:py-2 shadow-casa border-b border-[#ba935a]/30'
-          : 'bg-[#faf7f2] py-3 sm:py-3 border-b border-[#ba935a]/20'
-      }`}
+      className="fixed top-0 left-0 right-0 z-50 bg-[#faf7f2] py-3 border-b border-[#ba935a]/25 shadow-casa"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-3 relative">
 
@@ -74,6 +61,15 @@ export const Navbar: React.FC = () => {
             >
               <Utensils className="w-4 h-4" />
               <span>{t('nav.menu')}</span>
+            </Link>
+            <Link
+              href="/delivery"
+              className={`transition-colors py-1 flex items-center gap-1.5 ${
+                pathname === '/delivery' ? 'text-[#ba935a]' : 'hover:text-[#ba935a]'
+              }`}
+            >
+              <Bike className="w-4 h-4" />
+              <span>{t('nav.delivery')}</span>
             </Link>
           </nav>
         </div>
@@ -120,12 +116,22 @@ export const Navbar: React.FC = () => {
             <Link
               href="/menu"
               onClick={() => setIsMobileMenuOpen(false)}
-              className={`flex items-center gap-2 text-sm font-bold py-2 transition-colors ${
+              className={`flex items-center gap-2 text-sm font-bold py-2 border-b border-[#ba935a]/10 transition-colors ${
                 pathname === '/menu' ? 'text-[#ba935a]' : 'text-[#1a1816] hover:text-[#ba935a]'
               }`}
             >
               <Utensils className="w-4 h-4" />
               <span>{t('nav.menu')}</span>
+            </Link>
+            <Link
+              href="/delivery"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className={`flex items-center gap-2 text-sm font-bold py-2 transition-colors ${
+                pathname === '/delivery' ? 'text-[#ba935a]' : 'text-[#1a1816] hover:text-[#ba935a]'
+              }`}
+            >
+              <Bike className="w-4 h-4" />
+              <span>{t('nav.delivery')}</span>
             </Link>
 
             <div className="flex items-center justify-center gap-4 pt-4 mt-2 border-t border-[#ba935a]/20">

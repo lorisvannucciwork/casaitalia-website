@@ -74,12 +74,14 @@ CREATE INDEX IF NOT EXISTS idx_menu_active ON menu_items(active);
 
 
 
+-- System Settings
 INSERT OR REPLACE INTO system_settings (key, value) VALUES ('guestWifiSsid', 'CasaItalia_Guest');
 INSERT OR REPLACE INTO system_settings (key, value) VALUES ('guestWifiPassword', 'casaitaliaportghalib');
 INSERT OR REPLACE INTO system_settings (key, value) VALUES ('restaurantPhone', '+20 150 830 0656');
 INSERT OR REPLACE INTO system_settings (key, value) VALUES ('restaurantEmail', 'info@casaitaliarestaurants.com');
 INSERT OR REPLACE INTO system_settings (key, value) VALUES ('openingHours', '12:00 PM - 11:30 PM');
 
+-- Tables
 INSERT OR IGNORE INTO tables (id, table_number, name, active, created_at) VALUES ('table_1', 1, 'Table 1', 1, '2026-09-19T19:35:02.714Z');
 INSERT OR IGNORE INTO tables (id, table_number, name, active, created_at) VALUES ('table_2', 2, 'Table 2', 1, '2026-09-19T19:35:02.714Z');
 INSERT OR IGNORE INTO tables (id, table_number, name, active, created_at) VALUES ('table_3', 3, 'Table 3', 1, '2026-09-19T19:35:02.714Z');
@@ -101,6 +103,7 @@ INSERT OR IGNORE INTO tables (id, table_number, name, active, created_at) VALUES
 INSERT OR IGNORE INTO tables (id, table_number, name, active, created_at) VALUES ('table_19', 19, 'Table 19', 1, '2026-09-19T19:35:02.714Z');
 INSERT OR IGNORE INTO tables (id, table_number, name, active, created_at) VALUES ('table_20', 20, 'Table 20', 1, '2026-09-19T19:35:02.714Z');
 
+-- Menu Categories
 INSERT OR REPLACE INTO menu_categories (id, name, italian_title, description, display_order, active, created_at, updated_at) VALUES ('antipasti', 'Antipasti', 'Antipasti della Casa', 'Starters & Appetizers', 1, 1, '2026-09-19T19:35:02.714Z', '2026-09-19T19:35:02.714Z');
 INSERT OR REPLACE INTO menu_categories (id, name, italian_title, description, display_order, active, created_at, updated_at) VALUES ('primi', 'Primi Piatti', 'Primi Piatti Classici', 'Traditional Italian Pasta & Risotto', 2, 1, '2026-09-19T19:35:02.714Z', '2026-09-19T19:35:02.714Z');
 INSERT OR REPLACE INTO menu_categories (id, name, italian_title, description, display_order, active, created_at, updated_at) VALUES ('pasta_fresca', 'Pasta Fresca', 'Pasta Fresca', 'Fresh Pasta & Lasagna', 3, 1, '2026-09-19T19:35:02.714Z', '2026-09-19T19:35:02.714Z');
@@ -119,6 +122,7 @@ INSERT OR REPLACE INTO menu_categories (id, name, italian_title, description, di
 INSERT OR REPLACE INTO menu_categories (id, name, italian_title, description, display_order, active, created_at, updated_at) VALUES ('cocktails', 'Cocktails', 'Cocktails & Aperitivi', 'Signature Cocktails & Mocktails', 16, 1, '2026-09-19T19:35:02.714Z', '2026-09-19T19:35:02.714Z');
 INSERT OR REPLACE INTO menu_categories (id, name, italian_title, description, display_order, active, created_at, updated_at) VALUES ('colazione', 'Colazione', 'Colazione Italiana', 'Breakfast Croissants & Dishes', 17, 1, '2026-09-19T19:35:02.714Z', '2026-09-19T19:35:02.714Z');
 
+-- Menu Items
 INSERT OR REPLACE INTO menu_items (id, name, italian_name, description, price, category, image, calories, preparation_time, tags, badge, pronunciation, active, display_order, created_at, updated_at) VALUES ('tartare-di-tonno-all-arancia-1', 'Tuna Tartare with Orange', 'TARTARE DI TONNO ALL''ARANCIA', 'Tuna tartare with orange cream', 15, 'antipasti', 'https://cdn.casaitaliarestaurants.com/menu/Appetizers/TARTARE DI TONNO ALL ARANCIA.webp', NULL, NULL, '[]', NULL, NULL, 1, 1, '2026-09-19T19:35:02.714Z', '2026-09-19T19:35:02.714Z');
 INSERT OR REPLACE INTO menu_items (id, name, italian_name, description, price, category, image, calories, preparation_time, tags, badge, pronunciation, active, display_order, created_at, updated_at) VALUES ('polpo-alla-piastra-su-vellutata-di-patate-olive-e-pomodorini-2', 'Grilled Octopus on Potato Cream', 'POLPO ALLA PIASTRA SU VELLUTATA DI PATATE, OLIVE E POMODORINI', 'Grilled octopus on a cream of potatoes, olives and cherry tomatoes', 17, 'antipasti', 'https://cdn.casaitaliarestaurants.com/menu/Appetizers/POLPO ALLA PIASTRA.webp', NULL, NULL, '[]', NULL, NULL, 1, 2, '2026-09-19T19:35:02.714Z', '2026-09-19T19:35:02.714Z');
 INSERT OR REPLACE INTO menu_items (id, name, italian_name, description, price, category, image, calories, preparation_time, tags, badge, pronunciation, active, display_order, created_at, updated_at) VALUES ('tartare-di-salmone-al-mango-3', 'Salmon Tartare with Mango', 'TARTARE DI SALMONE AL MANGO', 'Salmon tartare with mango cream', 15, 'antipasti', 'https://cdn.casaitaliarestaurants.com/menu/Appetizers/TARTARE DI SALMONE AL MANGO.webp', NULL, NULL, '[]', NULL, NULL, 1, 3, '2026-09-19T19:35:02.714Z', '2026-09-19T19:35:02.714Z');

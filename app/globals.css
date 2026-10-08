@@ -168,3 +168,93 @@
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+/* Delivery Filter Smooth Accordion Animation */
+.filter-accordion-wrapper {
+  display: grid;
+  transition: grid-template-rows 350ms cubic-bezier(0.4, 0, 0.2, 1), opacity 350ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.filter-accordion-wrapper.open {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+.filter-accordion-wrapper.closed {
+  grid-template-rows: 0fr;
+  opacity: 0;
+  pointer-events: none;
+}
+.filter-accordion-inner {
+  min-height: 0;
+}
+.filter-accordion-wrapper.closed .filter-accordion-inner {
+  overflow: hidden;
+}
+.filter-accordion-wrapper.open .filter-accordion-inner {
+  overflow: visible;
+}
+.filter-accordion-content {
+  transition: transform 350ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.filter-accordion-wrapper.open .filter-accordion-content {
+  transform: translateY(0);
+}
+.filter-accordion-wrapper.closed .filter-accordion-content {
+  transform: translateY(-8px);
+}
+
+/* Delivery Drawer Slide & Fade Animations - Desktop View Only (>= 768px) */
+@media (min-width: 768px) {
+  @keyframes drawerSheetIn {
+    0% {
+      transform: translateX(100%);
+    }
+    100% {
+      transform: translateX(0%);
+    }
+  }
+
+  @keyframes drawerSheetOut {
+    0% {
+      transform: translateX(0%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  @keyframes drawerBackdropIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes drawerBackdropOut {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+
+  .drawer-backdrop-open {
+    animation: drawerBackdropIn 300ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .drawer-backdrop-close {
+    animation: drawerBackdropOut 300ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .drawer-sheet-open {
+    animation: drawerSheetIn 350ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .drawer-sheet-close {
+    animation: drawerSheetOut 300ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+}
+
+

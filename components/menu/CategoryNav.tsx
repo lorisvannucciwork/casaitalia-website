@@ -13,6 +13,8 @@ interface CategoryNavProps {
   activeDietaryFilter?: string | null;
   onSelectDietaryFilter?: (filter: string | null) => void;
   isAttached?: boolean;
+  includeAllOption?: boolean;
+  basePath?: string;
 }
 
 const ITEMS_PER_PAGE = 6;
@@ -21,6 +23,8 @@ export const CategoryNav: React.FC<CategoryNavProps> = ({
   activeCategory,
   onSelectCategory,
   categories = MENU_CATEGORIES,
+  includeAllOption = false,
+  basePath = '/menu',
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [page, setPage] = useState(0);
@@ -40,8 +44,21 @@ export const CategoryNav: React.FC<CategoryNavProps> = ({
   }, [isOpen]);
 
   const displayCategories: Category[] = useMemo(() => {
-    return categories.filter((c) => c.id.toLowerCase() !== 'all');
-  }, [categories]);
+    const valid = categories.filter((c) => c.id.toLowerCase() !== 'all');
+    if (includeAllOption) {
+      return [
+        {
+          id: 'all',
+          name: language === 'it' ? 'Tutti i Piatti' : 'All Dishes',
+          italianTitle: 'Tutti i Piatti',
+          description: language === 'it' ? 'Tutti i piatti disponibili' : 'All available dishes',
+          iconName: 'UtensilsCrossed',
+        },
+        ...valid,
+      ];
+    }
+    return valid;
+  }, [categories, includeAllOption, language]);
 
   const totalPages = Math.max(1, Math.ceil(displayCategories.length / ITEMS_PER_PAGE));
 
@@ -96,7 +113,7 @@ export const CategoryNav: React.FC<CategoryNavProps> = ({
         onClick={handleToggle}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
-        className="w-full sm:w-auto flex items-center justify-between gap-3 px-4 py-2.5 font-medium bg-white/90 backdrop-blur-md text-[#1a1816] hover:bg-white border border-[#ba935a]/40 shadow-sm hover:border-[#ba935a] transition-all text-sm cursor-pointer"
+        className="w-full sm:w-auto flex items-center justify-between gap-3 px-4 py-2.5 font-medium bg-white text-[#1a1816] hover:bg-white border border-[#ba935a]/40 shadow-sm hover:border-[#ba935a] transition-colors text-sm cursor-pointer"
       >
         <div className="flex items-center gap-2.5 text-[#ba935a]">
           <UtensilsCrossed className="w-4 h-4" />
@@ -186,7 +203,7 @@ export const CategoryNav: React.FC<CategoryNavProps> = ({
                       return (
                         <Link
                           key={cat.id}
-                          href={`/menu?category=${encodeURIComponent(cat.id)}`}
+                          href={cat.id === 'all' ? '#' : `${basePath}?category=${encodeURIComponent(cat.id)}`}
                           onClick={(e) => {
                             e.preventDefault();
                             onSelectCategory(cat.id);

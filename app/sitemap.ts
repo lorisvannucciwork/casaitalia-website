@@ -27,6 +27,22 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   }));
 
+  const deliveryCategoryRoutes: MetadataRoute.Sitemap = MENU_CATEGORIES.filter(
+    (cat) => cat.id.toLowerCase() !== 'all'
+  ).map((cat) => ({
+    url: `${baseUrl}/delivery?category=${cat.id}`,
+    lastModified: lastMenuUpdate,
+    changeFrequency: 'daily',
+    priority: 0.85,
+    alternates: {
+      languages: {
+        'it-IT': `${baseUrl}/delivery?category=${cat.id}`,
+        'en-US': `${baseUrl}/delivery?category=${cat.id}`,
+        'x-default': `${baseUrl}/delivery?category=${cat.id}`,
+      },
+    },
+  }));
+
   return [
 
     {
@@ -67,6 +83,26 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
 
     ...categoryRoutes,
+
+    {
+      url: `${baseUrl}/delivery`,
+      lastModified: lastMenuUpdate,
+      changeFrequency: 'daily',
+      priority: 0.9,
+      alternates: {
+        languages: {
+          'it-IT': `${baseUrl}/delivery`,
+          'en-US': `${baseUrl}/delivery`,
+          'x-default': `${baseUrl}/delivery`,
+        },
+      },
+      images: [
+        `${baseUrl}/logo/logo-01.webp`,
+        `${baseUrl}/backgrounds/bg-1.webp`,
+      ],
+    },
+
+    ...deliveryCategoryRoutes,
 
     {
       url: `${baseUrl}/tables`,
