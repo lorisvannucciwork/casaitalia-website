@@ -92,20 +92,20 @@ export const Hero: React.FC = () => {
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center justify-center gap-4 w-full sm:w-auto pt-2">
+        <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 w-full sm:w-auto pt-1">
           <Button
             href="/menu"
             variant="primary"
-            size="lg"
-            className="shadow-[0_4px_25px_rgba(186,147,90,0.4)] hover:shadow-[0_6px_30px_rgba(186,147,90,0.6)]"
+            size="md"
+            className="px-6 sm:px-8 !py-2.5 shadow-[0_4px_25px_rgba(186,147,90,0.4)] hover:shadow-[0_6px_30px_rgba(186,147,90,0.6)]"
           >
             {t('nav.menu')}
           </Button>
           <Button
             href="/delivery"
             variant="glass"
-            size="lg"
-            className="hover:border-[#ba935a]"
+            size="md"
+            className="px-6 sm:px-8 !py-2.5 hover:border-[#ba935a]"
           >
             {t('nav.delivery')}
           </Button>
