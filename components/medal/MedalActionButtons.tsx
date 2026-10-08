@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Share2, Check, MapPin, ExternalLink, Utensils, Bike } from 'lucide-react';
+import { Share2, Check, MapPin, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
 import { useLanguage } from '@/context/LanguageContext';
 import { SITE_CONFIG } from '@/config/site';
@@ -116,18 +116,16 @@ export const MedalActionButtons: React.FC<MedalActionButtonsProps> = ({
       <div className="flex items-center gap-1.5 sm:gap-2 pt-2">
         <Link
           href="/menu"
-          className="flex-1 flex items-center justify-center gap-1 sm:gap-1.5 p-2 sm:p-2.5 bg-[#ba935a] hover:bg-[#a37f48] text-white font-bold text-xs uppercase tracking-wider transition-colors shadow-xs"
+          className="flex-1 flex items-center justify-center p-2 sm:p-2.5 bg-[#ba935a] hover:bg-[#a37f48] text-white font-bold text-xs uppercase tracking-wider transition-colors shadow-xs"
         >
-          <Utensils className="w-3.5 h-3.5 shrink-0" />
           <span className="hidden sm:inline">{isIt ? 'Menu Digitale' : 'View Menu'}</span>
           <span className="sm:hidden">Menu</span>
         </Link>
 
         <Link
           href="/delivery"
-          className="flex-1 flex items-center justify-center gap-1 sm:gap-1.5 p-2 sm:p-2.5 bg-[#ba935a] hover:bg-[#a37f48] text-white font-bold text-xs uppercase tracking-wider transition-colors shadow-xs"
+          className="flex-1 flex items-center justify-center p-2 sm:p-2.5 bg-[#ba935a] hover:bg-[#a37f48] text-white font-bold text-xs uppercase tracking-wider transition-colors shadow-xs"
         >
-          <Bike className="w-3.5 h-3.5 shrink-0" />
           <span>{isIt ? 'Consegna' : 'Delivery'}</span>
         </Link>
 
