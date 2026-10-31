@@ -27,11 +27,11 @@ export async function generateMetadata({ searchParams }: DeliveryPageProps): Pro
 
   const title = matchedCategory
     ? `${matchedCategory.italianTitle || matchedCategory.name} - Consegna a Domicilio`
-    : 'Consegna a Domicilio & WhatsApp Order';
+    : 'Consegna a Domicilio & Ordine Online';
 
   const description = matchedCategory
-    ? `Ordina ${matchedCategory.italianTitle || matchedCategory.name} (${matchedCategory.description}) a domicilio al Ristorante Casa Italia a Porto Ghalib Marina. Consegna espressa in resort, villa o yacht tramite WhatsApp.`
-    : 'Order authentic Italian dishes, wood-fired pizza, fresh handmade pasta, steaks, and desserts for delivery in Port Ghalib Marina. Direct delivery to your resort room, villa, or marina yacht via WhatsApp concierge.';
+    ? `Ordina ${matchedCategory.italianTitle || matchedCategory.name} (${matchedCategory.description}) a domicilio al Ristorante Casa Italia a Porto Ghalib Marina. Ordina online, consegna espressa in resort, villa o yacht.`
+    : 'Order authentic Italian dishes, wood-fired pizza, fresh handmade pasta, steaks, and desserts online for delivery in Port Ghalib Marina. Direct delivery to your resort room, villa, or marina yacht.';
 
   const canonicalPath = matchedCategory
     ? `/delivery?category=${matchedCategory.id}`

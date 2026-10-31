@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Utensils, Menu, X, Bike } from 'lucide-react';
+import { Utensils, Menu, X, Bike, CalendarDays } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import { SITE_CONFIG } from '@/config/site';
 import { LanguageSelector } from './LanguageSelector';
@@ -71,6 +71,15 @@ export const Navbar: React.FC = () => {
               <Bike className="w-4 h-4" />
               <span>{t('nav.delivery')}</span>
             </Link>
+            <Link
+              href="/reservations"
+              className={`transition-colors py-1 flex items-center gap-1.5 ${
+                pathname === '/reservations' ? 'text-[#ba935a]' : 'hover:text-[#ba935a]'
+              }`}
+            >
+              <CalendarDays className="w-4 h-4" />
+              <span>{t('nav.reserve')}</span>
+            </Link>
           </nav>
         </div>
 
@@ -126,12 +135,22 @@ export const Navbar: React.FC = () => {
             <Link
               href="/delivery"
               onClick={() => setIsMobileMenuOpen(false)}
-              className={`flex items-center gap-2 text-sm font-bold py-2 transition-colors ${
+              className={`flex items-center gap-2 text-sm font-bold py-2 border-b border-[#ba935a]/10 transition-colors ${
                 pathname === '/delivery' ? 'text-[#ba935a]' : 'text-[#1a1816] hover:text-[#ba935a]'
               }`}
             >
               <Bike className="w-4 h-4" />
               <span>{t('nav.delivery')}</span>
+            </Link>
+            <Link
+              href="/reservations"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className={`flex items-center gap-2 text-sm font-bold py-2 transition-colors ${
+                pathname === '/reservations' ? 'text-[#ba935a]' : 'text-[#1a1816] hover:text-[#ba935a]'
+              }`}
+            >
+              <CalendarDays className="w-4 h-4" />
+              <span>{t('nav.reserve')}</span>
             </Link>
 
             <div className="flex items-center justify-center gap-4 pt-4 mt-2 border-t border-[#ba935a]/20">

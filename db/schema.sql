@@ -72,3 +72,46 @@ CREATE INDEX IF NOT EXISTS idx_categories_active ON menu_categories(active);
 CREATE INDEX IF NOT EXISTS idx_menu_category ON menu_items(category);
 CREATE INDEX IF NOT EXISTS idx_menu_active ON menu_items(active);
 
+-- Online delivery orders: kept 'pending' until the restaurant's Odoo has collected them
+CREATE TABLE IF NOT EXISTS online_orders (
+  id TEXT PRIMARY KEY,
+  ref TEXT NOT NULL UNIQUE,
+  type TEXT NOT NULL DEFAULT 'delivery',
+  customer_name TEXT NOT NULL,
+  phone TEXT NOT NULL,
+  area TEXT NOT NULL,
+  location TEXT NOT NULL,
+  notes TEXT,
+  items TEXT NOT NULL,
+  subtotal REAL NOT NULL,
+  currency TEXT NOT NULL,
+  language TEXT,
+  status TEXT NOT NULL DEFAULT 'pending',
+  odoo_ref TEXT,
+  received_at TEXT,
+  created_at TEXT NOT NULL
+);
+
+-- Table reservations: kept 'pending' until the restaurant's Odoo has collected them
+CREATE TABLE IF NOT EXISTS table_reservations (
+  id TEXT PRIMARY KEY,
+  ref TEXT NOT NULL UNIQUE,
+  customer_name TEXT NOT NULL,
+  phone TEXT NOT NULL,
+  email TEXT,
+  guests INTEGER NOT NULL,
+  date TEXT NOT NULL,
+  time TEXT NOT NULL,
+  area TEXT NOT NULL DEFAULT 'any',
+  notes TEXT,
+  language TEXT,
+  status TEXT NOT NULL DEFAULT 'pending',
+  odoo_ref TEXT,
+  table_number INTEGER,
+  received_at TEXT,
+  created_at TEXT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_online_orders_status ON online_orders(status, created_at);
+CREATE INDEX IF NOT EXISTS idx_reservations_status ON table_reservations(status, created_at);
+CREATE INDEX IF NOT EXISTS idx_reservations_date ON table_reservations(date, time);

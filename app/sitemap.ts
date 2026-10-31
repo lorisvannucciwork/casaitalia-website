@@ -105,6 +105,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...deliveryCategoryRoutes,
 
     {
+      url: `${baseUrl}/reservations`,
+      lastModified: lastContentUpdate,
+      changeFrequency: 'weekly',
+      priority: 0.9,
+      alternates: {
+        languages: {
+          'it-IT': `${baseUrl}/reservations`,
+          'en-US': `${baseUrl}/reservations`,
+          'x-default': `${baseUrl}/reservations`,
+        },
+      },
+    },
+
+    {
       url: `${baseUrl}/tables`,
       lastModified: lastContentUpdate,
       changeFrequency: 'daily',

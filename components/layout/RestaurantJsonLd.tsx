@@ -216,7 +216,7 @@ export function RestaurantJsonLd() {
             '@type': 'ReserveAction',
             target: {
               '@type': 'EntryPoint',
-              urlTemplate: SITE_CONFIG.contact.whatsappUrl,
+              urlTemplate: `${baseUrl}/reservations`,
               inLanguage: ['en', 'it'],
               actionPlatform: [
                 'http://schema.org/DesktopWebPlatform',
@@ -289,7 +289,7 @@ export function RestaurantJsonLd() {
             name: 'How can I make a reservation at Casa Italia?',
             acceptedAnswer: {
               '@type': 'Answer',
-              text: `You can make a reservation via WhatsApp at ${SITE_CONFIG.contact.phoneFormatted}, or simply walk in. We recommend reservations for dinner, especially on weekends.`,
+              text: `You can book a table online at ${baseUrl}/reservations with instant confirmation, or call us at ${SITE_CONFIG.contact.phoneFormatted}. We recommend reservations for dinner, especially on weekends.`,
             },
           },
           {

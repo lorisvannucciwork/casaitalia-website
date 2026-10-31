@@ -101,77 +101,79 @@ export const DeliveryDrawer: React.FC<DeliveryDrawerProps> = ({
   const totalItemsCount = cart.reduce((sum, item) => sum + item.quantity, 0);
   const subtotal = cart.reduce((sum, item) => sum + item.dish.price * item.quantity, 0);
 
-  // Generate formatted WhatsApp message and open link
-  const handleSendWhatsAppOrder = () => {
-    if (cart.length === 0) return;
+  // Order sending: the order is stored by the website and reaches the restaurant's POS
+  const [status, setStatus] = useState<'idle' | 'sending' | 'done'>('idle');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [showErrors, setShowErrors] = useState(false);
+  const [placed, setPlaced] = useState<{ ref: string; subtotal: number } | null>(null);
 
-    const itemsSummary = cart
-      .map((item) => {
-        const translated = getTranslatedMenuItem(item.dish, language);
-        const lineTotal = formatCurrency(item.dish.price * item.quantity);
-        const itemNote = item.notes?.trim() ? `\n   └ Note: "${item.notes.trim()}"` : '';
-        return `• ${item.quantity}x ${translated.name} (${lineTotal})${itemNote}`;
-      })
-      .join('\n');
-
-    const customerName = customerDetails.customerName.trim() || (isIt ? 'Ospite' : 'Guest');
-    const isInside = customerDetails.area !== 'outside';
-    const areaText = isInside
-      ? (isIt ? 'Dentro Port Ghalib' : 'Inside Port Ghalib')
-      : (isIt ? 'Fuori Port Ghalib' : 'Outside Port Ghalib');
-    const specificLoc = customerDetails.specificLocation.trim() || (isIt ? 'Da concordare' : 'To be confirmed');
-    const phone = customerDetails.phone.trim() || (isIt ? 'WhatsApp' : 'WhatsApp');
-    const specialNotes = customerDetails.notes?.trim() || (isIt ? 'Nessuna' : 'None');
-    const feeText = isInside
-      ? (isIt ? 'Gratuita (Offerta da Casa Italia)' : 'Complimentary (Free)')
-      : (isIt ? 'Da concordare su WhatsApp' : 'To be agreed via WhatsApp');
-    const closingText = isInside
-      ? (isIt ? 'Grazie! Attendo conferma dell’ordine.' : 'Thank you! Looking forward to your confirmation.')
-      : (isIt ? 'Grazie! Attendo conferma e indicazione delle spese di consegna.' : 'Thank you! Looking forward to your confirmation and delivery fee estimate.');
-
-    const message = isIt
-      ? `🇮🇹 *NUOVO ORDINE DELIVERY — CASA ITALIA PORTO GHALIB*
-
-👤 *Cliente:* ${customerName}
-📍 *Zona di Consegna:* ${areaText}
-📍 *Posizione:* ${specificLoc}
-📱 *Telefono:* ${phone}
-
-📋 *DETTAGLIO ORDINE:*
-${itemsSummary}
-
-💰 *Totale Cibo:* ${formatCurrency(subtotal)}
-🛵 *Spese di Consegna:* ${feeText}
-
-📝 *Note speciali:* ${specialNotes}
-
-${closingText}`
-      : `🇮🇹 *NEW DELIVERY ORDER — CASA ITALIA PORTO GHALIB*
-
-👤 *Customer:* ${customerName}
-📍 *Delivery Area:* ${areaText}
-📍 *Location:* ${specificLoc}
-📱 *Phone:* ${phone}
-
-📋 *ORDER ITEMS:*
-${itemsSummary}
-
-💰 *Food Subtotal:* ${formatCurrency(subtotal)}
-🛵 *Delivery Fee:* ${feeText}
-
-📝 *Special Instructions:* ${specialNotes}
-
-${closingText}`;
-
-    const whatsappUrl = `https://wa.me/201508300656?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+  const missing = {
+    name: !customerDetails.customerName.trim(),
+    phone: customerDetails.phone.replace(/[^0-9]/g, '').length < 7,
+    location: !customerDetails.specificLocation.trim(),
   };
+  const fieldClass = (invalid: boolean) =>
+    `w-full text-xs sm:text-sm p-2.5 bg-white border focus:border-[#ba935a] focus:ring-1 focus:ring-[#ba935a] focus:outline-none ${
+      showErrors && invalid ? 'border-[#8f1d1d]' : 'border-[#ba935a]/30'
+    }`;
+
+  const handlePlaceOrder = async () => {
+    if (cart.length === 0 || status === 'sending') return;
+    if (missing.name || missing.phone || missing.location) {
+      setShowErrors(true);
+      setErrorMessage(t('delivery.fillRequired'));
+      return;
+    }
+    setStatus('sending');
+    setErrorMessage(null);
+    try {
+      const response = await fetch('/api/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          language,
+          customer: {
+            name: customerDetails.customerName.trim(),
+            phone: customerDetails.phone.trim(),
+            area: customerDetails.area,
+            location: customerDetails.specificLocation.trim(),
+            notes: customerDetails.notes?.trim() || '',
+          },
+          items: cart.map((item) => ({ id: item.dish.id, quantity: item.quantity, notes: item.notes?.trim() || '' })),
+        }),
+      });
+      const data = (await response.json().catch(() => ({}))) as { ref?: string; subtotal?: number; message?: string };
+      if (!response.ok || !data.ref) {
+        setStatus('idle');
+        setErrorMessage(data.message || t('delivery.orderFailed'));
+        return;
+      }
+      setPlaced({ ref: data.ref, subtotal: data.subtotal ?? subtotal });
+      setStatus('done');
+      onClearCart();
+    } catch {
+      setStatus('idle');
+      setErrorMessage(t('delivery.orderFailed'));
+    }
+  };
+
+  const handleCloseDrawer = () => {
+    if (status === 'done') {
+      setStatus('idle');
+      setPlaced(null);
+    }
+    onClose();
+  };
+
+  // The confirmation stays until dishes are added again (the cart is emptied by the order)
+  const showConfirmation = status === 'done' && placed !== null && cart.length === 0;
 
   const handleGeneralInquiry = () => {
     const text = isIt
       ? 'Salve Casa Italia! Vorrei informazioni sul servizio di consegna a domicilio a Port Ghalib.'
       : 'Hello Casa Italia! I would like some information regarding your delivery service in Port Ghalib.';
-    window.open(`https://wa.me/201508300656?text=${encodeURIComponent(text)}`, '_blank', 'noopener,noreferrer');
+    const whatsappNumber = SITE_CONFIG.contact.phone.replace(/[^0-9]/g, '');
+    window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(text)}`, '_blank', 'noopener,noreferrer');
   };
 
   if (!shouldRender) return null;
@@ -185,7 +187,7 @@ ${closingText}`;
     >
       {/* Backdrop */}
       <div
-        onClick={onClose}
+        onClick={handleCloseDrawer}
         className={`fixed inset-0 bg-black/60 backdrop-blur-xs cursor-pointer ${
           isClosing ? 'drawer-backdrop-close' : 'drawer-backdrop-open'
         }`}
@@ -208,7 +210,7 @@ ${closingText}`;
           <div className="flex items-center gap-2">
             <button
               type="button"
-              onClick={onClose}
+              onClick={handleCloseDrawer}
               aria-label="Close delivery order tray"
               className="p-1.5 text-[#6e675e] hover:text-[#1a1816] transition-colors cursor-pointer"
             >
@@ -219,7 +221,30 @@ ${closingText}`;
 
         {/* Content Body */}
         <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-6 no-scrollbar [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-          {cart.length === 0 ? (
+          {showConfirmation && placed ? (
+            /* Order placed */
+            <div className="py-12 text-center space-y-5">
+              <div className="w-16 h-16 rounded-full bg-[#1b7e3e]/10 border border-[#1b7e3e]/30 text-[#1b7e3e] mx-auto flex items-center justify-center">
+                <Check className="w-8 h-8" />
+              </div>
+              <div className="space-y-2">
+                <h3 className="font-serif font-bold text-2xl text-[#1a1816]">{t('delivery.orderPlacedTitle')}</h3>
+                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#ba935a]">{t('delivery.orderNumber')}</p>
+                <p className="font-serif font-bold text-3xl text-[#1a1816] tracking-wider">{placed.ref}</p>
+                <p className="text-sm text-[#6e675e] max-w-xs mx-auto">{t('delivery.orderPlacedDesc')}</p>
+                <p className="text-sm font-semibold text-[#1a1816]">
+                  {t('delivery.subtotal')}: {formatCurrency(placed.subtotal)} · {t('delivery.payOnDelivery')}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={handleCloseDrawer}
+                className="px-5 py-2.5 bg-[#ba935a] hover:bg-[#a37f48] text-white text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer shadow-sm"
+              >
+                {t('delivery.backToMenu')}
+              </button>
+            </div>
+          ) : cart.length === 0 ? (
             /* Empty State */
             <div className="py-16 text-center space-y-4">
               <div className="w-16 h-16 rounded-full bg-[#ba935a]/10 border border-[#ba935a]/30 text-[#ba935a] mx-auto flex items-center justify-center">
@@ -393,7 +418,9 @@ ${closingText}`;
                     value={customerDetails.customerName}
                     onChange={(e) => onUpdateCustomerDetails({ customerName: e.target.value })}
                     placeholder={t('delivery.namePlaceholder')}
-                    className="w-full text-xs sm:text-sm p-2.5 bg-white border border-[#ba935a]/30 focus:border-[#ba935a] focus:ring-1 focus:ring-[#ba935a] focus:outline-none"
+                    autoComplete="name"
+                    aria-invalid={showErrors && missing.name}
+                    className={fieldClass(missing.name)}
                   />
                 </div>
 
@@ -457,7 +484,8 @@ ${closingText}`;
                       value={customerDetails.specificLocation}
                       onChange={(e) => onUpdateCustomerDetails({ specificLocation: e.target.value })}
                       placeholder={t('delivery.roomPlaceholder')}
-                      className="w-full text-xs sm:text-sm p-2.5 bg-white border border-[#ba935a]/30 focus:border-[#ba935a] focus:ring-1 focus:ring-[#ba935a] focus:outline-none"
+                      aria-invalid={showErrors && missing.location}
+                      className={fieldClass(missing.location)}
                     />
                   </div>
 
@@ -470,7 +498,9 @@ ${closingText}`;
                       value={customerDetails.phone}
                       onChange={(e) => onUpdateCustomerDetails({ phone: e.target.value })}
                       placeholder={t('delivery.phonePlaceholder')}
-                      className="w-full text-xs sm:text-sm p-2.5 bg-white border border-[#ba935a]/30 focus:border-[#ba935a] focus:ring-1 focus:ring-[#ba935a] focus:outline-none"
+                      autoComplete="tel"
+                      aria-invalid={showErrors && missing.phone}
+                      className={fieldClass(missing.phone)}
                     />
                   </div>
                 </div>
@@ -511,8 +541,8 @@ ${closingText}`;
                     }`}
                   >
                     {customerDetails.area === 'outside'
-                      ? (isIt ? 'Su WhatsApp' : 'Via WhatsApp')
-                      : (isIt ? 'Gratuita' : 'Complimentary')}
+                      ? t('delivery.feeOutside')
+                      : t('delivery.feeComplimentary')}
                   </span>
                 </div>
               </div>
@@ -523,16 +553,25 @@ ${closingText}`;
         {/* Bottom Sticky Action Footer */}
         {cart.length > 0 && (
           <div className="p-4 sm:p-5 bg-white border-t border-[#ba935a]/30 space-y-3 shrink-0 shadow-xl">
+            {errorMessage && (
+              <p role="alert" className="text-xs text-[#8f1d1d] bg-[#8f1d1d]/5 border-l-2 border-[#8f1d1d] px-3 py-2">
+                {errorMessage}
+              </p>
+            )}
             <button
               type="button"
-              onClick={handleSendWhatsAppOrder}
-              className="group relative w-full py-3.5 px-4 sm:px-5 overflow-hidden bg-gradient-to-r from-[#171513] via-[#231f1a] to-[#171513] hover:from-[#231f1a] hover:via-[#2d2822] hover:to-[#231f1a] text-[#faf7f2] border border-[#ba935a] shadow-[0_4px_22px_rgba(26,24,22,0.35)] hover:shadow-[0_6px_28px_rgba(186,147,90,0.38)] flex items-center justify-center transition-all duration-300 transform active:scale-[0.99] cursor-pointer"
+              onClick={handlePlaceOrder}
+              disabled={status === 'sending'}
+              aria-busy={status === 'sending'}
+              className="group relative w-full disabled:opacity-70 disabled:cursor-wait py-3.5 px-4 sm:px-5 overflow-hidden bg-gradient-to-r from-[#171513] via-[#231f1a] to-[#171513] hover:from-[#231f1a] hover:via-[#2d2822] hover:to-[#231f1a] text-[#faf7f2] border border-[#ba935a] shadow-[0_4px_22px_rgba(26,24,22,0.35)] hover:shadow-[0_6px_28px_rgba(186,147,90,0.38)] flex items-center justify-center transition-all duration-300 transform active:scale-[0.99] cursor-pointer"
             >
               {/* Subtle luxury light shimmer on hover */}
               <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full duration-1000 bg-gradient-to-r from-transparent via-[#ba935a]/20 to-transparent transition-transform ease-out pointer-events-none" />
 
               <span className="font-serif text-xs sm:text-sm font-bold tracking-wider uppercase text-[#faf7f2] truncate">
-                {t('delivery.orderOnWhatsApp')}
+                {status === 'sending'
+                  ? t('delivery.sendingOrder')
+                  : `${t('delivery.placeOrder')} · ${formatCurrency(subtotal)}`}
               </span>
             </button>
 
