@@ -146,9 +146,11 @@ interface MenuRow {
 }
 
 export function isOrderingOpen(): boolean {
-  const now = restaurantNow().minutes;
-  const hours = orderHours();
-  return now >= toMinutes(hours.open) && now <= toMinutes(hours.lastOrder);
+  // 12-11 order limit disabled for now
+  return true;
+  // const now = restaurantNow().minutes;
+  // const hours = orderHours();
+  // return now >= toMinutes(hours.open) && now <= toMinutes(hours.lastOrder);
 }
 
 export async function createOrder(input: OrderInput, currency: string) {
