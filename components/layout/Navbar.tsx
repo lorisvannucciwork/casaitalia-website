@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Utensils, Menu, X, Bike, CalendarDays } from 'lucide-react';
+import { Utensils, Menu, X, Bike, CalendarDays, Pizza } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import { SITE_CONFIG } from '@/config/site';
 import { LanguageSelector } from './LanguageSelector';
@@ -70,6 +70,15 @@ export const Navbar: React.FC = () => {
             >
               <Bike className="w-4 h-4" />
               <span>{t('nav.delivery')}</span>
+            </Link>
+            <Link
+              href="/create-your-pizza"
+              className={`transition-colors py-1 flex items-center gap-1.5 ${
+                pathname === '/create-your-pizza' ? 'text-[#ba935a]' : 'hover:text-[#ba935a]'
+              }`}
+            >
+              <Pizza className="w-4 h-4" />
+              <span>{t('nav.pizza')}</span>
             </Link>
             <Link
               href="/reservations"
@@ -141,6 +150,16 @@ export const Navbar: React.FC = () => {
             >
               <Bike className="w-4 h-4" />
               <span>{t('nav.delivery')}</span>
+            </Link>
+            <Link
+              href="/create-your-pizza"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className={`flex items-center gap-2 text-sm font-bold py-2 border-b border-[#ba935a]/10 transition-colors ${
+                pathname === '/create-your-pizza' ? 'text-[#ba935a]' : 'text-[#1a1816] hover:text-[#ba935a]'
+              }`}
+            >
+              <Pizza className="w-4 h-4" />
+              <span>{t('nav.pizza')}</span>
             </Link>
             <Link
               href="/reservations"

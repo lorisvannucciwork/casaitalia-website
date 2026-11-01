@@ -8,6 +8,7 @@
  */
 import db from './db';
 import { sanitizeText } from './security';
+import { CUSTOM_PIZZA_ID, PIZZA_BASE, TOPPINGS, customPizzaPrice } from '@/config/pizzaBuilder';
 
 export const RESTAURANT_TZ = 'Africa/Cairo';
 
@@ -105,8 +106,35 @@ function isValidPhone(phone: string): boolean {
 
 export interface OrderInput {
   customer?: { name?: unknown; phone?: unknown; area?: unknown; location?: unknown; notes?: unknown };
-  items?: { id?: unknown; quantity?: unknown; notes?: unknown }[];
+  items?: { id?: unknown; quantity?: unknown; notes?: unknown; toppings?: unknown }[];
   language?: unknown;
+}
+
+interface OrderItem {
+  item_id: string;
+  name: string;
+  italian_name: string | null;
+  price: number;
+  quantity: number;
+  notes: string | null;
+}
+
+/** A "create your own pizza" line: toppings checked against the builder's list, price computed here. */
+function customPizzaLine(toppings: unknown, quantity: number, notes: string): { key: string; item: OrderItem } {
+  const wanted = new Set(Array.isArray(toppings) ? toppings.filter((t): t is string => typeof t === 'string') : []);
+  const chosen = TOPPINGS.filter((t) => wanted.has(t.id));
+  const list = chosen.length ? chosen.map((t) => t.name.en).join(', ') : 'tomato only';
+  return {
+    key: `${CUSTOM_PIZZA_ID}:${chosen.map((t) => t.id).join('+')}`,
+    item: {
+      item_id: CUSTOM_PIZZA_ID,
+      name: 'Create Your Own Pizza',
+      italian_name: 'PIZZA A MODO TUO',
+      price: customPizzaPrice(chosen.map((t) => t.id)),
+      quantity,
+      notes: [`${PIZZA_BASE.name.en} + ${list}`, notes].filter(Boolean).join(' · '),
+    },
+  };
 }
 
 interface MenuRow {
@@ -138,33 +166,46 @@ export async function createOrder(input: OrderInput, currency: string) {
   if (!isValidPhone(phone)) throw new OnlineError('phone', 'Please enter a valid phone number.');
   if (!location) throw new OnlineError('location', 'Please enter the delivery location.');
 
-  // One line per dish; the quantities of a dish sent twice are added up
+  // One line per dish; the quantities of a dish sent twice are added up. Custom pizzas are one line
+  // per combination of toppings.
   const wanted = new Map<string, { quantity: number; notes: string }>();
+  const customPizzas = new Map<string, OrderItem>();
   for (const item of input.items || []) {
     const id = typeof item.id === 'string' ? item.id.slice(0, 120) : '';
     const quantity = Math.floor(Number(item.quantity));
     if (!id || !Number.isFinite(quantity) || quantity < 1) continue;
+    if (id === CUSTOM_PIZZA_ID) {
+      const { key, item: pizza } = customPizzaLine(item.toppings, quantity, clean(item.notes, 200));
+      const existing = customPizzas.get(key);
+      if (existing) existing.quantity = Math.min(existing.quantity + quantity, MAX_QUANTITY);
+      else customPizzas.set(key, { ...pizza, quantity: Math.min(quantity, MAX_QUANTITY) });
+      continue;
+    }
     const line = wanted.get(id) || { quantity: 0, notes: '' };
     line.quantity = Math.min(line.quantity + quantity, MAX_QUANTITY);
     line.notes = line.notes || clean(item.notes, 200);
     wanted.set(id, line);
   }
-  if (wanted.size === 0) throw new OnlineError('empty', 'Your order is empty.');
-  if (wanted.size > MAX_ORDER_LINES) throw new OnlineError('too_big', 'Too many different dishes in one order.');
+  if (wanted.size + customPizzas.size === 0) throw new OnlineError('empty', 'Your order is empty.');
+  if (wanted.size + customPizzas.size > MAX_ORDER_LINES) {
+    throw new OnlineError('too_big', 'Too many different dishes in one order.');
+  }
 
-  // Prices always come from the menu, never from the browser
+  // Prices always come from the menu (or the pizza builder's list), never from the browser
   const ids = Array.from(wanted.keys());
-  const rows = await db.query<MenuRow>(
-    `SELECT id, name, italian_name, price, active FROM menu_items WHERE id IN (${ids.map(() => '?').join(',')})`,
-    ids
-  );
+  const rows = ids.length
+    ? await db.query<MenuRow>(
+        `SELECT id, name, italian_name, price, active FROM menu_items WHERE id IN (${ids.map(() => '?').join(',')})`,
+        ids
+      )
+    : [];
   const menu = new Map(rows.map((r) => [r.id, r]));
   const unavailable = ids.filter((id) => !menu.get(id) || !menu.get(id)!.active);
   if (unavailable.length) {
     throw new OnlineError('unavailable', 'Some dishes are no longer available: please refresh the menu.');
   }
 
-  const items = ids.map((id) => {
+  const items: OrderItem[] = ids.map((id) => {
     const dish = menu.get(id)!;
     const line = wanted.get(id)!;
     return {
@@ -176,6 +217,7 @@ export async function createOrder(input: OrderInput, currency: string) {
       notes: line.notes || null,
     };
   });
+  items.push(...customPizzas.values());
   const subtotal = Math.round(items.reduce((sum, i) => sum + i.price * i.quantity, 0) * 100) / 100;
 
   const order = {

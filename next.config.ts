@@ -19,7 +19,8 @@ const securityHeaders = [
     key: 'Content-Security-Policy',
     value: [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' https://cdn.casaitaliarestaurants.com https://static.cloudflareinsights.com https://*.cloudflareinsights.com",
+      // 'unsafe-eval' only in development: the webpack dev server (`next dev --webpack`) runs modules through eval()
+      `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ''} https://cdn.casaitaliarestaurants.com https://static.cloudflareinsights.com https://*.cloudflareinsights.com`,
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com data:",
       "img-src 'self' data: blob: https://cdn.casaitaliarestaurants.com https://*.r2.cloudflarestorage.com https://*.r2.dev https://lh3.googleusercontent.com https://images.unsplash.com",

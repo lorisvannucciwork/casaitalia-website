@@ -102,6 +102,21 @@ export default function sitemap(): MetadataRoute.Sitemap {
       ],
     },
 
+    {
+      url: `${baseUrl}/create-your-pizza`,
+      lastModified: lastContentUpdate,
+      changeFrequency: 'monthly',
+      priority: 0.8,
+      alternates: {
+        languages: {
+          'it-IT': `${baseUrl}/create-your-pizza`,
+          'en-US': `${baseUrl}/create-your-pizza`,
+          'x-default': `${baseUrl}/create-your-pizza`,
+        },
+      },
+      images: [`${baseUrl}/pizza-builder/base-baked.webp`],
+    },
+
     ...deliveryCategoryRoutes,
 
     {
