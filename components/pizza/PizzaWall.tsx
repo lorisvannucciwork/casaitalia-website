@@ -166,6 +166,37 @@ function Stars({ pizza, onRate, labels }: { pizza: WallPizza; onRate: (stars: nu
   );
 }
 
+/** Our wood-fired oven, silent and looping behind the hero. Stays on its still image for reduced motion. */
+function OvenVideo() {
+  const ref = useRef<HTMLVideoElement>(null);
+  useEffect(() => {
+    const video = ref.current;
+    if (!video) return;
+    video.muted = true; // React does not write this attribute, and browsers only autoplay muted videos
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    video.play().catch(() => {
+      // autoplay refused (battery saver…): the poster stays
+    });
+  }, []);
+  return (
+    <video
+      ref={ref}
+      className={styles.ovenVideo}
+      poster="/videos/oven-poster.webp"
+      muted
+      loop
+      playsInline
+      preload="auto"
+      disablePictureInPicture
+      disableRemotePlayback
+      aria-hidden="true"
+    >
+      <source src="/videos/oven-720.mp4" type="video/mp4" media="(max-width: 640px)" />
+      <source src="/videos/oven-1080.mp4" type="video/mp4" />
+    </video>
+  );
+}
+
 /** The topping filter, in the same dropdown style as the menu's categories and the language selector. */
 function ToppingSelect({
   value,
@@ -353,9 +384,8 @@ export default function PizzaWall({ initialPizzas, initialSort }: { initialPizza
       <main className={styles.main}>
         {/* The oven */}
         <section className={styles.oven}>
-          <div className={styles.arch} aria-hidden="true">
-            <div className={styles.fire} />
-          </div>
+          <OvenVideo />
+          <div className={styles.ovenScrim} aria-hidden="true" />
           <div className={styles.sparks} aria-hidden="true">
             {Array.from({ length: 16 }, (_, i) => (
               <i key={i} style={{ '--x': `${(i * 37) % 100}%`, '--d': `${(i * 0.73) % 6}s`, '--t': `${5 + (i % 5)}s` } as React.CSSProperties} />
@@ -405,7 +435,7 @@ export default function PizzaWall({ initialPizzas, initialSort }: { initialPizza
           {pizzas.length === 0 ? (
             <div className={styles.empty}>
               <div className={styles.emptyBox}>
-                <img src="/pizza-builder/box-open.webp" alt="" />
+                <img src="/pizza-builder/casa-box-open.webp" alt="" />
               </div>
               <h2>{t.emptyTitle}</h2>
               <p>{t.emptyText}</p>
@@ -452,7 +482,7 @@ export default function PizzaWall({ initialPizzas, initialSort }: { initialPizza
                 {shown.slice(0, visible).map((pizza, index) => (
                   <article key={pizza.id} className={styles.card} style={{ '--tilt': `${[-1.6, 1.1, -0.7, 1.7, -1.1, 0.8][index % 6]}deg` } as React.CSSProperties}>
                     <button type="button" className={styles.box} onClick={() => setSpotlight(pizza)} aria-label={pizza.name}>
-                      <img src="/pizza-builder/box-open.webp" alt="" className={styles.boxImage} loading="lazy" />
+                      <img src="/pizza-builder/casa-box-open.webp" alt="" className={styles.boxImage} loading="lazy" />
                       <span className={styles.boxPizza}>
                         <PizzaArtwork toppings={pizza.toppings} />
                       </span>

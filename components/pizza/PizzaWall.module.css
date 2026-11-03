@@ -67,44 +67,20 @@
   text-align: center;
 }
 
-/* The mouth of the oven: a brick arch behind everything, with the fire breathing inside */
-.arch {
+/* Our real oven, filmed in the restaurant: the fire's glow sits behind the title */
+.ovenVideo {
   position: absolute;
-  left: 50%;
-  bottom: -14%;
-  width: min(1180px, 130vw);
-  aspect-ratio: 2 / 1.08;
-  transform: translateX(-50%);
-  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
-  border: clamp(14px, 2.6vw, 34px) solid #2a1c15;
-  border-bottom: 0;
-  background: #0c0806;
-  box-shadow: 0 0 0 2px rgba(186, 147, 90, 0.12), inset 0 0 90px rgba(0, 0, 0, 0.9);
-  overflow: hidden;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 57%;
 }
-.fire {
+.ovenScrim {
   position: absolute;
-  inset: 22% 8% -12%;
+  inset: 0;
   background:
-    radial-gradient(ellipse 50% 60% at 50% 100%, rgba(255, 196, 110, 0.75) 0%, rgba(233, 110, 44, 0.5) 40%, rgba(120, 30, 10, 0) 72%),
-    radial-gradient(ellipse 26% 40% at 28% 100%, rgba(255, 150, 70, 0.5) 0%, rgba(255, 150, 70, 0) 75%),
-    radial-gradient(ellipse 26% 42% at 74% 100%, rgba(255, 150, 70, 0.5) 0%, rgba(255, 150, 70, 0) 75%);
-  animation: breathe 3.6s ease-in-out infinite alternate;
-  transform-origin: 50% 100%;
-}
-@keyframes breathe {
-  0% {
-    opacity: 0.72;
-    transform: scale(0.97, 0.94);
-  }
-  45% {
-    opacity: 0.95;
-    transform: scale(1.02, 1.03);
-  }
-  100% {
-    opacity: 0.8;
-    transform: scale(0.99, 1.06);
-  }
+    linear-gradient(180deg, rgba(15, 13, 11, 0.78) 0%, rgba(15, 13, 11, 0.62) 34%, rgba(15, 13, 11, 0.36) 60%, rgba(15, 13, 11, 0.9) 100%);
 }
 
 .sparks {
@@ -621,7 +597,6 @@
 
 /* Calm for those who asked for it */
 @media (prefers-reduced-motion: reduce) {
-  .fire,
   .sparks i,
   .podiumPizza,
   .spinning,

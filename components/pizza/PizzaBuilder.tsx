@@ -9,7 +9,7 @@ import { Navbar } from '@/components/layout';
 import { CUSTOM_PIZZA_ID, PIZZA_BASE, TOPPINGS, customPizzaPrice, type ToppingId } from '@/config/pizzaBuilder';
 import { PIZZA_CREATOR_MAX, PIZZA_NAME_MAX, PIZZA_NAME_MIN, type WallPizza } from '@/lib/pizzaWallShared';
 import { placeTopping, trayHeap, type PiecePlacement } from './pizzaLayout';
-import { Glove, LidPrint, OvenTimer, type GlovePose } from './PizzaArt';
+import { Glove, OvenTimer, type GlovePose } from './PizzaArt';
 import { PizzaArtwork } from './PizzaArtwork';
 import styles from './PizzaBuilder.module.css';
 
@@ -70,8 +70,6 @@ const COPY = {
     arriving: 'Arriving',
     onItsWay: 'On its way!',
     order: 'Order',
-    startLabel: 'START YOUR ORDER',
-    ovenLabel: 'HOT FROM THE WOOD-FIRED OVEN',
     add: 'Add',
     remove: 'Remove',
     dineTitle: 'Already at Casa Italia?',
@@ -155,8 +153,6 @@ const COPY = {
     arriving: 'In arrivo',
     onItsWay: 'Sta arrivando!',
     order: 'Ordine',
-    startLabel: 'INIZIA IL TUO ORDINE',
-    ovenLabel: 'CALDA DAL FORNO A LEGNA',
     add: 'Aggiungi',
     remove: 'Togli',
     dineTitle: 'Sei già da Casa Italia?',
@@ -553,7 +549,7 @@ export default function PizzaBuilder({
           {/* The box */}
           <div className={styles.boxWrap}>
             <div className={`${styles.box} ${lidOn ? styles.boxClosed : styles.boxOpen}`}>
-              <img src="/pizza-builder/box-open.webp" alt="" className={styles.boxBase} draggable={false} />
+              <img src="/pizza-builder/casa-box-open.webp" alt="" className={styles.boxBase} draggable={false} />
               <div ref={pizzaRef} className={`${styles.pizza} ${baked ? styles.pizzaBaked : ''}`}>
                 <img src="/pizza-builder/base-raw.webp" alt="" className={styles.base} draggable={false} />
                 <img src="/pizza-builder/base-baked.webp" alt="" className={`${styles.base} ${styles.baseBaked}`} draggable={false} />
@@ -565,10 +561,7 @@ export default function PizzaBuilder({
                 {dragging && <div className={styles.dropRing} aria-hidden="true" />}
               </div>
               <div className={`${styles.lid} ${lidOn ? styles.lidOn : styles.lidOff} ${stage === 'closing' ? styles.lidDropping : ''}`}>
-                <img src="/pizza-builder/box-lid.webp" alt="" className={styles.lidBoard} draggable={false} />
-                <div className={styles.lidPrint}>
-                  <LidPrint startLabel={t.startLabel} ovenLabel={t.ovenLabel} />
-                </div>
+                <img src="/pizza-builder/casa-box-lid.webp" alt="" className={styles.lidBoard} draggable={false} />
                 {stage === 'closed' && (
                   <button type="button" className={styles.lidStart} onClick={openBox} aria-label={t.top.closed} />
                 )}

@@ -280,24 +280,15 @@
   opacity: 0;
   pointer-events: none;
 }
-.lidPrint {
-  position: absolute;
-  inset: 0;
-  mix-blend-mode: multiply;
-}
 .lidStart {
   position: absolute;
-  left: 30%;
-  top: 65%;
-  width: 40%;
-  height: 10%;
+  inset: 0;
   border: 0;
   background: transparent;
-  border-radius: 10px;
 }
 .lidStart:hover,
 .lidStart:focus-visible {
-  background: rgba(186, 147, 90, 0.12);
+  background: rgba(255, 245, 225, 0.08);
   outline: none;
 }
 .sticker {

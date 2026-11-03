@@ -1,10 +1,6 @@
 import React from 'react';
 
-/* Drawn parts of the pizza builder: the gloved hand (cursor), the print of the box lid in the
-   Casa Italia colours and the kitchen timer. */
-
-const GOLD = '#ba935a';
-const GOLD_DEEP = '#8c6c39';
+/* Drawn parts of the pizza builder: the gloved hand (cursor) and the kitchen timer. */
 
 // ---------------------------------------------------------------------------------------------
 // Black nitrile glove: three poses, drawn from rounded "capsules" with a glossy light from the
@@ -88,124 +84,6 @@ export function Glove({ pose }: { pose: GlovePose }) {
           </>
         )}
       </g>
-    </svg>
-  );
-}
-
-// ---------------------------------------------------------------------------------------------
-// Box lid print: Casa Italia logo and gold line drawings (basil, tomato, olive branch, a slice)
-// ---------------------------------------------------------------------------------------------
-function BasilSprig({ x, y, scale = 1, rotate = 0 }: { x: number; y: number; scale?: number; rotate?: number }) {
-  const leaf = 'M0 0 C 18 -22, 48 -24, 66 -6 C 46 8, 18 10, 0 0 Z';
-  return (
-    <g transform={`translate(${x} ${y}) rotate(${rotate}) scale(${scale})`} stroke={GOLD} strokeWidth="3.2" fill="none" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M0 0 C 30 -40, 50 -90, 52 -150" />
-      {[
-        [8, -18, -38],
-        [22, -50, 28],
-        [34, -82, -48],
-        [44, -112, 22],
-        [50, -140, -70],
-      ].map(([lx, ly, r], i) => (
-        <g key={i} transform={`translate(${lx} ${ly}) rotate(${r})`}>
-          <path d={leaf} />
-          <path d="M6 -1 C 24 -6, 42 -7, 58 -5" strokeWidth="1.8" />
-        </g>
-      ))}
-    </g>
-  );
-}
-
-function Tomato({ x, y, r = 46 }: { x: number; y: number; r?: number }) {
-  return (
-    <g transform={`translate(${x} ${y})`} stroke={GOLD} strokeWidth="3.2" fill="none" strokeLinecap="round" strokeLinejoin="round">
-      <path d={`M${-r} 4 C ${-r} ${-r * 0.8}, ${r} ${-r * 0.8}, ${r} 4 C ${r} ${r * 1.05}, ${-r} ${r * 1.05}, ${-r} 4 Z`} />
-      <path d={`M${-r * 0.55} ${-r * 0.1} C ${-r * 0.4} ${r * 0.5}, ${-r * 0.1} ${r * 0.75}, ${r * 0.15} ${r * 0.8}`} strokeWidth="2" opacity="0.7" />
-      <path d="M0 -26 L -16 -40 M0 -26 L 16 -42 M0 -26 L -22 -24 M0 -26 L 22 -22 M0 -26 L 2 -48" strokeWidth="3" />
-    </g>
-  );
-}
-
-function OliveBranch({ x, y, rotate = 0, scale = 1 }: { x: number; y: number; rotate?: number; scale?: number }) {
-  return (
-    <g transform={`translate(${x} ${y}) rotate(${rotate}) scale(${scale})`} stroke={GOLD} strokeWidth="3" fill="none" strokeLinecap="round">
-      <path d="M0 0 C 40 -10, 90 -10, 140 -2" />
-      {[20, 48, 76, 104].map((lx, i) => (
-        <g key={i}>
-          <path d={`M${lx} -4 C ${lx + 8} -22, ${lx + 26} -28, ${lx + 34} -26 C ${lx + 30} -14, ${lx + 16} -6, ${lx} -4 Z`} />
-          <path d={`M${lx + 6} -2 C ${lx + 14} 14, ${lx + 30} 20, ${lx + 38} 16 C ${lx + 32} 6, ${lx + 18} 0, ${lx + 6} -2 Z`} />
-        </g>
-      ))}
-      <ellipse cx="148" cy="8" rx="9" ry="12" transform="rotate(-20 148 8)" />
-      <ellipse cx="128" cy="16" rx="8" ry="11" transform="rotate(10 128 16)" />
-    </g>
-  );
-}
-
-function Slice({ x, y, rotate = 0 }: { x: number; y: number; rotate?: number }) {
-  return (
-    <g transform={`translate(${x} ${y}) rotate(${rotate})`} stroke={GOLD} strokeWidth="3.2" fill="none" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M0 0 L 130 -40 C 136 -22, 136 -4, 130 14 Z" />
-      <path d="M118 -32 C 124 -18, 124 0, 118 12" strokeWidth="2.2" />
-      <circle cx="52" cy="-6" r="10" />
-      <circle cx="86" cy="-18" r="9" />
-      <circle cx="94" cy="4" r="7" />
-      <path d="M30 2 C 32 14, 28 22, 30 30 M70 8 C 72 20, 68 26, 70 34" strokeWidth="2.4" />
-    </g>
-  );
-}
-
-function Sparkles({ points }: { points: [number, number][] }) {
-  return (
-    <g fill={GOLD}>
-      {points.map(([px, py], i) => (
-        <circle key={i} cx={px} cy={py} r={i % 3 === 0 ? 4 : 2.6} opacity={0.85} />
-      ))}
-    </g>
-  );
-}
-
-export function LidPrint({ startLabel, ovenLabel }: { startLabel: string; ovenLabel: string }) {
-  return (
-    <svg viewBox="0 0 1000 1000" width="100%" height="100%" aria-hidden="true">
-      {/* thin gold frame */}
-      <rect x="64" y="64" width="872" height="872" fill="none" stroke={GOLD} strokeWidth="2" opacity="0.55" />
-      <rect x="78" y="78" width="844" height="844" fill="none" stroke={GOLD} strokeWidth="1" opacity="0.4" />
-      {/* dough being tossed */}
-      <g stroke={GOLD} strokeWidth="3.2" fill="none" strokeLinecap="round" opacity="0.95">
-        <ellipse cx="500" cy="188" rx="112" ry="34" />
-        <ellipse cx="500" cy="186" rx="82" ry="20" strokeWidth="2" />
-        <path d="M376 160 C 360 150, 352 136, 356 120 M628 160 C 644 150, 652 136, 648 120 M420 128 C 426 112, 440 104, 456 102" strokeWidth="2.2" />
-      </g>
-      <Tomato x={232} y={260} />
-      <BasilSprig x={706} y={392} rotate={18} scale={1.05} />
-      <BasilSprig x={196} y={868} rotate={-30} scale={0.95} />
-      <OliveBranch x={610} y={846} rotate={-12} scale={1} />
-      <Slice x={716} y={704} rotate={-38} />
-      <Sparkles points={[[300, 150], [330, 182], [690, 160], [720, 214], [150, 420], [176, 470], [860, 520], [828, 600], [380, 880], [430, 846], [880, 300], [128, 620]]} />
-      {/* logo + PIZZA */}
-      <image href="/logo/logo-01.svg" x="270" y="330" width="460" height="199" />
-      <text x="500" y="606" textAnchor="middle" fill={GOLD_DEEP} style={{ fontFamily: 'var(--font-cormorant), Georgia, serif', fontWeight: 600, fontSize: 86, letterSpacing: 26 }}>
-        PIZZA
-      </text>
-      <path d="M402 632 L 598 632" stroke={GOLD} strokeWidth="2" />
-      {/* stamp */}
-      <rect x="312" y="666" width="376" height="74" rx="12" fill="none" stroke={GOLD_DEEP} strokeWidth="4" />
-      <text
-        x="500"
-        y="716"
-        textAnchor="middle"
-        fill={GOLD_DEEP}
-        // long labels (Italian) are squeezed to fit the stamp
-        {...(startLabel.length > 16 ? { textLength: 340, lengthAdjust: 'spacingAndGlyphs' } : {})}
-        style={{ fontFamily: 'var(--font-source-serif), Georgia, serif', fontWeight: 700, fontSize: 34, letterSpacing: startLabel.length > 16 ? 1 : 4 }}
-      >
-        {startLabel}
-      </text>
-      <text x="500" y="790" textAnchor="middle" fill={GOLD} style={{ fontFamily: 'var(--font-source-serif), Georgia, serif', fontWeight: 600, fontSize: 20, letterSpacing: 6 }}>
-        {ovenLabel}
-      </text>
-      <path d="M420 806 C 470 816, 530 816, 580 806" stroke={GOLD} strokeWidth="2" fill="none" />
     </svg>
   );
 }
