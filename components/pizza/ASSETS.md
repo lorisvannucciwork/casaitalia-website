@@ -7,7 +7,7 @@
 | `toppings/basil-01.webp` | Pixabay photo 74213 (Pixabay Content License: free for commercial use, no attribution required), cut out locally |
 | `toppings/olive-*`, `toppings/onion-*` | Drawn in code (numpy/Pillow) |
 | `counter.jpg`, `tray.webp`, `cloth.webp` | Drawn in code (numpy/Pillow) |
-| `casa-box-lid.webp`, `casa-box-open.webp` | Photos of the restaurant's real pizza box, straightened and evened out |
+| `casa-box-lid.webp`, `casa-box-lid-inside.webp`, `casa-box-open.webp`, `casa-box-side.webp` | Photos of the restaurant's real pizza box, straightened and evened out |
 
 The gloved hand and the kitchen timer are SVG in `PizzaArt.tsx`.
 The page's flow follows a reference video; its artwork, brand and wording were not copied.

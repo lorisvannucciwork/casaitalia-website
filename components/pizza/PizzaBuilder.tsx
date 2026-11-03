@@ -22,9 +22,9 @@ import styles from './PizzaBuilder.module.css';
 
 type Stage = 'closed' | 'opening' | 'build' | 'details' | 'baking' | 'closing' | 'done';
 
-const OPEN_MS = 950;
+const OPEN_MS = 1200; // same as the lidOpen animation
 const BAKE_MS = 4000;
-const CLOSE_MS = 950;
+const CLOSE_MS = 1150; // same as the lidClose animation
 
 const COPY = {
   en: {
@@ -547,8 +547,8 @@ export default function PizzaBuilder({
           </section>
 
           {/* The box */}
-          <div className={styles.boxWrap}>
-            <div className={`${styles.box} ${lidOn ? styles.boxClosed : styles.boxOpen}`}>
+          <div className={`${styles.boxWrap} ${lidOn ? '' : styles.boxWrapOpen}`}>
+            <div className={`${styles.box} ${stage === 'closing' ? styles.boxThud : ''}`}>
               <img src="/pizza-builder/casa-box-open.webp" alt="" className={styles.boxBase} draggable={false} />
               <div ref={pizzaRef} className={`${styles.pizza} ${baked ? styles.pizzaBaked : ''}`}>
                 <img src="/pizza-builder/base-raw.webp" alt="" className={styles.base} draggable={false} />
@@ -560,17 +560,27 @@ export default function PizzaBuilder({
                 )}
                 {dragging && <div className={styles.dropRing} aria-hidden="true" />}
               </div>
-              <div className={`${styles.lid} ${lidOn ? styles.lidOn : styles.lidOff} ${stage === 'closing' ? styles.lidDropping : ''}`}>
-                <img src="/pizza-builder/casa-box-lid.webp" alt="" className={styles.lidBoard} draggable={false} />
-                {stage === 'closed' && (
-                  <button type="button" className={styles.lidStart} onClick={openBox} aria-label={t.top.closed} />
-                )}
-                {stage === 'done' && order && (
-                  <div className={styles.sticker}>
-                    <span>{t.order} {order.ref}</span>
-                    <strong>{t.onItsWay}</strong>
-                  </div>
-                )}
+              <div className={styles.boxShade} aria-hidden="true" />
+              {/* The lid: hinged on the back of the box, it has an outside, an inside and folded edges */}
+              <div
+                className={`${styles.lid} ${lidOn ? styles.lidOn : styles.lidOff} ${stage === 'opening' ? styles.lidOpening : ''} ${stage === 'closing' ? styles.lidDropping : ''}`}
+              >
+                <div className={styles.lidInside} aria-hidden="true" />
+                <div className={styles.lidEdgeFront} aria-hidden="true" />
+                <div className={styles.lidEdgeLeft} aria-hidden="true" />
+                <div className={styles.lidEdgeRight} aria-hidden="true" />
+                <div className={styles.lidFront}>
+                  <img src="/pizza-builder/casa-box-lid.webp" alt="" className={styles.lidBoard} draggable={false} />
+                  {stage === 'closed' && (
+                    <button type="button" className={styles.lidStart} onClick={openBox} aria-label={t.top.closed} />
+                  )}
+                  {stage === 'done' && order && (
+                    <div className={styles.sticker}>
+                      <span>{t.order} {order.ref}</span>
+                      <strong>{t.onItsWay}</strong>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
             <div className={styles.boxBar}>
