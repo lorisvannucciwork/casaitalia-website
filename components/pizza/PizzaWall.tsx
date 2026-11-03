@@ -3,6 +3,7 @@
 
 import React, { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
+import { Check, ChevronDown, UtensilsCrossed } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import { Footer, Navbar } from '@/components/layout';
 import { TOPPINGS, type ToppingId } from '@/config/pizzaBuilder';
@@ -26,15 +27,10 @@ const VOTER_KEY = 'casa-pizza-voter';
 
 const COPY = {
   en: {
-    kicker: 'After the last order, the oven stays lit for these',
     title: 'La Bacheca',
     titleSmall: 'dei Pizzaioli',
-    lead: 'Every pizza here was invented by a guest of Casa Italia. Rate the ones you would eat, order the one you cannot stop thinking about.',
     create: 'Invent yours',
     surprise: 'Surprise me',
-    pizzas: 'pizzas invented',
-    ratings: 'ratings',
-    orders: 'orders',
     podium: 'The podium',
     top: 'Top rated',
     newest: 'Newest',
@@ -57,15 +53,10 @@ const COPY = {
     rateError: 'Your rating could not be saved, please try again.',
   },
   it: {
-    kicker: "Dopo l'ultimo ordine, il forno resta acceso per queste",
     title: 'La Bacheca',
     titleSmall: 'dei Pizzaioli',
-    lead: "Ogni pizza qui è stata inventata da un ospite di Casa Italia. Vota quelle che mangeresti, ordina quella a cui non smetti di pensare.",
     create: 'Inventa la tua',
     surprise: 'Sorprendimi',
-    pizzas: 'pizze inventate',
-    ratings: 'voti',
-    orders: 'ordini',
     podium: 'Il podio',
     top: 'Più votate',
     newest: 'Le ultime',
@@ -175,6 +166,99 @@ function Stars({ pizza, onRate, labels }: { pizza: WallPizza; onRate: (stars: nu
   );
 }
 
+/** The topping filter, in the same dropdown style as the menu's categories and the language selector. */
+function ToppingSelect({
+  value,
+  language,
+  allLabel,
+  onChange,
+}: {
+  value: ToppingId | null;
+  language: 'en' | 'it';
+  allLabel: string;
+  onChange: (value: ToppingId | null) => void;
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const onPointerDown = (event: PointerEvent) => {
+      if (ref.current && !ref.current.contains(event.target as Node)) setIsOpen(false);
+    };
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setIsOpen(false);
+    };
+    document.addEventListener('pointerdown', onPointerDown);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('pointerdown', onPointerDown);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [isOpen]);
+
+  const current = TOPPINGS.find((topping) => topping.id === value);
+  const options = [null, ...TOPPINGS];
+
+  return (
+    <div ref={ref} className="relative z-40 w-full sm:w-auto">
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        aria-haspopup="listbox"
+        aria-expanded={isOpen}
+        className="w-full sm:w-60 flex items-center justify-between gap-3 px-4 py-2.5 bg-white text-[#1a1816] border border-[#ba935a]/40 shadow-sm hover:border-[#ba935a] transition-colors text-sm cursor-pointer"
+      >
+        <span className="flex items-center gap-2.5 font-bold tracking-wide">
+          {current ? (
+            <img src={pieceSrc(current, 0)} alt="" className="w-5 h-5 object-contain" />
+          ) : (
+            <UtensilsCrossed className="w-4 h-4 text-[#ba935a]" />
+          )}
+          {current ? current.name[language] : allLabel}
+        </span>
+        <ChevronDown className={`w-4 h-4 text-[#ba935a] transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
+      </button>
+
+      {isOpen && (
+        <div
+          role="listbox"
+          className="absolute right-0 w-full sm:w-60 mt-2 py-1 bg-[#faf7f2] border border-[#ba935a]/40 shadow-xl overflow-hidden animate-fade-in z-50"
+        >
+          {options.map((topping) => {
+            const selected = (topping?.id ?? null) === value;
+            return (
+              <button
+                key={topping?.id ?? 'all'}
+                type="button"
+                role="option"
+                aria-selected={selected}
+                onClick={() => {
+                  onChange(topping?.id ?? null);
+                  setIsOpen(false);
+                }}
+                className={`w-full flex items-center justify-between px-3 py-2.5 text-xs font-bold transition-colors cursor-pointer ${
+                  selected ? 'bg-[#ba935a]/15 text-[#1a1816]' : 'text-[#6e675e] hover:bg-[#ba935a]/10 hover:text-[#1a1816]'
+                }`}
+              >
+                <span className="flex items-center gap-2.5">
+                  {topping ? (
+                    <img src={pieceSrc(topping, 0)} alt="" className="w-5 h-5 object-contain" />
+                  ) : (
+                    <UtensilsCrossed className="w-5 h-4 text-[#ba935a]" />
+                  )}
+                  {topping ? topping.name[language] : allLabel}
+                </span>
+                {selected && <Check className="w-3.5 h-3.5 text-[#ba935a]" />}
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function toppingList(pizza: WallPizza, language: 'en' | 'it', fallback: string) {
   const names = TOPPINGS.filter((t) => pizza.toppings.includes(t.id)).map((t) => t.name[language]);
   return names.length ? names.join(' · ') : fallback;
@@ -214,13 +298,6 @@ export default function PizzaWall({ initialPizzas, initialSort }: { initialPizza
   const byId = useMemo(() => new Map(pizzas.map((pizza) => [pizza.id, pizza])), [pizzas]);
   const podium = podiumOrder.flatMap((id) => byId.get(id) ?? []);
   const shown = order.flatMap((id) => byId.get(id) ?? []).filter((pizza) => !filter || pizza.toppings.includes(filter));
-  const totals = useMemo(
-    () => ({
-      ratings: pizzas.reduce((sum, p) => sum + p.ratingCount, 0),
-      orders: pizzas.reduce((sum, p) => sum + p.orderCount, 0),
-    }),
-    [pizzas]
-  );
 
   const rate = async (pizza: WallPizza, stars: number) => {
     const previous = readVotes()[pizza.id];
@@ -285,12 +362,10 @@ export default function PizzaWall({ initialPizzas, initialSort }: { initialPizza
             ))}
           </div>
           <div className={styles.heroText}>
-            <p className={styles.kicker}>{t.kicker}</p>
             <h1 className={styles.title}>
               {t.title}
               <span>{t.titleSmall}</span>
             </h1>
-            <p className={styles.lead}>{t.lead}</p>
             <div className={styles.heroActions}>
               <Link href="/create-your-pizza" className={styles.primary}>
                 {t.create} <span aria-hidden="true">↗</span>
@@ -301,22 +376,6 @@ export default function PizzaWall({ initialPizzas, initialSort }: { initialPizza
                 </button>
               )}
             </div>
-            {pizzas.length > 0 && (
-              <dl className={styles.stats}>
-                <div>
-                  <dd>{pizzas.length}</dd>
-                  <dt>{t.pizzas}</dt>
-                </div>
-                <div>
-                  <dd>{totals.ratings}</dd>
-                  <dt>{t.ratings}</dt>
-                </div>
-                <div>
-                  <dd>{totals.orders}</dd>
-                  <dt>{t.orders}</dt>
-                </div>
-              </dl>
-            )}
           </div>
 
           {podium.length > 0 && (
@@ -328,7 +387,6 @@ export default function PizzaWall({ initialPizzas, initialSort }: { initialPizza
                   className={`${styles.podiumPlace} ${styles[`place${index + 1}`]}`}
                   onClick={() => setSpotlight(pizza)}
                 >
-                  <span className={styles.medal}>{index + 1}</span>
                   <span className={styles.podiumPizza}>
                     <PizzaArtwork toppings={pizza.toppings} />
                   </span>
@@ -376,29 +434,15 @@ export default function PizzaWall({ initialPizzas, initialSort }: { initialPizza
                     </button>
                   ))}
                 </div>
-                <div className={styles.chips}>
-                  <button
-                    type="button"
-                    className={`${styles.chip} ${!filter ? styles.chipOn : ''}`}
-                    onClick={() => setFilter(null)}
-                  >
-                    {t.all}
-                  </button>
-                  {TOPPINGS.map((topping) => (
-                    <button
-                      key={topping.id}
-                      type="button"
-                      className={`${styles.chip} ${filter === topping.id ? styles.chipOn : ''}`}
-                      onClick={() => {
-                        setFilter(filter === topping.id ? null : topping.id);
-                        setVisible(PAGE_SIZE);
-                      }}
-                    >
-                      <img src={pieceSrc(topping, 0)} alt="" />
-                      {topping.name[language]}
-                    </button>
-                  ))}
-                </div>
+                <ToppingSelect
+                  value={filter}
+                  language={language}
+                  allLabel={t.all}
+                  onChange={(value) => {
+                    setFilter(value);
+                    setVisible(PAGE_SIZE);
+                  }}
+                />
               </div>
 
               {notice && <p className={styles.notice} role="alert">{notice}</p>}
