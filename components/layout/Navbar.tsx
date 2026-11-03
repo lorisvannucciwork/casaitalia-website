@@ -46,56 +46,50 @@ export const Navbar: React.FC = () => {
           <nav aria-label="Main navigation" className="flex items-center gap-6 text-sm font-bold text-[#1a1816]">
             <Link
               href="/"
-              className={`transition-colors py-1 flex items-center gap-1.5 ${
+              className={`transition-colors py-1 ${
                 pathname === '/' ? 'text-[#ba935a]' : 'hover:text-[#ba935a]'
               }`}
             >
-              <LuxuryVillaIcon className="w-4 h-4" />
               <span>{t('nav.home')}</span>
             </Link>
             <Link
               href="/menu"
-              className={`transition-colors py-1 flex items-center gap-1.5 ${
+              className={`transition-colors py-1 ${
                 pathname === '/menu' ? 'text-[#ba935a]' : 'hover:text-[#ba935a]'
               }`}
             >
-              <Utensils className="w-4 h-4" />
               <span>{t('nav.menu')}</span>
             </Link>
             <Link
               href="/delivery"
-              className={`transition-colors py-1 flex items-center gap-1.5 ${
+              className={`transition-colors py-1 ${
                 pathname === '/delivery' ? 'text-[#ba935a]' : 'hover:text-[#ba935a]'
               }`}
             >
-              <Bike className="w-4 h-4" />
               <span>{t('nav.delivery')}</span>
             </Link>
             <Link
               href="/create-your-pizza"
-              className={`transition-colors py-1 flex items-center gap-1.5 ${
+              className={`transition-colors py-1 ${
                 pathname === '/create-your-pizza' ? 'text-[#ba935a]' : 'hover:text-[#ba935a]'
               }`}
             >
-              <Pizza className="w-4 h-4" />
               <span>{t('nav.pizza')}</span>
             </Link>
             <Link
               href="/pizza-wall"
-              className={`transition-colors py-1 flex items-center gap-1.5 ${
+              className={`transition-colors py-1 ${
                 pathname === '/pizza-wall' ? 'text-[#ba935a]' : 'hover:text-[#ba935a]'
               }`}
             >
-              <Award className="w-4 h-4" />
               <span>{t('nav.wall')}</span>
             </Link>
             <Link
               href="/reservations"
-              className={`transition-colors py-1 flex items-center gap-1.5 ${
+              className={`transition-colors py-1 ${
                 pathname === '/reservations' ? 'text-[#ba935a]' : 'hover:text-[#ba935a]'
               }`}
             >
-              <CalendarDays className="w-4 h-4" />
               <span>{t('nav.reserve')}</span>
             </Link>
           </nav>
