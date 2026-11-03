@@ -64,9 +64,6 @@
   transform: translateY(-1px);
   box-shadow: 0 10px 22px -8px rgba(30, 20, 10, 0.5);
 }
-.topButton span {
-  color: var(--gold);
-}
 
 /* ---------------------------------------------------------------- trays */
 .trays {
@@ -590,7 +587,8 @@
 .primary {
   display: inline-flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  text-align: center;
   gap: 14px;
   width: 100%;
   padding: 11px 14px;

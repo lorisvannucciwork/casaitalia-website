@@ -398,7 +398,7 @@ export default function PizzaWall({ initialPizzas, initialSort }: { initialPizza
             </h1>
             <div className={styles.heroActions}>
               <Link href="/create-your-pizza" className={styles.primary}>
-                {t.create} <span aria-hidden="true">↗</span>
+                {t.create}
               </Link>
               {pizzas.length > 1 && (
                 <button type="button" className={styles.ghost} onClick={surprise}>
@@ -440,7 +440,7 @@ export default function PizzaWall({ initialPizzas, initialSort }: { initialPizza
               <h2>{t.emptyTitle}</h2>
               <p>{t.emptyText}</p>
               <Link href="/create-your-pizza" className={styles.primary}>
-                {t.create} <span aria-hidden="true">↗</span>
+                {t.create}
               </Link>
             </div>
           ) : (
@@ -503,7 +503,7 @@ export default function PizzaWall({ initialPizzas, initialSort }: { initialPizza
                         {pizza.orderCount > 0 && <span>{t.ordersCount(pizza.orderCount)}</span>}
                       </div>
                       <Link href={`/create-your-pizza?pizza=${pizza.id}`} className={styles.orderButton}>
-                        {t.order} <span aria-hidden="true">↗</span>
+                        {t.order}
                       </Link>
                     </div>
                   </article>
@@ -550,7 +550,7 @@ export default function PizzaWall({ initialPizzas, initialSort }: { initialPizza
                   <span>{spotlight.ratingCount ? `${spotlight.ratingAvg.toFixed(1)} · ${t.ratingsCount(spotlight.ratingCount)}` : t.noRatings}</span>
                 </div>
                 <Link href={`/create-your-pizza?pizza=${spotlight.id}`} className={styles.primary}>
-                  {t.order} · €{spotlight.price.toFixed(2)} <span aria-hidden="true">↗</span>
+                  {t.order} · €{spotlight.price.toFixed(2)}
                 </Link>
               </div>
             )}

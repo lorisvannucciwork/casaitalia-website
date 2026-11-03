@@ -503,7 +503,7 @@ export default function PizzaBuilder({
               else document.getElementById('pizza-receipt')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }}
           >
-            {topLabel} <span aria-hidden="true">↗</span>
+            {topLabel}
           </button>
 
           {/* Trays */}
@@ -621,7 +621,7 @@ export default function PizzaBuilder({
                 </h1>
                 <p className={styles.introText}>{t.intro}</p>
                 <button type="button" className={styles.primary} onClick={openBox}>
-                  {t.letsGo} <span aria-hidden="true">↗</span>
+                  {t.letsGo}
                 </button>
                 <dl className={styles.facts}>
                   <div>
@@ -651,7 +651,7 @@ export default function PizzaBuilder({
                   {t.arriving} <strong>{order.from}–{order.to}</strong>
                 </p>
                 <button type="button" className={styles.primary} onClick={openBox}>
-                  {t.top.done} <span aria-hidden="true">↗</span>
+                  {t.top.done}
                 </button>
                 {saved ? (
                   <Link href="/pizza-wall?sort=new" className={styles.wallButton}>
@@ -660,7 +660,7 @@ export default function PizzaBuilder({
                 ) : (
                   toppings.length > 0 && (
                     <button type="button" className={styles.wallButton} onClick={openNaming}>
-                      <i aria-hidden="true">★</i> {t.nameIt}
+                      {t.nameIt}
                     </button>
                   )
                 )}
@@ -749,7 +749,7 @@ export default function PizzaBuilder({
                       disabled={stage !== 'details'}
                     />
                     <button type="submit" className={styles.primary} disabled={stage !== 'details' || sending}>
-                      {stage === 'details' && !sending ? t.intoOven : t.inOven} <span aria-hidden="true">↗</span>
+                      {stage === 'details' && !sending ? t.intoOven : t.inOven}
                     </button>
                     {stage === 'details' && (
                       <button type="button" className={styles.linkButton} onClick={() => setStage('build')}>
@@ -804,7 +804,7 @@ export default function PizzaBuilder({
                 </div>
                 {stage === 'build' && (
                   <button type="button" className={styles.primary} onClick={placeOrder}>
-                    {t.placeOrder} <span aria-hidden="true">↗</span>
+                    {t.placeOrder}
                   </button>
                 )}
                 {stage === 'build' &&
@@ -815,7 +815,7 @@ export default function PizzaBuilder({
                   ) : (
                     toppings.length > 0 && (
                       <button type="button" className={styles.wallButton} onClick={openNaming}>
-                        <i aria-hidden="true">★</i> {t.nameIt}
+                        {t.nameIt}
                       </button>
                     )
                   ))}
@@ -859,7 +859,7 @@ export default function PizzaBuilder({
                   <h2 className={styles.namingTitle}>{t.savedTitle}</h2>
                   <p className={styles.introText}>{t.savedText(saved.name)}</p>
                   <Link href="/pizza-wall?sort=new" className={styles.primary}>
-                    {t.seeWall} <span aria-hidden="true">↗</span>
+                    {t.seeWall}
                   </Link>
                   <button type="button" className={styles.linkButton} onClick={() => setNaming('closed')}>
                     ‹ {t.keepBuilding}
@@ -902,7 +902,7 @@ export default function PizzaBuilder({
                   />
                   {saveError && <p className={styles.error} role="alert">{saveError}</p>}
                   <button type="submit" className={styles.primary} disabled={saving}>
-                    {saving ? t.hanging : t.hang} <span aria-hidden="true">↗</span>
+                    {saving ? t.hanging : t.hang}
                   </button>
                   <button type="button" className={styles.linkButton} onClick={() => setNaming('closed')}>
                     {t.cancel}

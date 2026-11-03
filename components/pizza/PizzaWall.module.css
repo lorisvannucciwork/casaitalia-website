@@ -391,7 +391,8 @@
 }
 .orderButton {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  text-align: center;
   padding: 9px 12px;
   background: linear-gradient(180deg, var(--gold), var(--gold-dark));
   color: #fff;
