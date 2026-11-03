@@ -115,3 +115,27 @@ CREATE TABLE IF NOT EXISTS table_reservations (
 CREATE INDEX IF NOT EXISTS idx_online_orders_status ON online_orders(status, created_at);
 CREATE INDEX IF NOT EXISTS idx_reservations_status ON table_reservations(status, created_at);
 CREATE INDEX IF NOT EXISTS idx_reservations_date ON table_reservations(date, time);
+-- The pizza wall: pizzas named and saved by the guests, rated and ordered by anyone
+CREATE TABLE IF NOT EXISTS community_pizzas (
+  id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  name_key TEXT NOT NULL UNIQUE,
+  creator TEXT,
+  toppings TEXT NOT NULL,
+  rating_sum INTEGER NOT NULL DEFAULT 0,
+  rating_count INTEGER NOT NULL DEFAULT 0,
+  order_count INTEGER NOT NULL DEFAULT 0,
+  hidden INTEGER NOT NULL DEFAULT 0,
+  language TEXT,
+  created_at TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS community_pizza_ratings (
+  pizza_id TEXT NOT NULL,
+  voter TEXT NOT NULL,
+  stars INTEGER NOT NULL,
+  created_at TEXT NOT NULL,
+  PRIMARY KEY (pizza_id, voter)
+);
+
+CREATE INDEX IF NOT EXISTS idx_community_pizzas_wall ON community_pizzas(hidden, created_at);

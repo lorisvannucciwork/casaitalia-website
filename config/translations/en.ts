@@ -7,6 +7,7 @@ export const enTranslations: TranslationDictionary = {
   'nav.delivery': 'Delivery',
   'nav.reserve': 'Book a Table',
   'nav.pizza': 'Your Pizza',
+  'nav.wall': 'Pizza Wall',
   'nav.medal': 'Medal & Social',
   'nav.page': 'Page',
   'nav.of': 'of',

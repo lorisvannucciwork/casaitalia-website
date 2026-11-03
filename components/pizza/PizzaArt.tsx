@@ -1,7 +1,7 @@
 import React from 'react';
 
 /* Drawn parts of the pizza builder: the gloved hand (cursor), the print of the box lid in the
-   Casa Italia colours, the kitchen timer and the receipt's barcode. */
+   Casa Italia colours and the kitchen timer. */
 
 const GOLD = '#ba935a';
 const GOLD_DEEP = '#8c6c39';
@@ -267,27 +267,6 @@ export function OvenTimer({ progress }: { progress: number }) {
         <circle cx="100" cy="100" r="10" fill="#1d1a17" />
         <circle cx="97" cy="97" r="3" fill="#ffffff" opacity="0.35" />
       </g>
-    </svg>
-  );
-}
-
-// ---------------------------------------------------------------------------------------------
-// Receipt barcode (decorative, from the order reference)
-// ---------------------------------------------------------------------------------------------
-export function Barcode({ seed }: { seed: string }) {
-  const bars: { x: number; w: number }[] = [];
-  let x = 0;
-  for (let i = 0; i < 46; i++) {
-    const code = seed.charCodeAt(i % Math.max(seed.length, 1)) || 7;
-    const w = ((code * (i + 3)) % 3) + 1;
-    if ((code + i) % 4 !== 0) bars.push({ x, w });
-    x += w + 1.2;
-  }
-  return (
-    <svg viewBox={`0 0 ${x} 24`} width="100%" height="26" preserveAspectRatio="none" aria-hidden="true">
-      {bars.map((b, i) => (
-        <rect key={i} x={b.x} y="0" width={b.w} height="24" fill="#1a1816" />
-      ))}
     </svg>
   );
 }

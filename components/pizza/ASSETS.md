@@ -8,5 +8,5 @@
 | `toppings/olive-*`, `toppings/onion-*` | Drawn in code (numpy/Pillow) |
 | `counter.jpg`, `box-open.webp`, `box-lid.webp`, `tray.webp`, `cloth.webp` | Drawn in code (numpy/Pillow) |
 
-The box-lid print, the gloved hand, the kitchen timer and the barcode are SVG in `PizzaArt.tsx`.
+The box-lid print, the gloved hand and the kitchen timer are SVG in `PizzaArt.tsx`.
 The page's flow follows a reference video; its artwork, brand and wording were not copied.

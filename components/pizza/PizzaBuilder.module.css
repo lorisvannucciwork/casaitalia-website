@@ -549,6 +549,29 @@
   font-size: 10px;
   color: #8c8479;
 }
+.service {
+  display: flex;
+  gap: 3px;
+  margin-bottom: 8px;
+  padding: 3px;
+  background: #f5eedf;
+}
+.serviceOption {
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 7px 2px;
+  border: 0;
+  background: transparent;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  color: #6e675e;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.serviceOn {
+  background: linear-gradient(180deg, var(--gold), var(--gold-dark));
+  color: #fff;
+}
 .reach {
   font-size: 11px;
   color: #6e675e;
@@ -644,6 +667,162 @@
   border-top: 1px solid rgba(186, 147, 90, 0.3);
   border-bottom: 1px solid rgba(186, 147, 90, 0.3);
   font-size: 13px;
+}
+
+/* ---------------------------------------------------------------- the wall: naming a pizza */
+.receiptSigned {
+  margin: 8px 0 0;
+  text-align: center;
+  font-family: var(--font-satisfy), cursive;
+  font-size: 26px;
+  font-weight: 400;
+  line-height: 1.1;
+  overflow-wrap: anywhere;
+}
+.receiptBy {
+  display: block;
+  margin-top: 2px;
+  text-align: center;
+  font-size: 10px;
+  color: #8c8479;
+  overflow-wrap: anywhere;
+}
+.wallButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  width: 100%;
+  margin-top: 8px;
+  padding: 9px 10px;
+  border: 1px dashed var(--gold-dark);
+  background: #fbf6ea;
+  font-family: var(--font-source-serif), Georgia, serif;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: #7a5d30;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+.wallButton:hover {
+  background: #f5eedf;
+  transform: translateY(-1px);
+}
+.wallButton i {
+  font-style: normal;
+  color: var(--gold-dark);
+}
+.naming {
+  --gold: #ba935a;
+  --gold-dark: #a37f48;
+  --ink: #1a1816;
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: flex;
+  padding: 16px;
+  overflow-y: auto;
+  background: rgba(16, 13, 10, 0.72);
+  backdrop-filter: blur(3px);
+  animation: namingIn 0.25s ease both;
+}
+@keyframes namingIn {
+  from {
+    opacity: 0;
+  }
+}
+.namingCard {
+  position: relative;
+  width: min(430px, 100%);
+  margin: auto;
+  padding: 0 24px 22px;
+  background: #fffdf9;
+  box-shadow: 0 30px 70px -20px rgba(0, 0, 0, 0.8);
+  animation: namingCard 0.45s cubic-bezier(0.2, 0.9, 0.3, 1.15) both;
+}
+@keyframes namingCard {
+  from {
+    transform: translateY(26px) rotate(-1.5deg) scale(0.96);
+  }
+}
+.namingPizza {
+  width: min(230px, 60vw, 30svh);
+  margin: -14px auto 0;
+  filter: drop-shadow(0 14px 16px rgba(30, 20, 10, 0.4));
+}
+.namingTicket {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: fit-content;
+  max-width: 94%;
+  min-width: 62%;
+  margin: -30px auto 14px;
+  padding: 7px 18px 8px;
+  position: relative;
+  background: #fff;
+  box-shadow: 0 8px 16px -7px rgba(30, 20, 10, 0.6);
+  transform: rotate(-2deg);
+  text-align: center;
+}
+.namingTicket strong {
+  font-family: var(--font-satisfy), cursive;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+}
+.namingTicket span {
+  font-size: 11px;
+  font-style: italic;
+  color: #6e675e;
+  overflow-wrap: anywhere;
+}
+.namingBody {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.namingBody .linkButton {
+  align-self: center;
+  margin-top: 4px;
+}
+.namingBody .introText {
+  margin-bottom: 6px;
+}
+.namingTitle {
+  margin: 0;
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: 29px;
+  font-weight: 700;
+  line-height: 1.02;
+}
+.nameRow {
+  display: flex;
+  gap: 6px;
+}
+.nameRow input {
+  flex: 1;
+  min-width: 0;
+}
+.inspire {
+  flex-shrink: 0;
+  padding: 0 10px;
+  border: 1px solid rgba(186, 147, 90, 0.5);
+  background: #fbf6ea;
+  font-size: 11px;
+  font-weight: 700;
+  color: #7a5d30;
+  cursor: pointer;
+}
+.naming .form input {
+  padding: 10px 11px;
+  font-size: 16px; /* no zoom on phones */
+}
+@media (min-width: 1024px) {
+  .naming .form input {
+    font-size: 13px;
+  }
 }
 
 /* ---------------------------------------------------------------- props: cloth, hand, handful */

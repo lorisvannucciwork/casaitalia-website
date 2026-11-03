@@ -9,6 +9,7 @@
 import db from './db';
 import { sanitizeText } from './security';
 import { CUSTOM_PIZZA_ID, PIZZA_BASE, TOPPINGS, customPizzaPrice } from '@/config/pizzaBuilder';
+import { countPizzaOrder, getPizza, type WallPizza } from './pizzaWall';
 
 export const RESTAURANT_TZ = 'Africa/Cairo';
 
@@ -105,9 +106,11 @@ function isValidPhone(phone: string): boolean {
 // ---------------------------------------------------------------------------------------------
 
 export interface OrderInput {
-  customer?: { name?: unknown; phone?: unknown; area?: unknown; location?: unknown; notes?: unknown };
-  items?: { id?: unknown; quantity?: unknown; notes?: unknown; toppings?: unknown }[];
+  customer?: { name?: unknown; phone?: unknown; area?: unknown; location?: unknown; table?: unknown; notes?: unknown };
+  items?: { id?: unknown; quantity?: unknown; notes?: unknown; toppings?: unknown; pizzaId?: unknown }[];
   language?: unknown;
+  /** 'dine_in': the guest is in the restaurant and gives a table number instead of an address */
+  type?: unknown;
 }
 
 interface OrderItem {
@@ -120,19 +123,21 @@ interface OrderItem {
 }
 
 /** A "create your own pizza" line: toppings checked against the builder's list, price computed here. */
-function customPizzaLine(toppings: unknown, quantity: number, notes: string): { key: string; item: OrderItem } {
-  const wanted = new Set(Array.isArray(toppings) ? toppings.filter((t): t is string => typeof t === 'string') : []);
+function customPizzaLine(toppings: unknown, quantity: number, notes: string, saved: WallPizza | null): { key: string; item: OrderItem } {
+  // A pizza of the wall is made as it was saved, whatever the browser sends
+  const source = saved ? saved.toppings : toppings;
+  const wanted = new Set(Array.isArray(source) ? source.filter((t): t is string => typeof t === 'string') : []);
   const chosen = TOPPINGS.filter((t) => wanted.has(t.id));
   const list = chosen.length ? chosen.map((t) => t.name.en).join(', ') : 'tomato only';
   return {
-    key: `${CUSTOM_PIZZA_ID}:${chosen.map((t) => t.id).join('+')}`,
+    key: `${CUSTOM_PIZZA_ID}:${saved?.id || ''}:${chosen.map((t) => t.id).join('+')}`,
     item: {
       item_id: CUSTOM_PIZZA_ID,
       name: 'Create Your Own Pizza',
       italian_name: 'PIZZA A MODO TUO',
       price: customPizzaPrice(chosen.map((t) => t.id)),
       quantity,
-      notes: [`${PIZZA_BASE.name.en} + ${list}`, notes].filter(Boolean).join(' · '),
+      notes: [saved ? `"${saved.name}"` : '', `${PIZZA_BASE.name.en} + ${list}`, notes].filter(Boolean).join(' · '),
     },
   };
 }
@@ -160,27 +165,37 @@ export async function createOrder(input: OrderInput, currency: string) {
   }
   const customer = input.customer || {};
   const name = clean(customer.name, 80);
+  const dineIn = input.type === 'dine_in';
+  const table = dineIn ? clean(customer.table, 8) : '';
   const phone = clean(customer.phone, 30);
-  const location = clean(customer.location, 160);
+  const location = dineIn ? `Table ${table}` : clean(customer.location, 160);
   const notes = clean(customer.notes, 500);
-  const area = customer.area === 'outside' ? 'outside' : 'inside';
+  const area = dineIn ? 'table' : customer.area === 'outside' ? 'outside' : 'inside';
   if (!name) throw new OnlineError('name', 'Please enter your name.');
-  if (!isValidPhone(phone)) throw new OnlineError('phone', 'Please enter a valid phone number.');
-  if (!location) throw new OnlineError('location', 'Please enter the delivery location.');
+  if (dineIn) {
+    if (!/^[\p{L}\p{N}][\p{L}\p{N} -]*$/u.test(table)) throw new OnlineError('table', 'Please enter your table number.');
+  } else {
+    if (!isValidPhone(phone)) throw new OnlineError('phone', 'Please enter a valid phone number.');
+    if (!location) throw new OnlineError('location', 'Please enter the delivery location.');
+  }
 
   // One line per dish; the quantities of a dish sent twice are added up. Custom pizzas are one line
   // per combination of toppings.
   const wanted = new Map<string, { quantity: number; notes: string }>();
   const customPizzas = new Map<string, OrderItem>();
+  const wallOrders = new Map<string, number>();
   for (const item of input.items || []) {
     const id = typeof item.id === 'string' ? item.id.slice(0, 120) : '';
     const quantity = Math.floor(Number(item.quantity));
     if (!id || !Number.isFinite(quantity) || quantity < 1) continue;
     if (id === CUSTOM_PIZZA_ID) {
-      const { key, item: pizza } = customPizzaLine(item.toppings, quantity, clean(item.notes, 200));
+      // The wall must never stop an order: if it cannot be read, the pizza goes out without its name
+      const saved = item.pizzaId ? await getPizza(item.pizzaId).catch(() => null) : null;
+      const { key, item: pizza } = customPizzaLine(item.toppings, quantity, clean(item.notes, 200), saved);
       const existing = customPizzas.get(key);
       if (existing) existing.quantity = Math.min(existing.quantity + quantity, MAX_QUANTITY);
       else customPizzas.set(key, { ...pizza, quantity: Math.min(quantity, MAX_QUANTITY) });
+      if (saved) wallOrders.set(saved.id, Math.min((wallOrders.get(saved.id) || 0) + quantity, MAX_QUANTITY));
       continue;
     }
     const line = wanted.get(id) || { quantity: 0, notes: '' };
@@ -220,6 +235,10 @@ export async function createOrder(input: OrderInput, currency: string) {
     };
   });
   items.push(...customPizzas.values());
+  // The kitchen sees the table on each line: nothing on the ticket should read like a delivery
+  if (dineIn) {
+    for (const item of items) item.notes = [`TABLE ${table}`, item.notes].filter(Boolean).join(' · ');
+  }
   const subtotal = Math.round(items.reduce((sum, i) => sum + i.price * i.quantity, 0) * 100) / 100;
 
   const order = {
@@ -229,10 +248,11 @@ export async function createOrder(input: OrderInput, currency: string) {
   };
   await db.execute(
     `INSERT INTO online_orders (id, ref, type, customer_name, phone, area, location, notes, items, subtotal, currency, language, status, created_at)
-     VALUES (?, ?, 'delivery', ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?)`,
-    [order.id, order.ref, name, phone, area, location, notes || null, JSON.stringify(items), subtotal, currency,
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?)`,
+    [order.id, order.ref, dineIn ? 'dine_in' : 'delivery', name, phone, area, location, notes || null, JSON.stringify(items), subtotal, currency,
      input.language === 'en' ? 'en' : 'it', order.created_at]
   );
+  await Promise.all(Array.from(wallOrders, ([id, quantity]) => countPizzaOrder(id, quantity)));
   return { ref: order.ref, subtotal, items: items.length };
 }
 

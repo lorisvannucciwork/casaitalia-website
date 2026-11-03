@@ -117,6 +117,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
       images: [`${baseUrl}/pizza-builder/base-baked.webp`],
     },
 
+    {
+      url: `${baseUrl}/pizza-wall`,
+      lastModified: lastContentUpdate,
+      changeFrequency: 'daily',
+      priority: 0.7,
+      alternates: {
+        languages: {
+          'it-IT': `${baseUrl}/pizza-wall`,
+          'en-US': `${baseUrl}/pizza-wall`,
+          'x-default': `${baseUrl}/pizza-wall`,
+        },
+      },
+    },
+
     ...deliveryCategoryRoutes,
 
     {

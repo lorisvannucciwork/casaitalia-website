@@ -3,11 +3,14 @@
    animated in % of the pizza: plain images, already sized and compressed (WebP) */
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import Link from 'next/link';
 import { useLanguage } from '@/context/LanguageContext';
 import { Navbar } from '@/components/layout';
 import { CUSTOM_PIZZA_ID, PIZZA_BASE, TOPPINGS, customPizzaPrice, type ToppingId } from '@/config/pizzaBuilder';
+import { PIZZA_CREATOR_MAX, PIZZA_NAME_MAX, PIZZA_NAME_MIN, type WallPizza } from '@/lib/pizzaWallShared';
 import { placeTopping, trayHeap, type PiecePlacement } from './pizzaLayout';
-import { Barcode, Glove, LidPrint, OvenTimer, type GlovePose } from './PizzaArt';
+import { Glove, LidPrint, OvenTimer, type GlovePose } from './PizzaArt';
+import { PizzaArtwork } from './PizzaArtwork';
 import styles from './PizzaBuilder.module.css';
 
 /**
@@ -71,6 +74,43 @@ const COPY = {
     ovenLabel: 'HOT FROM THE WOOD-FIRED OVEN',
     add: 'Add',
     remove: 'Remove',
+    dineTitle: 'Already at Casa Italia?',
+    dineText: 'Order from your table: we bring it straight to you',
+    serviceTable: 'At the restaurant',
+    serviceDelivery: 'Delivery',
+    service: 'Service',
+    atYourTable: 'At your table',
+    tableNumber: 'Table number',
+    fillTable: 'Please fill in your table number and your name.',
+    footnoteTable: 'Paid at your table · cash or card',
+    doneSubTable: (table: string) => `Coming to table ${table}.`,
+    doneTextTable: (ref: string) => `Order ${ref} is with our pizzaioli. Pay at your table, cash or card.`,
+    nameIt: 'Name it, hang it on the wall',
+    onWall: 'On the wall',
+    seeWall: 'See the wall',
+    by: 'by',
+    otherPizzas: 'Back to the wall',
+    dialogKicker: 'Your signature pizza',
+    dialogTitle: 'What do we call this masterpiece?',
+    dialogText: 'It will hang on the Pizza Wall for everyone to see, rate and order.',
+    pizzaName: 'Name of the pizza',
+    creatorName: 'Your name (optional, shown publicly)',
+    inspire: 'Inspire me',
+    hang: 'Hang it on the wall',
+    hanging: 'Pinning it up…',
+    cancel: 'Not now',
+    untitled: 'Your pizza name',
+    savedTitle: 'It is on the wall!',
+    savedText: (name: string) => `“${name}” now hangs on the Pizza Wall. Share it, order it, or go and see who it is up against.`,
+    keepBuilding: 'Back to my pizza',
+    saveErrors: {
+      name_short: 'Please give your pizza a name of at least 3 letters.',
+      name_bad: 'Please choose a different name.',
+      name_taken: 'This name is already on the wall. Be original!',
+      toppings: 'Add at least one topping first.',
+      too_many: 'Too many pizzas for now, please wait a few minutes.',
+      server: 'The pizza could not be saved, please try again.',
+    },
   },
   it: {
     tagline: ['Stesa a mano. Cotta a legna.', 'Fatta a modo tuo.'],
@@ -119,8 +159,55 @@ const COPY = {
     ovenLabel: 'CALDA DAL FORNO A LEGNA',
     add: 'Aggiungi',
     remove: 'Togli',
+    dineTitle: 'Sei già da Casa Italia?',
+    dineText: 'Ordina dal tuo tavolo: te la portiamo noi',
+    serviceTable: 'Al ristorante',
+    serviceDelivery: 'Consegna',
+    service: 'Servizio',
+    atYourTable: 'Al tuo tavolo',
+    tableNumber: 'Numero del tavolo',
+    fillTable: 'Inserisci il numero del tavolo e il tuo nome.',
+    footnoteTable: 'Si paga al tavolo · contanti o carta',
+    doneSubTable: (table: string) => `Arriva al tavolo ${table}.`,
+    doneTextTable: (ref: string) => `L'ordine ${ref} è nelle mani dei nostri pizzaioli. Si paga al tavolo.`,
+    nameIt: 'Dalle un nome, appendila in bacheca',
+    onWall: 'In bacheca',
+    seeWall: 'Vedi la bacheca',
+    by: 'di',
+    otherPizzas: 'Torna alla bacheca',
+    dialogKicker: 'La tua pizza firmata',
+    dialogTitle: 'Come chiamiamo questo capolavoro?',
+    dialogText: 'Resterà appesa nella Bacheca dei Pizzaioli: tutti potranno vederla, votarla e ordinarla.',
+    pizzaName: 'Nome della pizza',
+    creatorName: 'Il tuo nome (facoltativo, sarà pubblico)',
+    inspire: 'Ispirami',
+    hang: 'Appendila in bacheca',
+    hanging: 'La stiamo appendendo…',
+    cancel: 'Non ora',
+    untitled: 'Il nome della tua pizza',
+    savedTitle: 'È in bacheca!',
+    savedText: (name: string) => `“${name}” ora è appesa nella Bacheca dei Pizzaioli. Condividila, ordinala o vai a vedere con chi se la gioca.`,
+    keepBuilding: 'Torna alla mia pizza',
+    saveErrors: {
+      name_short: 'Dai alla tua pizza un nome di almeno 3 lettere.',
+      name_bad: 'Scegli un altro nome, per favore.',
+      name_taken: 'Questo nome è già in bacheca. Sii originale!',
+      toppings: 'Aggiungi prima almeno un ingrediente.',
+      too_many: 'Troppe pizze per ora, riprova tra qualche minuto.',
+      server: 'Non è stato possibile salvare la pizza, riprova.',
+    },
   },
 };
+
+const NAME_IDEAS: [string[], string[]] = [
+  ['La Regina', 'La Furia', 'Il Capitano', 'La Sirena', 'Il Corallo', 'La Marea', 'Il Vulcano', 'Il Delfino', 'La Stella', 'Il Faraone'],
+  ['del Mar Rosso', 'di Porto Ghalib', 'della Marina', 'del Forno', 'di Mezzanotte', 'del Pizzaiolo', 'del Deserto', 'di Mamma'],
+];
+
+function randomName() {
+  const pick = (list: string[]) => list[Math.floor(Math.random() * list.length)];
+  return `${pick(NAME_IDEAS[0])} ${pick(NAME_IDEAS[1])}`;
+}
 
 function euro(value: number) {
   return `€${value.toFixed(2)}`;
@@ -152,14 +239,31 @@ function Piece({ piece, filter, landing }: { piece: PiecePlacement; filter?: str
   );
 }
 
-export default function PizzaBuilder({ hours }: { hours: { open: string; lastOrder: string } }) {
+export default function PizzaBuilder({
+  hours,
+  preset = null,
+  table = '',
+}: {
+  hours: { open: string; lastOrder: string };
+  preset?: WallPizza | null;
+  table?: string;
+}) {
   const { language } = useLanguage();
   const t = COPY[language === 'it' ? 'it' : 'en'];
 
-  const [stage, setStage] = useState<Stage>('closed');
-  const [toppings, setToppings] = useState<ToppingId[]>([]);
+  // With a pizza of the wall the box is already open on it, ready to order
+  const [stage, setStage] = useState<Stage>(preset ? 'build' : 'closed');
+  const [toppings, setToppings] = useState<ToppingId[]>(preset ? preset.toppings : []);
+  const [saved, setSaved] = useState<{ id: string; name: string; creator: string } | null>(
+    preset ? { id: preset.id, name: preset.name, creator: preset.creator } : null
+  );
+  const [naming, setNaming] = useState<'closed' | 'form' | 'saved'>('closed');
+  const [nameForm, setNameForm] = useState({ name: '', creator: '' });
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [service, setService] = useState<'table' | 'delivery'>(table ? 'table' : 'delivery');
   const [area, setArea] = useState<'inside' | 'outside'>('inside');
-  const [form, setForm] = useState({ name: '', phone: '', location: '', notes: '' });
+  const [form, setForm] = useState({ table, name: '', phone: '', location: '', notes: '' });
   const [showErrors, setShowErrors] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
@@ -205,6 +309,7 @@ export default function PizzaBuilder({ hours }: { hours: { open: string; lastOrd
     if (stage === 'done') {
       setToppings([]);
       setOrder(null);
+      setSaved(null);
     }
     setError(null);
     setStage('opening');
@@ -213,7 +318,39 @@ export default function PizzaBuilder({ hours }: { hours: { open: string; lastOrd
 
   const toggleTopping = (id: ToppingId, onlyAdd = false) => {
     if (!building) return;
+    if (onlyAdd && toppings.includes(id)) return;
+    setSaved(null); // with other toppings it is a new pizza, no longer the one on the wall
     setToppings((current) => (current.includes(id) ? (onlyAdd ? current : current.filter((x) => x !== id)) : [...current, id]));
+  };
+
+  const openNaming = () => {
+    setSaveError(null);
+    setNaming('form');
+  };
+
+  const savePizza = async () => {
+    if (saving) return;
+    setSaving(true);
+    setSaveError(null);
+    try {
+      const response = await fetch('/api/pizzas', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: nameForm.name, creator: nameForm.creator, toppings, language }),
+      });
+      const data = (await response.json().catch(() => ({}))) as { pizza?: WallPizza; error?: string };
+      if (!response.ok || !data.pizza) {
+        const errors: Record<string, string> = t.saveErrors;
+        setSaveError(errors[data.error || ''] || t.saveErrors.server);
+        return;
+      }
+      setSaved({ id: data.pizza.id, name: data.pizza.name, creator: data.pizza.creator });
+      setNaming('saved');
+    } catch {
+      setSaveError(t.saveErrors.server);
+    } finally {
+      setSaving(false);
+    }
   };
 
   const placeOrder = () => {
@@ -222,17 +359,19 @@ export default function PizzaBuilder({ hours }: { hours: { open: string; lastOrd
     setStage('details');
   };
 
+  const atTable = service === 'table';
   const missing = {
+    table: atTable && !form.table.trim(),
     name: !form.name.trim(),
-    phone: form.phone.replace(/[^0-9]/g, '').length < 7,
-    location: !form.location.trim(),
+    phone: !atTable && form.phone.replace(/[^0-9]/g, '').length < 7,
+    location: !atTable && !form.location.trim(),
   };
 
   const submit = async () => {
     if (stage !== 'details' || sending) return;
-    if (missing.name || missing.phone || missing.location) {
+    if (missing.table || missing.name || missing.phone || missing.location) {
       setShowErrors(true);
-      setError(t.fill);
+      setError(atTable ? t.fillTable : t.fill);
       return;
     }
     setSending(true);
@@ -243,8 +382,11 @@ export default function PizzaBuilder({ hours }: { hours: { open: string; lastOrd
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           language,
-          customer: { name: form.name.trim(), phone: form.phone.trim(), area, location: form.location.trim(), notes: form.notes.trim() },
-          items: [{ id: CUSTOM_PIZZA_ID, quantity: 1, toppings }],
+          type: atTable ? 'dine_in' : 'delivery',
+          customer: atTable
+            ? { name: form.name.trim(), table: form.table.trim(), notes: form.notes.trim() }
+            : { name: form.name.trim(), phone: form.phone.trim(), area, location: form.location.trim(), notes: form.notes.trim() },
+          items: [{ id: CUSTOM_PIZZA_ID, quantity: 1, toppings, pizzaId: saved?.id }],
         }),
       });
       const data = (await response.json().catch(() => ({}))) as { ref?: string; message?: string };
@@ -254,7 +396,8 @@ export default function PizzaBuilder({ hours }: { hours: { open: string; lastOrd
         return;
       }
       const now = Date.now();
-      setOrder({ ref: data.ref, from: cairoTime(new Date(now + 35 * 60000)), to: cairoTime(new Date(now + 45 * 60000)) });
+      const minutes = atTable ? [15, 25] : [35, 45];
+      setOrder({ ref: data.ref, from: cairoTime(new Date(now + minutes[0] * 60000)), to: cairoTime(new Date(now + minutes[1] * 60000)) });
       setSending(false);
       setStage('baking');
       setBakeProgress(1);
@@ -440,7 +583,14 @@ export default function PizzaBuilder({ hours }: { hours: { open: string; lastOrd
             <div className={styles.boxBar}>
               {toppings.length ? t.toppingsCount(toppings.length) : t.yourRules}
               {building && toppings.length > 0 && (
-                <button type="button" className={styles.linkButton} onClick={() => setToppings([])}>
+                <button
+                  type="button"
+                  className={styles.linkButton}
+                  onClick={() => {
+                    setToppings([]);
+                    setSaved(null);
+                  }}
+                >
                   {t.startAgain}
                 </button>
               )}
@@ -479,6 +629,10 @@ export default function PizzaBuilder({ hours }: { hours: { open: string; lastOrd
                     <dt>{t.hoursTitle(hours.open, hours.lastOrder)}</dt>
                     <dd>{t.hoursText}</dd>
                   </div>
+                  <div>
+                    <dt>{t.dineTitle}</dt>
+                    <dd>{t.dineText}</dd>
+                  </div>
                 </dl>
               </div>
             ) : stage === 'done' && order ? (
@@ -487,21 +641,43 @@ export default function PizzaBuilder({ hours }: { hours: { open: string; lastOrd
                 <h2 className={styles.headline}>
                   {t.doneTitle}
                   <br />
-                  <em>{t.doneSub}</em>
+                  <em>{atTable ? t.doneSubTable(form.table.trim()) : t.doneSub}</em>
                 </h2>
-                <p className={styles.introText}>{t.doneText(order.ref)}</p>
+                <p className={styles.introText}>{atTable ? t.doneTextTable(order.ref) : t.doneText(order.ref)}</p>
                 <p className={styles.arriving}>
                   {t.arriving} <strong>{order.from}–{order.to}</strong>
                 </p>
                 <button type="button" className={styles.primary} onClick={openBox}>
                   {t.top.done} <span aria-hidden="true">↗</span>
                 </button>
+                {saved ? (
+                  <Link href="/pizza-wall?sort=new" className={styles.wallButton}>
+                    <i aria-hidden="true">✓</i> {t.onWall}: {t.seeWall}
+                  </Link>
+                ) : (
+                  toppings.length > 0 && (
+                    <button type="button" className={styles.wallButton} onClick={openNaming}>
+                      <i aria-hidden="true">★</i> {t.nameIt}
+                    </button>
+                  )
+                )}
               </div>
             ) : (
               <div id="pizza-receipt" className={`${styles.card} ${styles.receipt}`}>
                 <img src="/logo/logo-01.svg" alt="Casa Italia" className={styles.receiptLogo} />
                 <span className={styles.receiptKicker}>{t.receiptKicker}</span>
-                <h2 className={styles.receiptTitle}>{t.receiptTitle}</h2>
+                {saved ? (
+                  <>
+                    <h2 className={styles.receiptSigned}>{saved.name}</h2>
+                    {saved.creator && (
+                      <span className={styles.receiptBy}>
+                        {t.by} {saved.creator}
+                      </span>
+                    )}
+                  </>
+                ) : (
+                  <h2 className={styles.receiptTitle}>{t.receiptTitle}</h2>
+                )}
                 <div className={styles.rule} />
                 <div className={styles.line}>
                   <span>{PIZZA_BASE.name[language === 'it' ? 'it' : 'en']}</span>
@@ -524,6 +700,17 @@ export default function PizzaBuilder({ hours }: { hours: { open: string; lastOrd
                       submit();
                     }}
                   >
+                    {atTable && (
+                      <input
+                        className={showErrors && missing.table ? styles.invalid : ''}
+                        placeholder={t.tableNumber}
+                        inputMode="numeric"
+                        maxLength={8}
+                        value={form.table}
+                        onChange={(e) => setForm({ ...form, table: e.target.value })}
+                        disabled={stage !== 'details'}
+                      />
+                    )}
                     <input
                       className={showErrors && missing.name ? styles.invalid : ''}
                       placeholder={t.name}
@@ -532,22 +719,26 @@ export default function PizzaBuilder({ hours }: { hours: { open: string; lastOrd
                       onChange={(e) => setForm({ ...form, name: e.target.value })}
                       disabled={stage !== 'details'}
                     />
-                    <input
-                      className={showErrors && missing.phone ? styles.invalid : ''}
-                      placeholder={t.phone}
-                      autoComplete="tel"
-                      inputMode="tel"
-                      value={form.phone}
-                      onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                      disabled={stage !== 'details'}
-                    />
-                    <input
-                      className={showErrors && missing.location ? styles.invalid : ''}
-                      placeholder={t.location}
-                      value={form.location}
-                      onChange={(e) => setForm({ ...form, location: e.target.value })}
-                      disabled={stage !== 'details'}
-                    />
+                    {!atTable && (
+                      <>
+                        <input
+                          className={showErrors && missing.phone ? styles.invalid : ''}
+                          placeholder={t.phone}
+                          autoComplete="tel"
+                          inputMode="tel"
+                          value={form.phone}
+                          onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                          disabled={stage !== 'details'}
+                        />
+                        <input
+                          className={showErrors && missing.location ? styles.invalid : ''}
+                          placeholder={t.location}
+                          value={form.location}
+                          onChange={(e) => setForm({ ...form, location: e.target.value })}
+                          disabled={stage !== 'details'}
+                        />
+                      </>
+                    )}
                     <input
                       placeholder={t.notes}
                       value={form.notes}
@@ -565,19 +756,42 @@ export default function PizzaBuilder({ hours }: { hours: { open: string; lastOrd
                   </form>
                 ) : (
                   <>
-                    <div className={styles.reach}>{t.reachYou}</div>
-                    <div className={styles.radios}>
-                      {(['inside', 'outside'] as const).map((value) => (
-                        <label key={value} className={styles.radio}>
-                          <input type="radio" name="area" checked={area === value} onChange={() => setArea(value)} />
-                          <span>{value === 'inside' ? t.inside : t.outside}</span>
-                        </label>
+                    <div className={styles.service} role="radiogroup" aria-label={t.reachYou}>
+                      {(['table', 'delivery'] as const).map((value) => (
+                        <button
+                          key={value}
+                          type="button"
+                          role="radio"
+                          aria-checked={service === value}
+                          className={`${styles.serviceOption} ${service === value ? styles.serviceOn : ''}`}
+                          onClick={() => setService(value)}
+                        >
+                          {value === 'table' ? t.serviceTable : t.serviceDelivery}
+                        </button>
                       ))}
                     </div>
-                    <div className={styles.line}>
-                      <span>{t.delivery}</span>
-                      <span>{area === 'inside' ? t.free : t.toAgree}</span>
-                    </div>
+                    {atTable ? (
+                      <div className={styles.line}>
+                        <span>{t.service}</span>
+                        <span>{t.atYourTable}</span>
+                      </div>
+                    ) : (
+                      <>
+                        <div className={styles.reach}>{t.reachYou}</div>
+                        <div className={styles.radios}>
+                          {(['inside', 'outside'] as const).map((value) => (
+                            <label key={value} className={styles.radio}>
+                              <input type="radio" name="area" checked={area === value} onChange={() => setArea(value)} />
+                              <span>{value === 'inside' ? t.inside : t.outside}</span>
+                            </label>
+                          ))}
+                        </div>
+                        <div className={styles.line}>
+                          <span>{t.delivery}</span>
+                          <span>{area === 'inside' ? t.free : t.toAgree}</span>
+                        </div>
+                      </>
+                    )}
                   </>
                 )}
 
@@ -590,9 +804,20 @@ export default function PizzaBuilder({ hours }: { hours: { open: string; lastOrd
                     {t.placeOrder} <span aria-hidden="true">↗</span>
                   </button>
                 )}
+                {stage === 'build' &&
+                  (saved ? (
+                    <Link href="/pizza-wall" className={styles.wallButton}>
+                      <i aria-hidden="true">✓</i> {t.onWall}: {t.seeWall}
+                    </Link>
+                  ) : (
+                    toppings.length > 0 && (
+                      <button type="button" className={styles.wallButton} onClick={openNaming}>
+                        <i aria-hidden="true">★</i> {t.nameIt}
+                      </button>
+                    )
+                  ))}
                 {error && <p className={styles.error} role="alert">{error}</p>}
-                <p className={styles.footnote}>{t.footnote}</p>
-                <Barcode seed={order?.ref || toppings.join('') || 'casa-italia'} />
+                <p className={styles.footnote}>{atTable ? t.footnoteTable : t.footnote}</p>
               </div>
             )}
           </aside>
@@ -610,6 +835,80 @@ export default function PizzaBuilder({ hours }: { hours: { open: string; lastOrd
             <Glove pose={stage === 'done' && glovePose !== 'point' ? 'ok' : glovePose} />
           </div>
         </div>
+
+        {/* Naming the pizza: its ticket gets written as you type */}
+        {naming !== 'closed' && (
+          <div className={styles.naming} role="dialog" aria-modal="true" aria-label={t.dialogTitle}>
+            <div className={styles.namingCard}>
+              <div className={styles.namingPizza}>
+                <PizzaArtwork toppings={toppings} />
+              </div>
+              <div className={styles.namingTicket}>
+                <strong>{naming === 'saved' && saved ? saved.name : nameForm.name.trim() || t.untitled}</strong>
+                {nameForm.creator.trim() && (
+                  <span>
+                    {t.by} {nameForm.creator.trim()}
+                  </span>
+                )}
+              </div>
+              {naming === 'saved' && saved ? (
+                <div className={styles.namingBody}>
+                  <h2 className={styles.namingTitle}>{t.savedTitle}</h2>
+                  <p className={styles.introText}>{t.savedText(saved.name)}</p>
+                  <Link href="/pizza-wall?sort=new" className={styles.primary}>
+                    {t.seeWall} <span aria-hidden="true">↗</span>
+                  </Link>
+                  <button type="button" className={styles.linkButton} onClick={() => setNaming('closed')}>
+                    ‹ {t.keepBuilding}
+                  </button>
+                </div>
+              ) : (
+                <form
+                  className={`${styles.form} ${styles.namingBody}`}
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    savePizza();
+                  }}
+                >
+                  <span className={styles.kicker}>{t.dialogKicker}</span>
+                  <h2 className={styles.namingTitle}>{t.dialogTitle}</h2>
+                  <p className={styles.introText}>{t.dialogText}</p>
+                  <div className={styles.nameRow}>
+                    <input
+                      autoFocus
+                      placeholder={t.pizzaName}
+                      minLength={PIZZA_NAME_MIN}
+                      maxLength={PIZZA_NAME_MAX}
+                      value={nameForm.name}
+                      onChange={(e) => setNameForm({ ...nameForm, name: e.target.value })}
+                    />
+                    <button
+                      type="button"
+                      className={styles.inspire}
+                      onClick={() => setNameForm({ ...nameForm, name: randomName() })}
+                    >
+                      {t.inspire}
+                    </button>
+                  </div>
+                  <input
+                    placeholder={t.creatorName}
+                    autoComplete="name"
+                    maxLength={PIZZA_CREATOR_MAX}
+                    value={nameForm.creator}
+                    onChange={(e) => setNameForm({ ...nameForm, creator: e.target.value })}
+                  />
+                  {saveError && <p className={styles.error} role="alert">{saveError}</p>}
+                  <button type="submit" className={styles.primary} disabled={saving}>
+                    {saving ? t.hanging : t.hang} <span aria-hidden="true">↗</span>
+                  </button>
+                  <button type="button" className={styles.linkButton} onClick={() => setNaming('closed')}>
+                    {t.cancel}
+                  </button>
+                </form>
+              )}
+            </div>
+          </div>
+        )}
       </main>
     </div>
   );

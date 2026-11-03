@@ -7,6 +7,7 @@ export const itTranslations: TranslationDictionary = {
   'nav.delivery': 'Consegna',
   'nav.reserve': 'Prenota',
   'nav.pizza': 'La tua Pizza',
+  'nav.wall': 'Bacheca',
   'nav.medal': 'Medaglia & Social',
   'nav.page': 'Pagina',
   'nav.of': 'di',
