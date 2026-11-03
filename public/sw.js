@@ -1,12 +1,11 @@
 
 /**
- * Auto-generated cache version based on build timestamp.
- * This ensures caches are invalidated on every deploy without manual bumps.
- * The SW file itself changing (due to the new timestamp) triggers the browser
- * to detect an update and install the new service worker.
+ * Cache generation: bump it to drop everything cached so far. Changing this file is what makes
+ * browsers install the new service worker, and its `activate` step then deletes the old caches.
+ * It must stay a constant: this script runs again every time the browser wakes the worker up, so a
+ * value computed here (e.g. from Date.now()) would start a new, empty cache at each wake-up.
  */
-const BUILD_TIMESTAMP = '__BUILD_' + Date.now() + '__';
-const CACHE_VERSION = BUILD_TIMESTAMP;
+const CACHE_VERSION = 'v5';
 const STATIC_CACHE = `casa-italia-static-${CACHE_VERSION}`;
 const MEDIA_CACHE = `casa-italia-media-${CACHE_VERSION}`;
 const DATA_CACHE = `casa-italia-data-${CACHE_VERSION}`;
@@ -55,7 +54,8 @@ async function storeStylesheet(cache, key, response) {
   }
 }
 
-async function matchWithFallback(request, cacheName = STATIC_CACHE) {
+/** The requested file from the cache, and only that file. */
+async function matchCached(request, cacheName = STATIC_CACHE) {
   const cache = await caches.open(cacheName);
 
   let match = await cache.match(request);
@@ -75,6 +75,19 @@ async function matchWithFallback(request, cacheName = STATIC_CACHE) {
 
   }
 
+  return null;
+}
+
+/**
+ * For when the network has failed: the requested file, else a stand-in so an offline page keeps
+ * some styling. Never use it before trying the network: a page's own stylesheet would be replaced
+ * by another page's, and that page would show unstyled.
+ */
+async function matchWithFallback(request, cacheName = STATIC_CACHE) {
+  const match = await matchCached(request, cacheName);
+  if (match) return match;
+
+  const cache = await caches.open(cacheName);
   const requestUrl = typeof request === 'string' ? request : request.url;
   const isGoogleFont = requestUrl.includes('fonts.googleapis.com');
 
@@ -304,7 +317,7 @@ self.addEventListener('fetch', (event) => {
       (async () => {
         const staticCache = await caches.open(STATIC_CACHE);
 
-        const cached = await matchWithFallback(request, STATIC_CACHE);
+        const cached = await matchCached(request, STATIC_CACHE);
         if (cached) {
           // Always attempt background refresh — don't rely on navigator.onLine
           // which is unreliable (e.g., captive portals report true)
