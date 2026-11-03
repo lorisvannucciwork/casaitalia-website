@@ -435,7 +435,7 @@ export default function PizzaWall({ initialPizzas, initialSort }: { initialPizza
           {pizzas.length === 0 ? (
             <div className={styles.empty}>
               <div className={styles.emptyBox}>
-                <img src="/pizza-builder/casa-box-open.webp" alt="" />
+                <img src="/pizza-builder/casa-box-plain.webp" alt="" />
               </div>
               <h2>{t.emptyTitle}</h2>
               <p>{t.emptyText}</p>
@@ -482,7 +482,7 @@ export default function PizzaWall({ initialPizzas, initialSort }: { initialPizza
                 {shown.slice(0, visible).map((pizza, index) => (
                   <article key={pizza.id} className={styles.card} style={{ '--tilt': `${[-1.6, 1.1, -0.7, 1.7, -1.1, 0.8][index % 6]}deg` } as React.CSSProperties}>
                     <button type="button" className={styles.box} onClick={() => setSpotlight(pizza)} aria-label={pizza.name}>
-                      <img src="/pizza-builder/casa-box-open.webp" alt="" className={styles.boxImage} loading="lazy" />
+                      <img src="/pizza-builder/casa-box-plain.webp" alt="" className={styles.boxImage} loading="lazy" />
                       <span className={styles.boxPizza}>
                         <PizzaArtwork toppings={pizza.toppings} />
                       </span>

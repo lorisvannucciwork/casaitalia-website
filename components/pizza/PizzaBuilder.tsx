@@ -549,7 +549,7 @@ export default function PizzaBuilder({
           {/* The box */}
           <div className={`${styles.boxWrap} ${lidOn ? '' : styles.boxWrapOpen}`}>
             <div className={`${styles.box} ${stage === 'closing' ? styles.boxThud : ''}`}>
-              <img src="/pizza-builder/casa-box-open.webp" alt="" className={styles.boxBase} draggable={false} />
+              <img src="/pizza-builder/casa-box-plain.webp" alt="" className={styles.boxBase} draggable={false} />
               <div ref={pizzaRef} className={`${styles.pizza} ${baked ? styles.pizzaBaked : ''}`}>
                 <img src="/pizza-builder/base-raw.webp" alt="" className={styles.base} draggable={false} />
                 <img src="/pizza-builder/base-baked.webp" alt="" className={`${styles.base} ${styles.baseBaked}`} draggable={false} />
