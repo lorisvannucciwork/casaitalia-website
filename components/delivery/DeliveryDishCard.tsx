@@ -6,6 +6,8 @@ import type { MenuItem } from '@/types/menu';
 import { useLanguage } from '@/context/LanguageContext';
 import { getTranslatedMenuItem } from '@/utils/menuTranslations';
 import { Plus, Minus } from 'lucide-react';
+import { ticketTilt } from '@/components/menu/DishCard';
+import styles from '@/components/menu/DishCard.module.css';
 
 interface DeliveryDishCardProps {
   item: MenuItem;
@@ -22,21 +24,18 @@ export const DeliveryDishCard: React.FC<DeliveryDishCardProps> = ({
 }) => {
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const [hasImageError, setHasImageError] = useState(false);
-  const { language, formatCurrency, t } = useLanguage();
+  const { language, formatCurrency } = useLanguage();
 
   const translatedItem = getTranslatedMenuItem(item, language);
   const dishImage = item.image && item.image.trim() !== '' ? encodeURI(item.image.trim()) : null;
 
   return (
     <div
-      className={`group relative backdrop-blur-2xl p-2.5 sm:p-3 overflow-hidden border transition-all duration-500 flex flex-col transform hover:-translate-y-1.5 h-full shadow-lg hover:shadow-2xl hover:shadow-[#ba935a]/20 ${
-        quantityInCart > 0
-          ? 'border-[#ba935a] ring-1 ring-[#ba935a]/50 bg-gradient-to-b from-[#faf7f2] to-white/95'
-          : 'bg-white/70 border-white/60 hover:border-[#ba935a]/40'
-      }`}
+      className={`group ${styles.card} ${quantityInCart > 0 ? styles.inOrder : ''}`}
+      style={{ '--tilt': ticketTilt(String(item.id || translatedItem.name)) } as React.CSSProperties}
     >
       {/* Top Image Container */}
-      <div className="relative w-full h-52 sm:h-60 bg-[#f5eedf] overflow-hidden shadow-inner shrink-0 flex items-center justify-center group/img">
+      <div className={styles.photo}>
         {item.badge && (
           <div className="absolute top-2 left-2 z-20 px-2.5 py-1 bg-[#ba935a] text-white text-[10px] font-bold uppercase tracking-wider shadow-md">
             {item.badge}
@@ -79,78 +78,69 @@ export const DeliveryDishCard: React.FC<DeliveryDishCardProps> = ({
         )}
       </div>
 
-      {/* Dish Information */}
-      <div className="px-2 sm:px-3 pt-4 pb-2 flex-1 flex flex-col justify-between">
-        <div className="space-y-2">
-          <div>
-            <h3 className="font-serif font-bold text-lg sm:text-xl text-[#1a1816] group-hover:text-[#ba935a] transition-colors leading-tight line-clamp-2">
-              {translatedItem.name}
-            </h3>
-            {language !== 'it' && translatedItem.italianName && (
-              <p className="text-xs text-[#ba935a] font-serif italic font-medium pt-0.5">
-                {translatedItem.italianName}
-              </p>
-            )}
-          </div>
+      {/* The ticket */}
+      <div className={styles.ticket}>
+        <span className={styles.pin} aria-hidden="true" />
+        <div className={styles.paper}>
+          <h3 className={styles.name}>{translatedItem.name}</h3>
 
-          <p className="text-xs sm:text-sm text-[#6e675e] line-clamp-2 leading-relaxed pt-1 font-medium">
-            {translatedItem.description}
-          </p>
+          {language !== 'it' && translatedItem.italianName && (
+            <p className={styles.italianName}>{translatedItem.italianName}</p>
+          )}
+
+          <p className={styles.description}>{translatedItem.description}</p>
 
           {item.tags && item.tags.length > 0 && (
-            <div className="flex flex-wrap gap-1.5 pt-1">
+            <div className={styles.tags}>
               {item.tags.slice(0, 3).map((tag) => (
-                <span
-                  key={tag}
-                  className="px-2 py-0.5 bg-[#faf7f2] border border-[#ba935a]/25 text-[10px] font-semibold text-[#8c6c39] tracking-wider uppercase"
-                >
+                <span key={tag} className={styles.tag}>
                   {tag}
                 </span>
               ))}
             </div>
           )}
-        </div>
 
-        {/* Pricing & Cart Action Bar */}
-        <div className="pt-4 mt-4 border-t border-[#ba935a]/15 flex items-center justify-between gap-2">
-          <span className="font-serif font-bold text-xl sm:text-2xl text-[#1a1816] leading-none">
-            {formatCurrency(item.price)}
-          </span>
+          {/* Pricing & Cart Action Bar */}
+          <div className={styles.foot}>
+            <div className={styles.footRow}>
+              <span className={styles.price}>{formatCurrency(item.price)}</span>
 
-          {/* Add / Quantity Control */}
-          {quantityInCart === 0 ? (
-            <button
-              type="button"
-              onClick={() => onAddToCart(item)}
-              aria-label={`Add ${translatedItem.name} to delivery order`}
-              title={language === 'it' ? 'Aggiungi all\'ordine' : 'Add to order'}
-              className="w-8 h-8 sm:w-8.5 sm:h-8.5 bg-gradient-to-r from-[#ba935a] to-[#a37f48] hover:from-[#c8a165] hover:to-[#ba935a] text-white shadow-sm hover:shadow-md transition-all flex items-center justify-center active:scale-95 cursor-pointer"
-            >
-              <Plus className="w-4 h-4 stroke-[2.5]" />
-            </button>
-          ) : (
-            <div className="flex items-center bg-[#faf7f2] border border-[#ba935a] shadow-xs">
-              <button
-                type="button"
-                onClick={() => onRemoveFromCart(item)}
-                aria-label={`Decrease ${translatedItem.name} quantity`}
-                className="w-8 h-8 flex items-center justify-center text-[#1a1816] hover:bg-[#ba935a] hover:text-white transition-colors cursor-pointer"
-              >
-                <Minus className="w-3.5 h-3.5" />
-              </button>
-              <span className="w-8 text-center font-bold text-xs text-[#1a1816] select-none">
-                {quantityInCart}
-              </span>
-              <button
-                type="button"
-                onClick={() => onAddToCart(item)}
-                aria-label={`Increase ${translatedItem.name} quantity`}
-                className="w-8 h-8 flex items-center justify-center text-[#1a1816] hover:bg-[#ba935a] hover:text-white transition-colors cursor-pointer"
-              >
-                <Plus className="w-3.5 h-3.5" />
-              </button>
+              {/* Add / Quantity Control */}
+              {quantityInCart === 0 ? (
+                <button
+                  type="button"
+                  onClick={() => onAddToCart(item)}
+                  aria-label={`Add ${translatedItem.name} to delivery order`}
+                  title={language === 'it' ? 'Aggiungi all\'ordine' : 'Add to order'}
+                  className="w-8 h-8 sm:w-8.5 sm:h-8.5 bg-gradient-to-r from-[#ba935a] to-[#a37f48] hover:from-[#c8a165] hover:to-[#ba935a] text-white shadow-sm hover:shadow-md transition-all flex items-center justify-center active:scale-95 cursor-pointer"
+                >
+                  <Plus className="w-4 h-4 stroke-[2.5]" />
+                </button>
+              ) : (
+                <div className="flex items-center bg-[#faf7f2] border border-[#ba935a] shadow-xs">
+                  <button
+                    type="button"
+                    onClick={() => onRemoveFromCart(item)}
+                    aria-label={`Decrease ${translatedItem.name} quantity`}
+                    className="w-8 h-8 flex items-center justify-center text-[#1a1816] hover:bg-[#ba935a] hover:text-white transition-colors cursor-pointer"
+                  >
+                    <Minus className="w-3.5 h-3.5" />
+                  </button>
+                  <span className="w-8 text-center font-bold text-xs text-[#1a1816] select-none">
+                    {quantityInCart}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => onAddToCart(item)}
+                    aria-label={`Increase ${translatedItem.name} quantity`}
+                    className="w-8 h-8 flex items-center justify-center text-[#1a1816] hover:bg-[#ba935a] hover:text-white transition-colors cursor-pointer"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              )}
             </div>
-          )}
+          </div>
         </div>
       </div>
     </div>

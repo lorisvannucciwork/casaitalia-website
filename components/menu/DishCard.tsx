@@ -10,7 +10,7 @@ import styles from './DishCard.module.css';
 /** Each ticket has its own slight tilt, always the same for a dish (also on the server). */
 const TILTS = [-1.3, 0.9, -0.6, 1.4, -1, 0.7];
 
-function ticketTilt(id: string) {
+export function ticketTilt(id: string) {
   let sum = 0;
   for (let i = 0; i < id.length; i++) sum += id.charCodeAt(i);
   return `${TILTS[sum % TILTS.length]}deg`;

@@ -136,6 +136,30 @@
   color: #1a1816;
 }
 
+/* Delivery: the price and the add button share the bottom line */
+.footRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding-top: 0.55rem;
+  border-top: 1px dashed rgba(26, 24, 22, 0.3);
+}
+.footRow .price {
+  padding-top: 0;
+  border-top: 0;
+}
+
+/* A dish in the order: warmer paper and a gold glow around the ticket */
+.inOrder .paper {
+  background:
+    repeating-linear-gradient(180deg, rgba(186, 147, 90, 0) 0 25px, rgba(186, 147, 90, 0.16) 25px 26px),
+    #fbf1dc;
+}
+.inOrder .ticket {
+  filter: drop-shadow(0 0 1.5px #a37f48) drop-shadow(0 0 7px rgba(186, 147, 90, 0.75)) drop-shadow(0 12px 12px rgba(30, 20, 10, 0.25));
+}
+
 @media (prefers-reduced-motion: reduce) {
   .card,
   .ticket {
