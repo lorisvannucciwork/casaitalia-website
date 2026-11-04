@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Utensils, Menu, X, Bike, CalendarDays, Pizza, Award } from 'lucide-react';
+import { Utensils, Menu, X, Bike, CalendarDays, Pizza, Pin } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import { SITE_CONFIG } from '@/config/site';
 import { LanguageSelector } from './LanguageSelector';
@@ -171,7 +171,7 @@ export const Navbar: React.FC = () => {
                 pathname === '/pizza-wall' ? 'text-[#ba935a]' : 'text-[#1a1816] hover:text-[#ba935a]'
               }`}
             >
-              <Award className="w-4 h-4" />
+              <Pin className="w-4 h-4" />
               <span>{t('nav.wall')}</span>
             </Link>
             <Link
