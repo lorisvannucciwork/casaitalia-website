@@ -777,17 +777,6 @@
 .doneCard {
   text-align: left;
 }
-.doneCheck {
-  display: inline-flex;
-  width: 30px;
-  height: 30px;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  border: 1.5px solid var(--gold);
-  color: var(--gold-dark);
-  font-size: 15px;
-}
 .arriving {
   margin: 0 0 16px;
   padding: 10px 0;

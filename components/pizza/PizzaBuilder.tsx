@@ -640,7 +640,6 @@ export default function PizzaBuilder({
               </div>
             ) : stage === 'done' && order ? (
               <div className={`${styles.card} ${styles.doneCard}`}>
-                <span className={styles.doneCheck} aria-hidden="true">✓</span>
                 <h2 className={styles.headline}>
                   {t.doneTitle}
                   <br />
