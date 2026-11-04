@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import dishStyles from '@/components/menu/DishCard.module.css';
 
 export const Skeleton: React.FC<{
   className?: string;
@@ -84,10 +85,10 @@ export const CasaBrandLoader: React.FC<{
 export const DishCardSkeleton: React.FC<{ className?: string }> = ({ className = '' }) => {
   return (
     <div
-      className={`relative bg-white/70 backdrop-blur-2xl p-2.5 sm:p-3 overflow-hidden border border-white/60 shadow-lg flex flex-col h-full ${className}`}
+      className={`${dishStyles.card} ${className}`}
     >
 
-      <div className="relative w-full h-52 sm:h-60 bg-[#f5eedf] overflow-hidden shadow-inner shrink-0 flex items-center justify-center">
+      <div className={dishStyles.photo}>
 
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent animate-shimmer" />
 
@@ -100,7 +101,8 @@ export const DishCardSkeleton: React.FC<{ className?: string }> = ({ className =
         </div>
       </div>
 
-      <div className="px-2 sm:px-3 pt-4 pb-2 flex-1 flex flex-col justify-between space-y-3">
+      <div className={dishStyles.ticket}>
+      <div className={`${dishStyles.paper} justify-between space-y-3`}>
         <div className="space-y-2">
 
           <div className="space-y-1">
@@ -121,6 +123,7 @@ export const DishCardSkeleton: React.FC<{ className?: string }> = ({ className =
             <Skeleton variant="circular" className="w-5 h-5" />
           </div>
         </div>
+      </div>
       </div>
     </div>
   );

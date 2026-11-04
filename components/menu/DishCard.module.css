@@ -1,0 +1,147 @@
+/* The menu's dishes as the kitchen tickets of the Pizza Wall: the photo of the dish, with a paper
+   ticket pinned on it. The grid keeps the torn edges of a row level. */
+
+.card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  transition: transform 0.3s ease;
+}
+.card:hover {
+  transform: translateY(-4px);
+}
+
+.photo {
+  position: relative;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 15rem;
+  overflow: hidden;
+  background: #f5eedf;
+  box-shadow: 0 16px 24px -14px rgba(30, 20, 10, 0.55);
+}
+@media (min-width: 640px) {
+  .photo {
+    height: 17rem;
+  }
+}
+
+/* Holds the shadow: the torn edge of the paper would cut it off */
+.ticket {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  width: 92%;
+  margin: -2.75rem auto 0;
+  filter: drop-shadow(0 12px 12px rgba(30, 20, 10, 0.28)) drop-shadow(0 1px 2px rgba(30, 20, 10, 0.2));
+  transform: rotate(var(--tilt, 0deg));
+  transition: transform 0.25s ease;
+}
+.card:hover .ticket {
+  transform: rotate(0deg);
+}
+
+.paper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 1.4rem 1.1rem 1.15rem;
+  background:
+    repeating-linear-gradient(180deg, rgba(186, 147, 90, 0) 0 25px, rgba(186, 147, 90, 0.12) 25px 26px),
+    #fffdf7;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 5px), 95% 100%, 90% calc(100% - 5px), 85% 100%, 80% calc(100% - 5px), 75% 100%, 70% calc(100% - 5px), 65% 100%, 60% calc(100% - 5px), 55% 100%, 50% calc(100% - 5px), 45% 100%, 40% calc(100% - 5px), 35% 100%, 30% calc(100% - 5px), 25% 100%, 20% calc(100% - 5px), 15% 100%, 10% calc(100% - 5px), 5% 100%, 0 calc(100% - 5px));
+}
+
+.pin {
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  z-index: 2;
+  width: 12px;
+  height: 12px;
+  margin-left: -6px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #f1d9a8, #ba935a 50%, #6e5228);
+  box-shadow: 0 2px 3px rgba(30, 20, 10, 0.45);
+}
+
+.name {
+  margin: 0;
+  font-family: var(--font-satisfy), cursive;
+  font-size: 1.65rem;
+  font-weight: 400;
+  line-height: 1.2;
+  color: #1a1816;
+  overflow-wrap: anywhere;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.italianName {
+  margin: 0.15rem 0 0;
+  font-size: 0.78rem;
+  font-style: italic;
+  color: #8c6c39;
+}
+
+.description {
+  margin: 0.5rem 0 0;
+  font-family: 'Courier New', ui-monospace, monospace;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: #524d46;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.55rem;
+}
+.tag {
+  padding: 0.1rem 0.4rem;
+  border: 1px solid rgba(186, 147, 90, 0.35);
+  font-family: 'Courier New', ui-monospace, monospace;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #8c6c39;
+}
+
+/* The price stays on the bottom line of the ticket, however long the text above */
+.foot {
+  margin-top: auto;
+  padding-top: 0.85rem;
+}
+.price {
+  display: block;
+  padding-top: 0.55rem;
+  border-top: 1px dashed rgba(26, 24, 22, 0.3);
+  font-family: 'Courier New', ui-monospace, monospace;
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #1a1816;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .ticket {
+    transition: none;
+  }
+  .card:hover {
+    transform: none;
+  }
+}

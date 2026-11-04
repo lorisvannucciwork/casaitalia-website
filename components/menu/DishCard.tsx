@@ -5,6 +5,16 @@ import Image from 'next/image';
 import { MenuItem } from '@/data/menuData';
 import { useLanguage } from '@/context/LanguageContext';
 import { getTranslatedMenuItem } from '@/utils/menuTranslations';
+import styles from './DishCard.module.css';
+
+/** Each ticket has its own slight tilt, always the same for a dish (also on the server). */
+const TILTS = [-1.3, 0.9, -0.6, 1.4, -1, 0.7];
+
+function ticketTilt(id: string) {
+  let sum = 0;
+  for (let i = 0; i < id.length; i++) sum += id.charCodeAt(i);
+  return `${TILTS[sum % TILTS.length]}deg`;
+}
 
 interface DishCardProps {
   item: MenuItem;
@@ -21,10 +31,11 @@ export const DishCard: React.FC<DishCardProps> = ({ item }) => {
 
   return (
     <div
-      className="group relative bg-white/70 backdrop-blur-2xl p-2.5 sm:p-3 overflow-hidden border border-white/60 shadow-lg hover:shadow-2xl hover:shadow-[#ba935a]/20 hover:border-[#ba935a]/40 transition-all duration-500 flex flex-col transform hover:-translate-y-1.5 h-full focus:outline-none"
+      className={`group ${styles.card}`}
+      style={{ '--tilt': ticketTilt(String(item.id || translatedItem.name)) } as React.CSSProperties}
     >
 
-      <div className="relative w-full h-52 sm:h-60 bg-[#f5eedf] overflow-hidden shadow-inner shrink-0 flex items-center justify-center">
+      <div className={styles.photo}>
 
         {item.badge && (
           <div className="absolute top-2 left-2 z-20 px-2.5 py-1 bg-[#ba935a] text-white text-[10px] font-bold uppercase tracking-wider shadow-md">
@@ -75,41 +86,30 @@ export const DishCard: React.FC<DishCardProps> = ({ item }) => {
         )}
       </div>
 
-      <div className="px-2 sm:px-3 pt-4 pb-2 flex-1 flex flex-col justify-between">
-        <div className="space-y-2">
-
-          <h3 className="font-serif font-bold text-lg sm:text-xl text-[#1a1816] group-hover:text-[#ba935a] transition-colors leading-tight line-clamp-2">
-            {translatedItem.name}
-          </h3>
+      <div className={styles.ticket}>
+        <span className={styles.pin} aria-hidden="true" />
+        <div className={styles.paper}>
+          <h3 className={styles.name}>{translatedItem.name}</h3>
 
           {language !== 'it' && translatedItem.italianName && (
-            <p className="text-xs text-[#ba935a] font-serif italic font-medium">
-              {translatedItem.italianName}
-            </p>
+            <p className={styles.italianName}>{translatedItem.italianName}</p>
           )}
 
-          <p className="text-xs sm:text-sm text-[#6e675e] line-clamp-2 leading-relaxed pt-1 font-medium">
-            {translatedItem.description}
-          </p>
+          <p className={styles.description}>{translatedItem.description}</p>
 
           {item.tags && item.tags.length > 0 && (
-            <div className="flex flex-wrap gap-1.5 pt-1">
+            <div className={styles.tags}>
               {item.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="px-2 py-0.5 bg-[#faf7f2] border border-[#ba935a]/25 text-[10px] font-semibold text-[#8c6c39] tracking-wider uppercase"
-                >
+                <span key={tag} className={styles.tag}>
                   {tag}
                 </span>
               ))}
             </div>
           )}
-        </div>
 
-        <div className="pt-4 mt-4 border-t border-[#ba935a]/15 flex items-center justify-between gap-2">
-          <span className="font-serif font-bold text-xl sm:text-2xl text-[#1a1816] leading-none">
-            {formatCurrency(item.price)}
-          </span>
+          <div className={styles.foot}>
+            <span className={styles.price}>{formatCurrency(item.price)}</span>
+          </div>
         </div>
       </div>
     </div>
