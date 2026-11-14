@@ -5,6 +5,7 @@ import React, { useEffect, useMemo, useRef, useState, useSyncExternalStore } fro
 import Link from 'next/link';
 import { Check, ChevronDown, UtensilsCrossed } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
+import { ONLINE_ORDERING_AVAILABLE } from '@/config/ordering';
 import { Footer, Navbar } from '@/components/layout';
 import { TOPPINGS, type ToppingId } from '@/config/pizzaBuilder';
 import type { WallPizza } from '@/lib/pizzaWallShared';
@@ -43,6 +44,7 @@ const COPY = {
     ratingsCount: (n: number) => `${n} rating${n === 1 ? '' : 's'}`,
     ordersCount: (n: number) => `ordered ${n} time${n === 1 ? '' : 's'}`,
     order: 'Order this pizza',
+    unavailable: 'Ordering is currently unavailable',
     rate: (n: number) => `Rate ${n} out of 5`,
     more: 'Show more pizzas',
     emptyTitle: 'The wall is waiting for its first pizza.',
@@ -69,6 +71,7 @@ const COPY = {
     ratingsCount: (n: number) => `${n} vot${n === 1 ? 'o' : 'i'}`,
     ordersCount: (n: number) => `ordinata ${n} volt${n === 1 ? 'a' : 'e'}`,
     order: 'Ordina questa pizza',
+    unavailable: 'Ordini non disponibili al momento',
     rate: (n: number) => `Vota ${n} su 5`,
     more: 'Mostra altre pizze',
     emptyTitle: 'La bacheca aspetta la sua prima pizza.',
@@ -397,9 +400,15 @@ export default function PizzaWall({ initialPizzas, initialSort }: { initialPizza
               <span>{t.titleSmall}</span>
             </h1>
             <div className={styles.heroActions}>
-              <Link href="/create-your-pizza" className={styles.primary}>
-                {t.create}
-              </Link>
+              {ONLINE_ORDERING_AVAILABLE ? (
+                <Link href="/create-your-pizza" className={styles.primary}>
+                  {t.create}
+                </Link>
+              ) : (
+                <span className={styles.primary} aria-disabled="true" style={{ opacity: 0.6, cursor: 'default' }}>
+                  {t.unavailable}
+                </span>
+              )}
               {pizzas.length > 1 && (
                 <button type="button" className={styles.ghost} onClick={surprise}>
                   {t.surprise}
@@ -439,9 +448,11 @@ export default function PizzaWall({ initialPizzas, initialSort }: { initialPizza
               </div>
               <h2>{t.emptyTitle}</h2>
               <p>{t.emptyText}</p>
-              <Link href="/create-your-pizza" className={styles.primary}>
-                {t.create}
-              </Link>
+              {ONLINE_ORDERING_AVAILABLE && (
+                <Link href="/create-your-pizza" className={styles.primary}>
+                  {t.create}
+                </Link>
+              )}
             </div>
           ) : (
             <>
@@ -502,9 +513,15 @@ export default function PizzaWall({ initialPizzas, initialSort }: { initialPizza
                         <strong>€{pizza.price.toFixed(2)}</strong>
                         {pizza.orderCount > 0 && <span>{t.ordersCount(pizza.orderCount)}</span>}
                       </div>
-                      <Link href={`/create-your-pizza?pizza=${pizza.id}`} className={styles.orderButton}>
-                        {t.order}
-                      </Link>
+                      {ONLINE_ORDERING_AVAILABLE ? (
+                        <Link href={`/create-your-pizza?pizza=${pizza.id}`} className={styles.orderButton}>
+                          {t.order}
+                        </Link>
+                      ) : (
+                        <span className={styles.orderButton} aria-disabled="true" style={{ opacity: 0.6, cursor: 'default' }}>
+                          {t.unavailable}
+                        </span>
+                      )}
                     </div>
                   </article>
                 ))}
@@ -549,9 +566,15 @@ export default function PizzaWall({ initialPizzas, initialSort }: { initialPizza
                   <Stars pizza={spotlight} labels={t.rate} onRate={(stars) => rate(spotlight, stars)} />
                   <span>{spotlight.ratingCount ? `${spotlight.ratingAvg.toFixed(1)} · ${t.ratingsCount(spotlight.ratingCount)}` : t.noRatings}</span>
                 </div>
-                <Link href={`/create-your-pizza?pizza=${spotlight.id}`} className={styles.primary}>
-                  {t.order} · €{spotlight.price.toFixed(2)}
-                </Link>
+                {ONLINE_ORDERING_AVAILABLE ? (
+                  <Link href={`/create-your-pizza?pizza=${spotlight.id}`} className={styles.primary}>
+                    {t.order} · €{spotlight.price.toFixed(2)}
+                  </Link>
+                ) : (
+                  <span className={styles.primary} aria-disabled="true" style={{ opacity: 0.6, cursor: 'default' }}>
+                    {t.unavailable}
+                  </span>
+                )}
               </div>
             )}
           </div>

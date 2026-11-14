@@ -3,7 +3,8 @@ import type { Metadata } from 'next';
 import { SITE_URL } from '@/config/site';
 import { orderHours } from '@/lib/online';
 import { getPizza } from '@/lib/pizzaWall';
-import { BreadcrumbJsonLd } from '@/components/layout';
+import { BreadcrumbJsonLd, OrderingUnavailable } from '@/components/layout';
+import { ONLINE_ORDERING_AVAILABLE } from '@/config/ordering';
 import PizzaBuilder from '@/components/pizza/PizzaBuilder';
 
 export const metadata: Metadata = {
@@ -46,6 +47,7 @@ export const metadata: Metadata = {
  * With ?table=<number> (a QR code on the table), the order is already set for that table.
  */
 export default async function CreateYourPizzaPage({ searchParams }: { searchParams: Promise<{ pizza?: string; table?: string }> }) {
+  if (!ONLINE_ORDERING_AVAILABLE) return <OrderingUnavailable kind="pizza" />;
   const { pizza, table } = await searchParams;
   const preset = pizza ? await getPizza(pizza).catch(() => null) : null;
   const tableNumber = typeof table === 'string' && /^[\p{L}\p{N}][\p{L}\p{N} -]{0,7}$/u.test(table) ? table : '';

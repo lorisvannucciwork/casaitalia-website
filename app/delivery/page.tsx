@@ -6,7 +6,8 @@ import { MENU_CATEGORIES } from '@/data/menuCategories';
 import { getDynamicMenuCategories, getDynamicMenuItems } from '@/lib/menu';
 import { DeliveryView } from '@/components/delivery';
 import { MenuLoadingView } from '@/components/menu';
-import { BreadcrumbJsonLd } from '@/components/layout';
+import { BreadcrumbJsonLd, OrderingUnavailable } from '@/components/layout';
+import { ONLINE_ORDERING_AVAILABLE } from '@/config/ordering';
 
 interface DeliveryPageProps {
   searchParams?: Promise<{
@@ -78,6 +79,7 @@ export async function generateMetadata({ searchParams }: DeliveryPageProps): Pro
 export const revalidate = 60;
 
 export default async function DeliveryPage({ searchParams }: DeliveryPageProps) {
+  if (!ONLINE_ORDERING_AVAILABLE) return <OrderingUnavailable kind="delivery" />;
   const resolvedParams = searchParams ? await searchParams : {};
   const requestedCategory =
     typeof resolvedParams.category === 'string'

@@ -9,6 +9,7 @@
 import db from './db';
 import { sanitizeText } from './security';
 import { CUSTOM_PIZZA_ID, PIZZA_BASE, TOPPINGS, customPizzaPrice } from '@/config/pizzaBuilder';
+import { ONLINE_ORDERING_AVAILABLE } from '@/config/ordering';
 import { countPizzaOrder, getPizza, type WallPizza } from './pizzaWall';
 
 export const RESTAURANT_TZ = 'Africa/Cairo';
@@ -159,6 +160,9 @@ export function isOrderingOpen(): boolean {
 }
 
 export async function createOrder(input: OrderInput, currency: string) {
+  if (!ONLINE_ORDERING_AVAILABLE) {
+    throw new OnlineError('unavailable_service', 'Online ordering is currently unavailable.', 503);
+  }
   if (!isOrderingOpen()) {
     const hours = orderHours();
     throw new OnlineError('closed', `Delivery orders are taken from ${hours.open} to ${hours.lastOrder}.`);

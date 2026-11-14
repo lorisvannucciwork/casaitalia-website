@@ -7,3 +7,4 @@ export * from './RestaurantJsonLd';
 export * from './BreadcrumbJsonLd';
 export * from './MenuJsonLd';
 export * from './DisableZoom';
+export * from './OrderingUnavailable';
