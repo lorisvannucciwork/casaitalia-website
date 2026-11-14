@@ -9,7 +9,7 @@
 import db from './db';
 import { sanitizeText } from './security';
 import { CUSTOM_PIZZA_ID, PIZZA_BASE, TOPPINGS, customPizzaPrice } from '@/config/pizzaBuilder';
-import { ONLINE_ORDERING_AVAILABLE } from '@/config/ordering';
+import { ONLINE_ORDERING_AVAILABLE, RESERVATIONS_AVAILABLE } from '@/config/ordering';
 import { countPizzaOrder, getPizza, type WallPizza } from './pizzaWall';
 
 export const RESTAURANT_TZ = 'Africa/Cairo';
@@ -316,6 +316,9 @@ export async function getAvailability(date: string, guests = 1) {
 }
 
 export async function createReservation(input: ReservationInput) {
+  if (!RESERVATIONS_AVAILABLE) {
+    throw new OnlineError('unavailable_service', 'Online booking is currently unavailable.', 503);
+  }
   const name = clean(input.name, 80);
   const phone = clean(input.phone, 30);
   const email = clean(input.email, 120);

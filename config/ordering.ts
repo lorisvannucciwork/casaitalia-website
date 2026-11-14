@@ -4,3 +4,9 @@
  * Set back to true (and push) to take orders again.
  */
 export const ONLINE_ORDERING_AVAILABLE = false;
+
+/**
+ * Online table booking switch (the "Book a table" page).
+ * false = the page shows "currently unavailable" and the server refuses every new booking.
+ */
+export const RESERVATIONS_AVAILABLE = false;

@@ -2,7 +2,8 @@ import React from 'react';
 import type { Metadata } from 'next';
 import { SITE_URL } from '@/config/site';
 import { ReservationView } from '@/components/reservations';
-import { BreadcrumbJsonLd } from '@/components/layout';
+import { BreadcrumbJsonLd, OrderingUnavailable } from '@/components/layout';
+import { RESERVATIONS_AVAILABLE } from '@/config/ordering';
 
 export const metadata: Metadata = {
   title: 'Prenota un Tavolo | Book a Table',
@@ -40,6 +41,7 @@ export const metadata: Metadata = {
 };
 
 export default function ReservationsPage() {
+  if (!RESERVATIONS_AVAILABLE) return <OrderingUnavailable kind="reservations" />;
   return (
     <>
       <BreadcrumbJsonLd
