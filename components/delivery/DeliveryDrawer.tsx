@@ -6,6 +6,7 @@ import type { DeliveryCartItem, DeliveryCustomerDetails } from '@/types/delivery
 import { useLanguage } from '@/context/LanguageContext';
 import { getTranslatedMenuItem } from '@/utils/menuTranslations';
 import { SITE_CONFIG } from '@/config/site';
+import { DELIVERY_VIA_WHATSAPP, openWhatsApp, whatsappLink } from '@/config/ordering';
 import {
   X,
   Plus,
@@ -105,7 +106,7 @@ export const DeliveryDrawer: React.FC<DeliveryDrawerProps> = ({
   const [status, setStatus] = useState<'idle' | 'sending' | 'done'>('idle');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [showErrors, setShowErrors] = useState(false);
-  const [placed, setPlaced] = useState<{ ref: string; subtotal: number } | null>(null);
+  const [placed, setPlaced] = useState<{ ref: string; subtotal: number; whatsapp?: string } | null>(null);
 
   const missing = {
     name: !customerDetails.customerName.trim(),
@@ -122,6 +123,34 @@ export const DeliveryDrawer: React.FC<DeliveryDrawerProps> = ({
     if (missing.name || missing.phone || missing.location) {
       setShowErrors(true);
       setErrorMessage(t('delivery.fillRequired'));
+      return;
+    }
+    if (DELIVERY_VIA_WHATSAPP) {
+      // The order is written out in a WhatsApp message to the restaurant: nothing goes to the server
+      const lines = cart.map((item) => {
+        const note = item.notes?.trim() ? ` (${item.notes.trim()})` : '';
+        return `• ${item.quantity} x ${item.dish.name} - ${formatCurrency(item.dish.price * item.quantity)}${note}`;
+      });
+      const outside = customerDetails.area === 'outside';
+      const text = [
+        isIt ? 'Salve Casa Italia! Vorrei ordinare a domicilio:' : 'Hello Casa Italia! I would like to order for delivery:',
+        '',
+        ...lines,
+        '',
+        `${t('delivery.subtotal')}: ${formatCurrency(subtotal)}`,
+        '',
+        `${t('delivery.nameLabel')}: ${customerDetails.customerName.trim()}`,
+        `${t('delivery.areaLabel')}: ${outside ? t('delivery.outsidePortGhalib') : t('delivery.insidePortGhalib')}`,
+        `${t('delivery.roomLabel')}: ${customerDetails.specificLocation.trim()}`,
+        `${t('delivery.phoneLabel')}: ${customerDetails.phone.trim()}`,
+        ...(customerDetails.notes?.trim() ? [`${t('delivery.notesLabel')}: ${customerDetails.notes.trim()}`] : []),
+      ].join('\n');
+      const url = whatsappLink(SITE_CONFIG.contact.phone, text);
+      openWhatsApp(url);
+      setErrorMessage(null);
+      setPlaced({ ref: '', subtotal, whatsapp: url });
+      setStatus('done');
+      onClearCart();
       return;
     }
     setStatus('sending');
@@ -172,8 +201,7 @@ export const DeliveryDrawer: React.FC<DeliveryDrawerProps> = ({
     const text = isIt
       ? 'Salve Casa Italia! Vorrei informazioni sul servizio di consegna a domicilio a Port Ghalib.'
       : 'Hello Casa Italia! I would like some information regarding your delivery service in Port Ghalib.';
-    const whatsappNumber = SITE_CONFIG.contact.phone.replace(/[^0-9]/g, '');
-    window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(text)}`, '_blank', 'noopener,noreferrer');
+    openWhatsApp(whatsappLink(SITE_CONFIG.contact.phone, text));
   };
 
   if (!shouldRender) return null;
@@ -228,14 +256,32 @@ export const DeliveryDrawer: React.FC<DeliveryDrawerProps> = ({
                 <Check className="w-8 h-8" />
               </div>
               <div className="space-y-2">
-                <h3 className="font-serif font-bold text-2xl text-[#1a1816]">{t('delivery.orderPlacedTitle')}</h3>
-                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#ba935a]">{t('delivery.orderNumber')}</p>
-                <p className="font-serif font-bold text-3xl text-[#1a1816] tracking-wider">{placed.ref}</p>
-                <p className="text-sm text-[#6e675e] max-w-xs mx-auto">{t('delivery.orderPlacedDesc')}</p>
+                <h3 className="font-serif font-bold text-2xl text-[#1a1816]">
+                  {placed.whatsapp ? t('delivery.whatsappSentTitle') : t('delivery.orderPlacedTitle')}
+                </h3>
+                {placed.ref && (
+                  <>
+                    <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#ba935a]">{t('delivery.orderNumber')}</p>
+                    <p className="font-serif font-bold text-3xl text-[#1a1816] tracking-wider">{placed.ref}</p>
+                  </>
+                )}
+                <p className="text-sm text-[#6e675e] max-w-xs mx-auto">
+                  {placed.whatsapp ? t('delivery.whatsappSentDesc') : t('delivery.orderPlacedDesc')}
+                </p>
                 <p className="text-sm font-semibold text-[#1a1816]">
                   {t('delivery.subtotal')}: {formatCurrency(placed.subtotal)} · {t('delivery.payOnDelivery')}
                 </p>
               </div>
+              {placed.whatsapp && (
+                <a
+                  href={placed.whatsapp}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block w-fit mx-auto px-5 py-2.5 bg-[#25D366] hover:bg-[#1ebe5b] text-white text-xs font-bold uppercase tracking-wider transition-colors shadow-sm"
+                >
+                  {t('delivery.openWhatsAppAgain')}
+                </a>
+              )}
               <button
                 type="button"
                 onClick={handleCloseDrawer}
@@ -571,7 +617,7 @@ export const DeliveryDrawer: React.FC<DeliveryDrawerProps> = ({
               <span className="font-serif text-xs sm:text-sm font-bold tracking-wider uppercase text-[#faf7f2] truncate">
                 {status === 'sending'
                   ? t('delivery.sendingOrder')
-                  : `${t('delivery.placeOrder')} · ${formatCurrency(subtotal)}`}
+                  : `${DELIVERY_VIA_WHATSAPP ? t('delivery.orderOnWhatsApp') : t('delivery.placeOrder')} · ${formatCurrency(subtotal)}`}
               </span>
             </button>
 

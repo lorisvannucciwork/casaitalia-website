@@ -5,6 +5,7 @@ import { CalendarDays, Check, Clock, Minus, Phone, Plus, Users } from 'lucide-re
 import { Navbar, Footer } from '@/components/layout';
 import { useLanguage } from '@/context/LanguageContext';
 import { SITE_CONFIG } from '@/config/site';
+import { RESERVATIONS_VIA_WHATSAPP, openWhatsApp, whatsappLink } from '@/config/ordering';
 
 interface Slot {
   time: string;
@@ -67,7 +68,7 @@ export const ReservationView: React.FC = () => {
   const [status, setStatus] = useState<'idle' | 'sending' | 'done'>('idle');
   const [error, setError] = useState<string | null>(null);
   const [showErrors, setShowErrors] = useState(false);
-  const [booked, setBooked] = useState<{ ref: string; date: string; time: string; guests: number } | null>(null);
+  const [booked, setBooked] = useState<{ ref: string; date: string; time: string; guests: number; whatsapp?: string } | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -112,6 +113,34 @@ export const ReservationView: React.FC = () => {
     if (missing.name || missing.phone || missing.time) {
       setShowErrors(true);
       setError(missing.time ? t('reserve.chooseTime') : t('reserve.fillRequired'));
+      return;
+    }
+    if (RESERVATIONS_VIA_WHATSAPP) {
+      // The booking request is written out in a WhatsApp message to the restaurant: nothing goes to the server
+      const isIt = language === 'it';
+      const seating = areaOptions.find((o) => o.value === area)?.label || '';
+      const text = [
+        isIt ? 'Salve Casa Italia! Vorrei prenotare un tavolo:' : 'Hello Casa Italia! I would like to book a table:',
+        '',
+        `${t('reserve.date')}: ${formattedDate(date)}`,
+        `${t('reserve.time')}: ${time}`,
+        `${t('reserve.partySize')}: ${guests}`,
+        `${t('reserve.area')}: ${seating}`,
+        '',
+        `${t('reserve.name')}: ${guest.name.trim()}`,
+        `${t('reserve.phone')}: ${guest.phone.trim()}`,
+        ...(guest.email.trim() ? [`Email: ${guest.email.trim()}`] : []),
+        ...(guest.notes.trim() ? [`${t('reserve.notes')}: ${guest.notes.trim()}`] : []),
+      ].join('\n');
+      const url = whatsappLink(SITE_CONFIG.contact.phone, text);
+      openWhatsApp(url);
+      try {
+        localStorage.setItem(STORAGE_KEY_GUEST, JSON.stringify({ name: guest.name, phone: guest.phone, email: guest.email }));
+      } catch {}
+      setError(null);
+      setBooked({ ref: '', date, time: time!, guests, whatsapp: url });
+      setStatus('done');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
     setStatus('sending');
@@ -183,7 +212,7 @@ export const ReservationView: React.FC = () => {
               {t('reserve.title')}
             </h1>
             <p className="mt-3 text-sm text-[#faf7f2]/90 max-w-xl mx-auto [text-shadow:0_2px_4px_rgba(0,0,0,0.6)]">
-              {t('reserve.subtitle')}
+              {RESERVATIONS_VIA_WHATSAPP ? t('reserve.subtitleWhatsApp') : t('reserve.subtitle')}
             </p>
           </div>
 
@@ -193,16 +222,34 @@ export const ReservationView: React.FC = () => {
               <div className="w-16 h-16 rounded-full bg-[#1b7e3e]/10 border border-[#1b7e3e]/30 text-[#1b7e3e] mx-auto flex items-center justify-center">
                 <Check className="w-8 h-8" />
               </div>
-              <h2 className="font-serif font-bold text-2xl sm:text-3xl text-[#1a1816]">{t('reserve.confirmedTitle')}</h2>
+              <h2 className="font-serif font-bold text-2xl sm:text-3xl text-[#1a1816]">
+                {booked.whatsapp ? t('reserve.whatsappSentTitle') : t('reserve.confirmedTitle')}
+              </h2>
               <div className="inline-block border-y border-[#ba935a]/40 py-4 px-6 space-y-1">
-                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#ba935a]">{t('reserve.bookingNumber')}</p>
-                <p className="font-serif font-bold text-3xl tracking-wider">{booked.ref}</p>
+                {booked.ref && (
+                  <>
+                    <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#ba935a]">{t('reserve.bookingNumber')}</p>
+                    <p className="font-serif font-bold text-3xl tracking-wider">{booked.ref}</p>
+                  </>
+                )}
                 <p className="text-sm text-[#1a1816] capitalize">{formattedDate(booked.date)}</p>
                 <p className="text-sm text-[#1a1816]">
                   {booked.time} · {booked.guests} {booked.guests === 1 ? t('reserve.guest') : t('reserve.guests')}
                 </p>
               </div>
-              <p className="text-sm text-[#6e675e] max-w-md mx-auto">{t('reserve.confirmedDesc')}</p>
+              <p className="text-sm text-[#6e675e] max-w-md mx-auto">
+                {booked.whatsapp ? t('reserve.whatsappSentDesc') : t('reserve.confirmedDesc')}
+              </p>
+              {booked.whatsapp && (
+                <a
+                  href={booked.whatsapp}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block w-fit mx-auto px-5 py-2.5 bg-[#25D366] hover:bg-[#1ebe5b] text-white text-xs font-bold uppercase tracking-wider transition-colors shadow-sm"
+                >
+                  {t('reserve.openWhatsAppAgain')}
+                </a>
+              )}
               <button
                 type="button"
                 onClick={startOver}
@@ -402,9 +449,7 @@ export const ReservationView: React.FC = () => {
                 <span className="font-serif text-sm font-bold tracking-wider uppercase">
                   {status === 'sending'
                     ? t('reserve.sending')
-                    : time
-                      ? `${t('reserve.submit')} · ${time}`
-                      : t('reserve.submit')}
+                    : `${RESERVATIONS_VIA_WHATSAPP ? t('reserve.submitWhatsApp') : t('reserve.submit')}${time ? ` · ${time}` : ''}`}
                 </span>
               </button>
 

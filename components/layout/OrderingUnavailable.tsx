@@ -6,7 +6,7 @@ import { Navbar } from './Navbar';
 import { Footer } from './Footer';
 import { useLanguage } from '@/context/LanguageContext';
 import { SITE_CONFIG } from '@/config/site';
-import { RESERVATIONS_AVAILABLE } from '@/config/ordering';
+import { DELIVERY_OPEN, DELIVERY_VIA_WHATSAPP, RESERVATIONS_OPEN } from '@/config/ordering';
 
 type Kind = 'delivery' | 'pizza' | 'reservations';
 
@@ -20,13 +20,15 @@ const TEXT = {
     body: {
       delivery:
         'Online ordering is paused for now: delivery, creating your own pizza and ordering from the Pizza Wall. We will be back soon.',
-      pizza:
-        'Online ordering is paused for now: delivery, creating your own pizza and ordering from the Pizza Wall. We will be back soon.',
+      pizza: DELIVERY_VIA_WHATSAPP
+        ? 'Creating your own pizza and ordering from the Pizza Wall are paused for now. You can still order delivery from our menu on WhatsApp.'
+        : 'Online ordering is paused for now: delivery, creating your own pizza and ordering from the Pizza Wall. We will be back soon.',
       reservations: 'Booking a table online is paused for now. To book, please call us.',
     },
     menu: 'See the menu',
     book: 'Book a table',
     call: 'Call us',
+    delivery: 'Order delivery',
   },
   it: {
     title: {
@@ -37,13 +39,15 @@ const TEXT = {
     body: {
       delivery:
         'Gli ordini online sono sospesi per ora: consegna, crea la tua pizza e ordini dalla Bacheca delle pizze. Torneremo presto.',
-      pizza:
-        'Gli ordini online sono sospesi per ora: consegna, crea la tua pizza e ordini dalla Bacheca delle pizze. Torneremo presto.',
+      pizza: DELIVERY_VIA_WHATSAPP
+        ? 'Crea la tua pizza e gli ordini dalla Bacheca delle pizze sono sospesi per ora. Puoi sempre ordinare a domicilio dal nostro menù su WhatsApp.'
+        : 'Gli ordini online sono sospesi per ora: consegna, crea la tua pizza e ordini dalla Bacheca delle pizze. Torneremo presto.',
       reservations: 'La prenotazione online è sospesa per ora. Per prenotare, chiamaci.',
     },
     menu: 'Vedi il menù',
     book: 'Prenota un tavolo',
     call: 'Chiamaci',
+    delivery: 'Ordina a domicilio',
   },
 };
 
@@ -69,6 +73,10 @@ export function OrderingUnavailable({ kind }: { kind: Kind }) {
               <a href={`tel:${phone.phone}`} className={primary}>
                 {t.call} · {phone.phoneFormatted}
               </a>
+            ) : kind === 'pizza' && DELIVERY_OPEN ? (
+              <Link href="/delivery" className={primary}>
+                {t.delivery}
+              </Link>
             ) : (
               <Link href="/menu" className={primary}>
                 {t.menu}
@@ -79,7 +87,7 @@ export function OrderingUnavailable({ kind }: { kind: Kind }) {
                 {t.menu}
               </Link>
             ) : (
-              RESERVATIONS_AVAILABLE && (
+              RESERVATIONS_OPEN && (
                 <Link href="/reservations" className={secondary}>
                   {t.book}
                 </Link>
